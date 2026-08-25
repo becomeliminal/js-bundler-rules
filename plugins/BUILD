@@ -21,3 +21,10 @@ plugin_repo(
     plugin = "node-rules",
     revision = "v0.1.0",
 )
+
+plugin_repo(
+    name = "ts",
+    owner = "becomeliminal",
+    plugin = "ts-rules",
+    revision = "d8bfec4",
+)

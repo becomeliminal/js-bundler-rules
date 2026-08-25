@@ -6,7 +6,7 @@ Name = bundler
 
 [PluginConfig "esbuild"]
 ConfigKey = Esbuild
-DefaultValue = ///bundler//third_party/js:node_modules
+DefaultValue = ///bundler//third_party/js/esbuild:node_modules
 Help = node_modules tree holding esbuild. Owned by this plugin rather than read from the consumer's lockfile, which is safe because esbuild has no plugin ecosystem whose versions have to agree with it. vite is the opposite case and is pinned by the consumer.
 Inherit = true
 
@@ -23,6 +23,9 @@ NodeTool = //third_party/node:node|node
 ; This plugin's own fixtures resolve first-party libraries only; a repo using
 ; these rules points this at its own npm_link tree.
 NodeModules =
+
+[Plugin "ts"]
+Target = //plugins:ts
 
 [Plugin "node"]
 Target = //plugins:node

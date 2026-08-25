@@ -8,7 +8,7 @@ esbuild_bundle(
     name = "bundle",
     entry_point = "main.js",
     out = "bundle.js",
-    deps = ["//test/bundle/lib/shouter"],
+    deps = ["//test/lib/shouter"],
     format = "cjs",
     platform = "node",
 )

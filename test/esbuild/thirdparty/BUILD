@@ -9,8 +9,8 @@ esbuild_bundle(
     name = "bundle",
     entry_point = "main.js",
     out = "bundle.js",
-    deps = ["//test/bundle/lib/greeter"],
-    node_modules = "//third_party/js/consumer:node_modules",
+    deps = ["//test/lib/greeter"],
+    node_modules = "//third_party/js/tiny:node_modules",
     format = "cjs",
     platform = "node",
 )

@@ -679,6 +679,20 @@ npm_repo(
 )
 
 npm_repo(
+    name = "types_react-dom_19.1.7_5d8f97ea",
+    hashes = ["154e36ce002e285c43aa499193b14929c83d0f9c447c27740d544cd5c6fa8d4b"],
+    pkg = "@types/react-dom",
+    version = "19.1.7",
+)
+
+npm_repo(
+    name = "types_react_19.1.9",
+    hashes = ["1fcab75bb16226627a02c934a5c1bf803489ca7636564d9dbdcec0379745ae61"],
+    pkg = "@types/react",
+    version = "19.1.9",
+)
+
+npm_repo(
     name = "vitejs_plugin-react_5.0.0_3f9da55b",
     hashes = ["bfb18cf62cadeaec6de98518e39f14cdbc92903554775dd891fae7d62dd48dcd"],
     pkg = "@vitejs/plugin-react",
@@ -718,6 +732,13 @@ npm_repo(
     hashes = ["0e9342b066986722098d9b108b238033862eae90b3d53ff90581538264d91b60"],
     pkg = "cookie",
     version = "1.1.1",
+)
+
+npm_repo(
+    name = "csstype_3.2.3",
+    hashes = ["f3501f8ee1c73f7568fecb22c11231162c0467e59262461da5579519307427a3"],
+    pkg = "csstype",
+    version = "3.2.3",
 )
 
 npm_repo(
@@ -959,6 +980,7 @@ npm_link(
         ":caniuse-lite_1.0.30001809",
         ":convert-source-map_2.0.0",
         ":cookie_1.1.1",
+        ":csstype_3.2.3",
         ":debug_4.4.3",
         ":electron-to-chromium_1.5.413",
         ":esbuild_0.25.12",
@@ -1049,6 +1071,8 @@ npm_link(
         ":types_babel_template_7.4.4",
         ":types_babel_traverse_7.28.0",
         ":types_estree_1.0.9",
+        ":types_react-dom_19.1.7_5d8f97ea",
+        ":types_react_19.1.9",
         ":update-browserslist-db_1.3.1_48be4307",
         ":vite_7.1.2",
         ":vitejs_plugin-react_5.0.0_3f9da55b",

@@ -8,7 +8,7 @@ esbuild_bundle(
     entry_point = "main.ts",
     out_dir = "dist",
     srcs = ["styles.css"],
-    deps = ["//test/site/layers"],
+    deps = ["//test/lib/layers"],
     format = "esm",
     minify = True,
     platform = "browser",

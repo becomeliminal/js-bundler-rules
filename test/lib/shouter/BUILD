@@ -6,6 +6,6 @@ js_library(
     name = "shouter",
     package = "@test/shouter",
     srcs = ["index.js"],
-    deps = ["//test/bundle/lib/greeter"],
+    deps = ["//test/lib/greeter"],
     visibility = ["//test/..."],
 )
