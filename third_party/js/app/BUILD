@@ -714,6 +714,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "cookie_1.1.1",
+    hashes = ["0e9342b066986722098d9b108b238033862eae90b3d53ff90581538264d91b60"],
+    pkg = "cookie",
+    version = "1.1.1",
+)
+
+npm_repo(
     name = "debug_4.4.3",
     hashes = ["89c1ac9c946ee8905a875837114528e97eeae35e03be3190584b2216af43e4a7"],
     pkg = "debug",
@@ -848,6 +855,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "react-router_7.9.1_a63170c7",
+    hashes = ["a56b3746a911b0a4edb31c216c36487f12f461beb22b798a24f65d1cac9c1984"],
+    pkg = "react-router",
+    version = "7.9.1",
+)
+
+npm_repo(
     name = "react_19.1.1",
     hashes = ["754c21ed5078d3d211a443c9e4137031ecd72e1725d0ef3d235443c294eea2a5"],
     pkg = "react",
@@ -873,6 +887,13 @@ npm_repo(
     hashes = ["3c9b042a38e099cbd00a9bd792042aefb62a70b3f0f1ba1a3cbddf07e5eb1230"],
     pkg = "semver",
     version = "6.3.1",
+)
+
+npm_repo(
+    name = "set-cookie-parser_2.7.2",
+    hashes = ["1fdf9181ca54f9cdbd4d6bcfc59d28d9f0495fc2743029169d8213987210596c"],
+    pkg = "set-cookie-parser",
+    version = "2.7.2",
 )
 
 npm_repo(
@@ -937,6 +958,7 @@ npm_link(
         ":browserslist_4.28.8",
         ":caniuse-lite_1.0.30001809",
         ":convert-source-map_2.0.0",
+        ":cookie_1.1.1",
         ":debug_4.4.3",
         ":electron-to-chromium_1.5.413",
         ":esbuild_0.25.12",
@@ -988,6 +1010,7 @@ npm_link(
         ":postcss_8.5.26",
         ":react-dom_19.1.1_6cb25bb6",
         ":react-refresh_0.17.0",
+        ":react-router_7.9.1_a63170c7",
         ":react_19.1.1",
         ":rolldown_pluginutils_1.0.0-beta.30",
         ":rollup_4.62.5",
@@ -1018,6 +1041,7 @@ npm_link(
         ":rollup_rollup-win32-x64-msvc_4.62.5",
         ":scheduler_0.26.0",
         ":semver_6.3.1",
+        ":set-cookie-parser_2.7.2",
         ":source-map-js_1.2.1",
         ":tinyglobby_0.2.17",
         ":types_babel_core_7.20.5",

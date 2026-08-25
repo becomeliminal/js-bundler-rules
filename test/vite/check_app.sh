@@ -17,6 +17,11 @@ grep -q "Hello, " "$JS" \
   || { echo "@test/greeter never made it into the bundle" >&2; exit 1; }
 
 # React itself, from the consumer's lockfile rather than this plugin's.
+CSS=$(find "$DIR/assets" -name "index-*.css" | head -1)
+[ -n "$CSS" ] || { echo "no stylesheet emitted" >&2; exit 1; }
+grep -q "$(basename "$CSS")" "$DIR/index.html" \
+  || { echo "index.html does not reference the stylesheet vite emitted" >&2; exit 1; }
+
 grep -q "createRoot" "$JS" \
   || { echo "react-dom missing: the consumer tree was not resolved" >&2; exit 1; }
 
@@ -24,5 +29,10 @@ grep -q "createRoot" "$JS" \
 # than the tree: a second copy would carry a second copy of this marker.
 COPIES=$(grep -o "Objects are not valid as a React child" "$JS" | wc -l)
 [ "$COPIES" -le 1 ] || { echo "react appears $COPIES times: the bundle carries duplicates" >&2; exit 1; }
+
+# Client-side routing, which is the case a static page cannot fake: a dynamic
+# segment is read from the URL at render time, so the router has to be in here.
+grep -q "hashchange" "$JS" \
+  || { echo "react-router missing: the hash history was never bundled" >&2; exit 1; }
 
 echo "ok"
