@@ -1,0 +1,10 @@
+{
+  "name": "vite-pin",
+  "private": true,
+  "dependencies": {
+    "vite": "7.1.2",
+    "@vitejs/plugin-react": "5.0.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  }
+}
