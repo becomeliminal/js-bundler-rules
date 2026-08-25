@@ -5,22 +5,8 @@
 // separate first-party library. Nothing here is written into the HTML, so if
 // the bundle failed to resolve @stack/layers the page is blank -- the page is
 // its own falsification test.
-import { LAYERS, FACTS } from "@stack/layers";
+import { LAYERS, FACTS, type Layer, type Fact } from "@stack/layers";
 import "./styles.css";
-
-interface Layer {
-  n: number;
-  repo: string;
-  role: string;
-  rule: string;
-  hands: string;
-}
-
-interface Fact {
-  k: string;
-  v: string;
-  note: string;
-}
 
 const el = (tag: string, cls?: string, text?: string): HTMLElement => {
   const node = document.createElement(tag);

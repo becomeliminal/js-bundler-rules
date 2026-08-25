@@ -1,8 +1,9 @@
-subinclude("///js//build_defs:js")
+subinclude("///ts//build_defs:ts")
 
-js_library(
+ts_library(
     name = "layers",
     package = "@stack/layers",
-    srcs = ["index.js"],
+    srcs = ["index.ts"],
+    tsconfig_deps = ["//:tsconfig.json"],
     visibility = ["//test/..."],
 )

@@ -51,14 +51,36 @@ match the vite major it is loaded into, so a plugin-owned vite would silently
 mismatch whatever `@vitejs/plugin-react` a consumer pinned. esbuild has no such
 ecosystem, which is the only reason this plugin can own that one.
 
-## Type-checking is a separate target
+## A bundle cannot be built from TypeScript nothing checks
 
-Neither bundler type-checks. vite transpiles TypeScript with esbuild, which
-strips types without reading them, so a type error reaches the bundle having
-failed no build — verified, not assumed: `//test/vite/app:app` builds cleanly
-from sources that `//test/vite/app:typecheck` rejects.
+Neither bundler reads types. vite transpiles with esbuild and esbuild strips
+them without looking, so a type error reaches the output having failed no build.
 
-So an application carries both, and they are different failures over different
+Both rules therefore refuse to parse if any source is TypeScript and `check` is
+absent:
+
+```
+vite_bundle app: src/App.tsx is TypeScript and nothing checks it. This bundler
+strips types without reading them, so a type error here would reach the output
+having failed no build. Pass check = ":typecheck" naming a ts_check over these
+sources, or check = False to say you meant it.
+```
+
+`check` names a `ts_check` and becomes a dependency of the bundle, so the bundle
+cannot be produced while the check fails. `check = False` bundles unchecked
+TypeScript deliberately.
+
+They stay **two actions**, because they are different failures over different
 inputs: a type error is no reason to invalidate a bundle's cache, and a changed
-asset is no reason to type-check again. `tsc && vite build` draws the same line
-by hand.
+asset is no reason to type-check again. Only the edge between them is enforced.
+
+This follows every other language's binary rule rather than the bundler's own
+behaviour — `go_binary` cannot emit a binary from code that does not compile,
+and neither can cargo. The JavaScript convention agrees, it is just spelled in a
+package.json: `tsc -b && vite build` is what vite's own React template ships,
+and a developer running `npm run build` experiences it as one thing.
+
+Aspect leaves this open — their esbuild example bundles an `index.ts` with
+nothing checking it. Their intended wiring puts a `ts_project` upstream so the
+check gates because the JavaScript itself comes out of tsc, which works for
+esbuild and cannot work for vite, whose plugins need the original `.tsx`.

@@ -23,12 +23,52 @@ subinclude("///js//build_defs:js")
 _SOURCEMAPS = ["inline", "external", "linked", "both"]
 
 
+def _checked(rule:str, name:str, sources:list, check):
+    """Refuses to bundle TypeScript that nothing type-checks.
+
+    Neither bundler reads types. vite transpiles with esbuild and esbuild strips
+    them without looking, so a type error reaches the output having failed no
+    build -- which makes a type check that nothing depends on decoration rather
+    than a guarantee.
+
+    Every other language's binary rule already works this way: go_binary cannot
+    emit a binary from code that does not compile, and neither can cargo. The
+    JavaScript convention agrees, it is just spelled in a package.json rather
+    than in a build graph -- `tsc -b && vite build` is what vite's own React
+    template ships, and a developer running `npm run build` experiences it as
+    one thing.
+
+    Aspect leaves this open: their esbuild example bundles an index.ts with
+    nothing checking it. Their intended wiring puts a ts_project upstream, so
+    the check gates because the JavaScript itself comes out of tsc -- which
+    works for esbuild and cannot work for vite, whose plugins need the original
+    .tsx. One mechanism for both beats two stories.
+
+    The check stays a separate action: a type error is no reason to invalidate a
+    bundle's cache, and a changed asset is no reason to type-check again. Only
+    the edge between them is new.
+    """
+    typescript = [s for s in sources if s.endswith(".ts") or s.endswith(".tsx")]
+    if not typescript:
+        return []
+    first = typescript[0]
+    if check == None:
+        fail(f"{rule} {name}: {first} is TypeScript and nothing checks it. " +
+             "This bundler strips types without reading them, so a type error " +
+             "here would reach the output having failed no build. Pass " +
+             "check = \":typecheck\" naming a ts_check over these sources, or " +
+             "check = False to say you meant it.")
+    if check == False:
+        return []
+    return [check]
+
+
 def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
                    out:str="", out_dir:str="", platform:str="browser",
                    format:str="", target:str="", minify:bool=False,
                    sourcemap:str="", splitting:bool=False, external:list=[],
                    define:dict={}, node_modules:str="", env:dict={},
-                   args:list=[], visibility:list=None,
+                   check=None, args:list=[], visibility:list=None,
                    test_only:bool&testonly=False, labels:list=[]):
     """A bundle produced by esbuild.
 
@@ -56,6 +96,10 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
                 platform.
         target: Language target, e.g. "es2022" or "node22".
         minify: Minify the output.
+        check: A ts_check target covering these sources, made a dependency of
+               the bundle so the bundle cannot be produced while it fails.
+               Required when any source is TypeScript; pass False to bundle
+               unchecked TypeScript deliberately.
         sourcemap: One of inline, external, linked, both. Empty for none.
         splitting: Split shared code into chunks. esbuild supports this only for
                    esm, and only into a directory.
@@ -110,7 +154,7 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
         # is not a corner case, since vite depends on esbuild, so any consumer
         # with vite already has one.
         tool_modules = CONFIG.BUNDLER.ESBUILD,
-        deps = deps,
+        deps = deps + _checked("esbuild_bundle", name, [entry_point] + srcs, check),
         node_modules = node_modules,
         srcs = [entry_point] + srcs,
         outs = outs,
@@ -125,7 +169,7 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
 
 def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
                 config_deps:list=[], out_dir:str="dist", mode:str="",
-                node_modules:str="", env:dict={}, args:list=[],
+                node_modules:str="", env:dict={}, check=None, args:list=[],
                 visibility:list=None, test_only:bool&testonly=False,
                 labels:list=[]):
     """A production build produced by vite.
@@ -159,6 +203,10 @@ def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
                      at their real paths, so carrying the chain is the whole
                      implementation -- nothing is rewritten.
         out_dir: Where vite writes, matching build.outDir in the config.
+        check: A ts_check target covering these sources, made a dependency of
+               the bundle so the bundle cannot be produced while it fails.
+               Required when any source is TypeScript; pass False to bundle
+               unchecked TypeScript deliberately.
         mode: vite's --mode, which selects the .env files it loads.
         node_modules: The tree the build resolves through, holding vite itself.
                       Defaults to the NodeModules config.
@@ -178,7 +226,7 @@ def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
         name = name,
         package = "vite",
         bin = "vite",
-        deps = deps,
+        deps = deps + _checked("vite_bundle", name, [config] + srcs, check),
         node_modules = node_modules,
         srcs = [config] + srcs + config_deps,
         # vite content-hashes filenames, so nothing here can be declared. Please

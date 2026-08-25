@@ -1,4 +1,4 @@
-subinclude("//build_defs:bundler", "///js//build_defs:js")
+subinclude("//build_defs:bundler", "///js//build_defs:js", "///ts//build_defs:ts")
 
 # A browser bundle, which is the case the first fixture does not cover: several
 # outputs rather than one, CSS pulled in by an import rather than named, and
@@ -9,10 +9,23 @@ esbuild_bundle(
     out_dir = "dist",
     srcs = ["styles.css"],
     deps = ["//test/lib/layers"],
+    check = ":typecheck",
     format = "esm",
     minify = True,
     platform = "browser",
     target = "es2022",
+)
+
+# main.ts is TypeScript, and esbuild strips types without reading them, so this
+# is what stands between a type error and the bundle.
+ts_check(
+    name = "typecheck",
+    srcs = [
+        "env.d.ts",
+        "main.ts",
+    ],
+    deps = ["//test/lib/layers"],
+    tsconfig_deps = ["//:tsconfig.json"],
 )
 
 # A site is a directory you serve: the bundle, plus the page that loads it.
