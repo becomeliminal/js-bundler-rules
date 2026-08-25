@@ -1,12 +1,20 @@
 #!/bin/sh
 set -eu
 
-SITE=test/site/site.html
+DIR=test/site
 
-grep -q "js-bundler-rules" "$SITE" || { echo "layer data missing: the bundle did not resolve @stack/layers" >&2; exit 1; }
-grep -q "byte-identical" "$SITE" || { echo "fact data missing from the bundle" >&2; exit 1; }
-grep -q "IBM+Plex" "$SITE" || { echo "the page shell was not assembled around the bundle" >&2; exit 1; }
-grep -q "__CSS__" "$SITE" && { echo "stylesheet was never substituted in" >&2; exit 1; }
-grep -q "__JS__" "$SITE" && { echo "bundle was never substituted in" >&2; exit 1; }
+# esbuild names its outputs after the entry point, so unlike vite these can be
+# named rather than found.
+for f in index.html main.js main.css; do
+  [ -f "$DIR/$f" ] || { echo "missing $f: the site is not a complete directory" >&2; exit 1; }
+done
+
+grep -q 'src="main.js"' "$DIR/index.html" || { echo "the page does not load the bundle" >&2; exit 1; }
+grep -q 'href="main.css"' "$DIR/index.html" || { echo "the page does not load the stylesheet" >&2; exit 1; }
+
+# The library the page draws itself from, reached by package name. Nothing is
+# written into the HTML, so this string can only be in the bundle.
+grep -q "js-bundler-rules" "$DIR/main.js" || { echo "@stack/layers never reached the bundle" >&2; exit 1; }
+grep -q "byte-identical" "$DIR/main.js" || { echo "fact data missing from the bundle" >&2; exit 1; }
 
 echo "ok"

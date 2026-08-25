@@ -29,29 +29,3 @@ build_rule(
     test_cmd = "$TEST",
 )
 
-# Inlined into one file, which is not what a real deployment does -- vite splits
-# JS and CSS on purpose so a browser can cache them apart. It is what a page has
-# to be to travel as a single artifact, and it proves the output is complete:
-# nothing left to fetch means nothing was left behind.
-genrule(
-    name = "single_file",
-    srcs = {"bundle": [":app"]},
-    outs = ["app.html"],
-    cmd = " && ".join([
-        'HTML=$(for f in $SRCS_BUNDLE; do case "$f" in *index.html) echo "$f";; esac; done | head -1)',
-        'JS=$(find $SRCS_BUNDLE -name "*.js" 2>/dev/null | head -1)',
-        'CSS=$(find $SRCS_BUNDLE -name "*.css" 2>/dev/null | head -1)',
-        " ".join([
-            '"$TOOLS_NODE" -e',
-            """'const f=require("fs"),p=process.argv;""",
-            """const rd=(x)=>x&&f.existsSync(x)?f.readFileSync(x,"utf8"):"";""",
-            """let h=rd(p[1]);""",
-            """h=h.replace(/<script type="module"[^>]*><\\/script>/, () => "<script type=\\"module\\">"+rd(p[2])+"<\\/script>");""",
-            """h=h.replace(/<link rel="stylesheet" crossorigin href="[^"]*">/, () => "<style>"+rd(p[3])+"<\\/style>");""",
-            """f.writeFileSync(p[4], h)'""",
-            '"$HTML" "$JS" "$CSS" "$OUT"',
-        ]),
-    ]),
-    tools = {"node": ["//third_party/node:node|node"]},
-    visibility = ["PUBLIC"],
-)
