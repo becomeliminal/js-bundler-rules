@@ -1,0 +1,47 @@
+<title>Four Layers Down</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>/*__CSS__*/</style>
+
+<div class="sheet">
+  <header>
+    <p class="eyebrow">js-bundler-rules · fixture //test/site</p>
+    <h1>Four Layers Down</h1>
+    <p class="standfirst">
+      This page was bundled by <code>esbuild_bundle</code>, which is a wrapper over
+      <code>js_run_binary</code>, which runs a published CLI against a real
+      <code>node_modules</code>. Everything below the fold is drawn at runtime from a
+      separate first-party package. Nothing is written into the HTML — so a blank page
+      would mean the bundler never resolved it.
+    </p>
+  </header>
+
+  <section>
+    <h2>The stack</h2>
+    <div id="strata"></div>
+  </section>
+
+  <section>
+    <h2>Measured, not assumed</h2>
+    <div id="facts"></div>
+  </section>
+
+  <section>
+    <h2>Proof of life</h2>
+    <div class="prose">
+      <p>
+        The button below reads the same imported data the strata are drawn from. If the
+        bundle had left <code>@stack/layers</code> as an unresolved import, the browser
+        would have thrown before this element existed.
+      </p>
+    </div>
+    <div id="proof"></div>
+  </section>
+
+  <footer>
+    esbuild 0.28.2 · platform=browser · format=esm · minified ·
+    one of 26 platform packages fetched · rebuild byte-identical
+  </footer>
+</div>
+<script type="module">/*__JS__*/</script>
