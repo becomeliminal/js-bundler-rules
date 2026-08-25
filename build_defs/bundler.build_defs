@@ -61,8 +61,11 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
                    esm, and only into a directory.
         external: Import paths left unbundled.
         define: Compile-time constant substitutions.
-        node_modules: The tree the sources resolve through. Defaults to the
-                      NodeModules config.
+        node_modules: The tree the sources resolve through -- the application's
+                      own third-party packages. Defaults to the NodeModules
+                      config. esbuild itself is never in here: it comes from its
+                      own tree, because an application that depends on vite
+                      depends on esbuild, and one tree cannot hold two of them.
         env: Environment variables for the action.
         args: Further esbuild flags.
         visibility: Visibility specification.
@@ -102,8 +105,13 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
     return js_run_binary(
         name = name,
         package = CONFIG.BUNDLER.ESBUILD_PACKAGE,
+        # Two trees. The bundler is an npm package and so is everything it
+        # bundles, and a tree cannot hold two entries claiming one name -- which
+        # is not a corner case, since vite depends on esbuild, so any consumer
+        # with vite already has one.
+        tool_modules = CONFIG.BUNDLER.ESBUILD,
         deps = deps,
-        node_modules = node_modules or CONFIG.BUNDLER.ESBUILD,
+        node_modules = node_modules,
         srcs = [entry_point] + srcs,
         outs = outs,
         out_dirs = [out_dir] if out_dir else [],
