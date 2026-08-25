@@ -1,0 +1,36 @@
+[please]
+version = >=17.27.0
+
+[PluginDefinition]
+Name = bundler
+
+[PluginConfig "esbuild"]
+ConfigKey = Esbuild
+DefaultValue = ///bundler//third_party/js:node_modules
+Help = node_modules tree holding esbuild. Owned by this plugin rather than read from the consumer's lockfile, which is safe because esbuild has no plugin ecosystem whose versions have to agree with it. vite is the opposite case and is pinned by the consumer.
+Inherit = true
+
+[PluginConfig "esbuild_package"]
+ConfigKey = EsbuildPackage
+DefaultValue = esbuild
+Help = npm package within that tree publishing the bundler.
+Inherit = true
+
+[Plugin "js"]
+Target = //plugins:js
+; The toolchain belongs to the repo being built, so a consumer supplies its own.
+NodeTool = //third_party/node:node|node
+; This plugin's own fixtures resolve first-party libraries only; a repo using
+; these rules points this at its own npm_link tree.
+NodeModules =
+
+[Plugin "node"]
+Target = //plugins:node
+
+[Plugin "go"]
+Target = //plugins:go
+gotool = ///js//third_party/go:gotool|go
+
+; No [Parse] preloadsubincludes: that config ships to every consumer, so
+; anything preloaded here becomes a requirement on any repo that parses a
+; package of this plugin.
