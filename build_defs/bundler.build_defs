@@ -121,3 +121,73 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
         test_only = test_only,
         labels = labels + ["esbuild_bundle"],
     )
+
+
+def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
+                config_deps:list=[], out_dir:str="dist", mode:str="",
+                node_modules:str="", env:dict={}, args:list=[],
+                visibility:list=None, test_only:bool&testonly=False,
+                labels:list=[]):
+    """A production build produced by vite.
+
+    Unlike esbuild, vite comes from the *consumer's* tree rather than this
+    plugin's. That asymmetry is the design and not an oversight: a
+    vite.config.ts imports plugins, and a plugin has to match the vite major it
+    is loaded into, so a plugin-owned vite would silently mismatch whatever
+    @vitejs/plugin-react a consumer has pinned. esbuild has no such ecosystem,
+    which is why this plugin can own that one.
+
+    Nothing is passed to vite that its config could also set. The config file is
+    the interface vite's own users already know, and a rule that half-overrode
+    it would leave two places to look when the output is wrong.
+
+    Bundles from sources rather than from ts_library output, because vite's
+    plugins operate on the original .tsx -- Fast Refresh needs the component as
+    written -- and vite strips types with esbuild without checking them. So this
+    does not type-check, exactly as `tsc && vite build` does not: type-checking
+    is a separate target, which is better anyway, since it is a different
+    failure with a different cache key.
+
+    Args:
+        name: Target name.
+        srcs: Everything the build reads: index.html, sources, styles, assets,
+              and any .env file, which changes the output and so is an input.
+        deps: js_library and ts_library targets the sources import by package
+              name, and npm_repo targets.
+        config: The vite config, relative to this package.
+        config_deps: Anything the config imports or extends. Please stages srcs
+                     at their real paths, so carrying the chain is the whole
+                     implementation -- nothing is rewritten.
+        out_dir: Where vite writes, matching build.outDir in the config.
+        mode: vite's --mode, which selects the .env files it loads.
+        node_modules: The tree the build resolves through, holding vite itself.
+                      Defaults to the NodeModules config.
+        env: Environment variables for the action. Anything the config or the
+             sources read from process.env has to come through here, or the
+             build is not reproducible.
+        args: Further vite flags.
+        visibility: Visibility specification.
+        test_only: If True, only visible to test rules.
+        labels: Additional labels.
+    """
+    flags = ["build", "--config", config, "--outDir", out_dir]
+    if mode:
+        flags += ["--mode", mode]
+
+    return js_run_binary(
+        name = name,
+        package = "vite",
+        bin = "vite",
+        deps = deps,
+        node_modules = node_modules,
+        srcs = [config] + srcs + config_deps,
+        # vite content-hashes filenames, so nothing here can be declared. Please
+        # hoists a directory output's contents, so this target's outputs are
+        # index.html and assets/, not a dist/.
+        out_dirs = [out_dir],
+        args = flags + args,
+        env = env,
+        visibility = visibility,
+        test_only = test_only,
+        labels = labels + ["vite_bundle"],
+    )
