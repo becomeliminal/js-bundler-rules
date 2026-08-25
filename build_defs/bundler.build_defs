@@ -1,0 +1,115 @@
+"""Bundlers for Please.
+
+Layer 3, where a repo of JavaScript becomes something you can ship. Everything
+below has already happened: node-rules provides the runtime, js-rules the
+package graph and the rules for running a tool against it, ts-rules the
+compiler. A bundler rule adds no new machinery -- it declares the right inputs,
+runs a published CLI, and declares what comes out.
+
+That is deliberate. The old js-rules embedded esbuild as a Go library so it
+could intercept module resolution and rewrite first-party import paths, because
+there was no node_modules for anything to resolve through. There is one now, so
+esbuild's own resolver -- the same algorithm, maintained by the people who wrote
+it -- does the whole job. The Go route also does not generalise: rollup, vite
+and webpack are JavaScript, and a ruleset covering all of them needs one
+mechanism, which is running the tool's own CLI against a real tree.
+"""
+
+subinclude("///js//build_defs:js")
+
+# esbuild's own words for what it will emit a sourcemap as. Anything else is a
+# typo, and esbuild reports it as an unknown flag long after the build has
+# staged a tree.
+_SOURCEMAPS = ["inline", "external", "linked", "both"]
+
+
+def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
+                   out:str="", out_dir:str="", platform:str="browser",
+                   format:str="", target:str="", minify:bool=False,
+                   sourcemap:str="", splitting:bool=False, external:list=[],
+                   define:dict={}, node_modules:str="", env:dict={},
+                   args:list=[], visibility:list=None,
+                   test_only:bool&testonly=False, labels:list=[]):
+    """A bundle produced by esbuild.
+
+    Named arguments cover the flags that change what comes out -- `splitting`
+    and `sourcemap` add files, `format` and `platform` change their contents --
+    and everything else goes through `args`. The rule owns the flags its outputs
+    depend on and does not let `args` override them, the same division
+    ts_library draws.
+
+    Args:
+        name: Target name.
+        entry_point: The file esbuild starts from, relative to this package.
+                     Added to srcs, so it does not have to be listed twice.
+        srcs: Further files the bundle reads, such as CSS or assets imported by
+              the sources.
+        deps: js_library and ts_library targets the sources import by package
+              name, and npm_repo targets.
+        out: The bundled file, for a bundle that is one file. Declared, so a
+             downstream target can depend on exactly it.
+        out_dir: The directory the bundle is written to, for a bundle that is
+                 not one file. Required with splitting, and the only option once
+                 anything content-hashes its filenames.
+        platform: "browser", "node" or "neutral".
+        format: "iife", "cjs" or "esm". Defaults to esbuild's own choice for the
+                platform.
+        target: Language target, e.g. "es2022" or "node22".
+        minify: Minify the output.
+        sourcemap: One of inline, external, linked, both. Empty for none.
+        splitting: Split shared code into chunks. esbuild supports this only for
+                   esm, and only into a directory.
+        external: Import paths left unbundled.
+        define: Compile-time constant substitutions.
+        node_modules: The tree the sources resolve through. Defaults to the
+                      NodeModules config.
+        env: Environment variables for the action.
+        args: Further esbuild flags.
+        visibility: Visibility specification.
+        test_only: If True, only visible to test rules.
+        labels: Additional labels.
+    """
+    if bool(out) == bool(out_dir):
+        fail(f"esbuild_bundle {name}: set exactly one of out or out_dir")
+    if splitting and not out_dir:
+        fail(f"esbuild_bundle {name}: splitting writes several files, so it needs out_dir")
+    if splitting and format != "esm":
+        fail(f"esbuild_bundle {name}: esbuild only splits esm output, not `{format or 'the default'}`")
+    if sourcemap and sourcemap not in _SOURCEMAPS:
+        fail(f"esbuild_bundle {name}: sourcemap is one of {', '.join(_SOURCEMAPS)}, not `{sourcemap}`")
+
+    flags = [entry_point, "--bundle", f"--platform={platform}"]
+    flags += [f"--outfile={out}"] if out else [f"--outdir={out_dir}"]
+    if format:
+        flags += [f"--format={format}"]
+    if target:
+        flags += [f"--target={target}"]
+    if minify:
+        flags += ["--minify"]
+    if sourcemap:
+        flags += [f"--sourcemap={sourcemap}"]
+    if splitting:
+        flags += ["--splitting"]
+    flags += [f"--external:{e}" for e in external]
+    flags += [f"--define:{k}={v}" for k, v in sorted(define.items())]
+
+    # A sourcemap that is not inlined is a second file, and an output esbuild
+    # writes but the rule does not declare is one Please deletes.
+    outs = [out] if out else []
+    if out and sourcemap in ["external", "linked", "both"]:
+        outs += [out + ".map"]
+
+    return js_run_binary(
+        name = name,
+        package = CONFIG.BUNDLER.ESBUILD_PACKAGE,
+        deps = deps,
+        node_modules = node_modules or CONFIG.BUNDLER.ESBUILD,
+        srcs = [entry_point] + srcs,
+        outs = outs,
+        out_dirs = [out_dir] if out_dir else [],
+        args = flags + args,
+        env = env,
+        visibility = visibility,
+        test_only = test_only,
+        labels = labels + ["esbuild_bundle"],
+    )
