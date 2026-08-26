@@ -1,0 +1,7 @@
+{
+  "name": "terser-pin",
+  "private": true,
+  "dependencies": {
+    "terser": "5.50.0"
+  }
+}

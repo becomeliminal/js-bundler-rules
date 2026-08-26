@@ -206,6 +206,85 @@ def esbuild_bundle(name:str, entry_point:str="", entry_points:list=[],
     )
 
 
+def terser_minified(name:str, srcs:list, compress:bool=True, mangle:bool=True,
+                    node_modules:str="", args:list=[], visibility:list=None,
+                    test_only:bool&testonly=False, labels:list=[]):
+    """Minification as a separate pass over an existing bundle.
+
+    The first rule here that consumes another bundler's output rather than
+    sources, and the input shape follows from that: a bundle is one declared
+    file, but a vite build is a directory of hashed names nobody can declare.
+    So this takes both -- every .js, .mjs and .cjs among the staged inputs is
+    minified, each at its own relative path under a directory named after the
+    rule, and everything else is ignored rather than copied: this rule's
+    output is minified code, not a second copy of an index.html.
+
+    A directory output rather than hoisted files, deliberately: the obvious
+    consumer minifies `:bundle` in the same package, and a hoisted bundle.js
+    would collide with the very file it was made from.
+
+    terser comes from this plugin's own tree, like esbuild and unlike vite:
+    it has no plugin ecosystem whose versions must agree with a consumer's
+    config, so the plugin owning the pin costs nobody anything. The Terser
+    config key overrides it.
+
+    Args:
+        name: Target name, and the output directory's name.
+        srcs: What to minify: bundle targets, or files. Directories are
+              walked; non-JavaScript is skipped.
+        compress: Apply terser's compressor. On by default; passing False
+                  leaves only whatever `args` asks for.
+        mangle: Shorten names. On by default for the same reason.
+        node_modules: The tree holding terser, overriding the plugin's own.
+        args: Further terser flags -- sourcemap options most usefully.
+        visibility: Visibility specification.
+        test_only: If True, only visible to test rules.
+        labels: Additional labels.
+    """
+    if not srcs:
+        fail(f"terser_minified {name}: srcs is empty, and an unquoted find would walk the whole staging dir")
+
+    tool_tree = node_modules or CONFIG.BUNDLER.TERSER
+    flags = " ".join((["--compress"] if compress else []) + (["--mangle"] if mangle else []) + args)
+    pkg = package_name()
+    strip = pkg + "/" if pkg else ""
+
+    return build_rule(
+        name = name,
+        srcs = {
+            "srcs": srcs,
+            "tool": [tool_tree],
+        },
+        outs = [name],
+        cmd = " && ".join([
+            'PLEASE_JS=$(readlink -f "$TOOLS_PLEASE_JS")',
+            'NODE=$(readlink -f "$TOOLS_NODE")',
+            f'BIN=$(readlink -f "$("$PLEASE_JS" resolve-bin --tree "$SRCS_TOOL" --package {CONFIG.BUNDLER.TERSER_PACKAGE} --bin terser)")',
+            'mkdir -p "$OUT"',
+            'OUT_ABS=$(readlink -f "$OUT")',
+            # Files and directories through one walk; find on a file yields the
+            # file. The output must not be empty -- srcs that contain no
+            # JavaScript mean the wrong thing was staged, and a silently empty
+            # directory would let a consumer ship nothing.
+            'MINIFIED=0',
+            'for f in $(find $SRCS_SRCS -type f | grep -E "[.](js|mjs|cjs)$" | sort); do ' +
+            f'rel="${{f#{strip}}}"; ' +
+            'mkdir -p "$OUT_ABS/$(dirname "$rel")"; ' +
+            f'"$NODE" "$BIN" "$f" {flags} -o "$OUT_ABS/$rel"; ' +
+            'MINIFIED=$((MINIFIED + 1)); done',
+            '[ "$MINIFIED" -gt 0 ] || { echo "terser_minified: no JavaScript among the staged srcs" >&2; exit 1; }',
+        ]),
+        tools = {
+            "please_js": ["///js//tools/please_js"],
+            "node": [CONFIG.JS.NODE_TOOL],
+        },
+        visibility = visibility,
+        test_only = test_only,
+        labels = labels + ["terser_minified"],
+        building_description = "Minifying...",
+    )
+
+
 def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
                 config_deps:list=[], out_dir:str="dist", mode:str="",
                 node_modules:str="", env:dict={}, check=None, args:list=[],
