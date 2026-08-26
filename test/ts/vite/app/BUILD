@@ -63,3 +63,15 @@ vitest_test(
     ],
     node_modules = "//third_party/js/react:node_modules",
 )
+
+# Not a test, and cannot be: a development server reacts to files that change
+# after the build. `plz run //test/ts/vite/app:dev`.
+vite_dev(
+    name = "dev",
+    srcs = glob([
+        "index.html",
+        "src/**/*",
+    ]),
+    deps = ["//test/lib/greeter"],
+    node_modules = "//third_party/js/react:hoisted",
+)
