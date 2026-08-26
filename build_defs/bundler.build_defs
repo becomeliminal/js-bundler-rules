@@ -63,10 +63,14 @@ def _checked(rule:str, name:str, sources:list, check):
     return [check]
 
 
-def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
-                   out:str="", out_dir:str="", platform:str="browser",
+def esbuild_bundle(name:str, entry_point:str="", entry_points:list=[],
+                   srcs:list=[], deps:list=[],
+                   out:str="", out_dir:str="", out_css:str="",
+                   platform:str="browser",
                    format:str="", target:str="", minify:bool=False,
-                   sourcemap:str="", splitting:bool=False, external:list=[],
+                   sourcemap:str="", sources_content:bool=True,
+                   metafile:bool=False,
+                   splitting:bool=False, external:list=[],
                    define:dict={}, node_modules:str="", env:dict={},
                    check=None, args:list=[], visibility:list=None,
                    test_only:bool&testonly=False, labels:list=[]):
@@ -82,12 +86,22 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
         name: Target name.
         entry_point: The file esbuild starts from, relative to this package.
                      Added to srcs, so it does not have to be listed twice.
+        entry_points: Several entry points into one bundle graph, which is what
+                      makes shared code shareable: two esbuild invocations would
+                      each carry their own copy of a common import, where one
+                      invocation with two entries splits it once. Requires
+                      out_dir, since several entries cannot produce one file.
         srcs: Further files the bundle reads, such as CSS or assets imported by
               the sources.
         deps: js_library and ts_library targets the sources import by package
               name, and npm_repo targets.
         out: The bundled file, for a bundle that is one file. Declared, so a
              downstream target can depend on exactly it.
+        out_css: The stylesheet esbuild emits when a source imports one,
+                 declared as its own output so a downstream target can depend
+                 on the CSS alone -- without this the only option is out_dir,
+                 which is how //test/ts/esbuild/site ended up with a directory
+                 for what is really two files.
         out_dir: The directory the bundle is written to, for a bundle that is
                  not one file. Required with splitting, and the only option once
                  anything content-hashes its filenames.
@@ -101,6 +115,14 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
                Required when any source is TypeScript; pass False to bundle
                unchecked TypeScript deliberately.
         sourcemap: One of inline, external, linked, both. Empty for none.
+        sources_content: Embed the original sources in the sourcemap. On by
+                         default, as esbuild has it -- but a public site
+                         shipping its sourcemaps is shipping its source, so
+                         turning this off is the difference between a map that
+                         locates errors and one that also publishes the code.
+        metafile: Emit esbuild's dependency analysis as <name>.meta.json, a
+                  declared output. The input to every bundle-size tool, and to
+                  any future size-budget check.
         splitting: Split shared code into chunks. esbuild supports this only for
                    esm, and only into a directory.
         external: Import paths left unbundled.
@@ -116,8 +138,14 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
         test_only: If True, only visible to test rules.
         labels: Additional labels.
     """
+    if bool(entry_point) == bool(entry_points):
+        fail(f"esbuild_bundle {name}: set exactly one of entry_point or entry_points")
+    if entry_points and not out_dir:
+        fail(f"esbuild_bundle {name}: several entry points cannot produce one file, so they need out_dir")
     if bool(out) == bool(out_dir):
         fail(f"esbuild_bundle {name}: set exactly one of out or out_dir")
+    if out_css and not out:
+        fail(f"esbuild_bundle {name}: out_css declares a sidecar of out; with out_dir the stylesheet already lands there")
     if splitting and not out_dir:
         fail(f"esbuild_bundle {name}: splitting writes several files, so it needs out_dir")
     if splitting and format != "esm":
@@ -125,7 +153,8 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
     if sourcemap and sourcemap not in _SOURCEMAPS:
         fail(f"esbuild_bundle {name}: sourcemap is one of {', '.join(_SOURCEMAPS)}, not `{sourcemap}`")
 
-    flags = [entry_point, "--bundle", f"--platform={platform}"]
+    entries = [entry_point] if entry_point else entry_points
+    flags = entries + ["--bundle", f"--platform={platform}"]
     flags += [f"--outfile={out}"] if out else [f"--outdir={out_dir}"]
     if format:
         flags += [f"--format={format}"]
@@ -135,6 +164,10 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
         flags += ["--minify"]
     if sourcemap:
         flags += [f"--sourcemap={sourcemap}"]
+    if not sources_content:
+        flags += ["--sources-content=false"]
+    if metafile:
+        flags += [f"--metafile={name}.meta.json"]
     if splitting:
         flags += ["--splitting"]
     flags += [f"--external:{e}" for e in external]
@@ -145,6 +178,12 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
     outs = [out] if out else []
     if out and sourcemap in ["external", "linked", "both"]:
         outs += [out + ".map"]
+    if out_css:
+        outs += [out_css]
+        if sourcemap in ["external", "linked", "both"]:
+            outs += [out_css + ".map"]
+    if metafile:
+        outs += [name + ".meta.json"]
 
     return js_run_binary(
         name = name,
@@ -156,7 +195,7 @@ def esbuild_bundle(name:str, entry_point:str, srcs:list=[], deps:list=[],
         tool_modules = CONFIG.BUNDLER.ESBUILD,
         deps = deps + _checked("esbuild_bundle", name, [entry_point] + srcs, check),
         node_modules = node_modules,
-        srcs = [entry_point] + srcs,
+        srcs = entries + srcs,
         outs = outs,
         out_dirs = [out_dir] if out_dir else [],
         args = flags + args,
