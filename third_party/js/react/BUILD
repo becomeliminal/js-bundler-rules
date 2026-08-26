@@ -22,7 +22,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "babel_core_7.29.7_cfc6fa9a",
+    name = "babel_core_7.29.7_5b645c40",
     hashes = ["46dd458b3d2bc29daa0e9e01f13b399ab544a8013f27ac6c51b56b831c8a0ed3"],
     pkg = "@babel/core",
     version = "7.29.7",
@@ -50,14 +50,14 @@ npm_repo(
 )
 
 npm_repo(
-    name = "babel_helper-module-imports_7.29.7_cfc6fa9a",
+    name = "babel_helper-module-imports_7.29.7_5b645c40",
     hashes = ["4bdf46cf597b875ce16770f151159ca34f96c20ba3c112dc8d7f6c6d6cce770c"],
     pkg = "@babel/helper-module-imports",
     version = "7.29.7",
 )
 
 npm_repo(
-    name = "babel_helper-module-transforms_7.29.7_a924915d",
+    name = "babel_helper-module-transforms_7.29.7_30ffd7b0",
     hashes = ["dbb3b9b10b0a2828f5af58a6317685b1a150464c6bd54995069c526aba45e6e4"],
     pkg = "@babel/helper-module-transforms",
     version = "7.29.7",
@@ -106,14 +106,14 @@ npm_repo(
 )
 
 npm_repo(
-    name = "babel_plugin-transform-react-jsx-self_7.29.7_17344f07",
+    name = "babel_plugin-transform-react-jsx-self_7.29.7_ce46d344",
     hashes = ["fdbe8ac6d7d22e28bd2f013496c233de0906a261cc7e1a7b3eee9bb5fcc70bf0"],
     pkg = "@babel/plugin-transform-react-jsx-self",
     version = "7.29.7",
 )
 
 npm_repo(
-    name = "babel_plugin-transform-react-jsx-source_7.29.7_17344f07",
+    name = "babel_plugin-transform-react-jsx-source_7.29.7_ce46d344",
     hashes = ["8afa100bf1bafc073813b589980414576b20c66bf3598af229d30b92183fa1a9"],
     pkg = "@babel/plugin-transform-react-jsx-source",
     version = "7.29.7",
@@ -128,6 +128,13 @@ npm_repo(
 
 npm_repo(
     name = "babel_traverse_7.29.8_cfc6fa9a",
+    hashes = ["cf16861f356fd766361ba4d85d5462b6320e0e59f05cb55c762d8f5dff83e234"],
+    pkg = "@babel/traverse",
+    version = "7.29.8",
+)
+
+npm_repo(
+    name = "babel_traverse_7.29.8_5b645c40",
     hashes = ["cf16861f356fd766361ba4d85d5462b6320e0e59f05cb55c762d8f5dff83e234"],
     pkg = "@babel/traverse",
     version = "7.29.8",
@@ -180,6 +187,13 @@ npm_repo(
     hashes = ["0a92d4d311b7acf320aadcb632acde29569711f8eadcca9f0e980f3af93f4339"],
     pkg = "@csstools/css-tokenizer",
     version = "3.0.4",
+)
+
+npm_repo(
+    name = "discoveryjs_json-ext_0.6.3",
+    hashes = ["12ebc2d05c845306ce55b32831ba4c16a07919a8c2d24247600fff34969c1781"],
+    pkg = "@discoveryjs/json-ext",
+    version = "0.6.3",
 )
 
 npm_repo(
@@ -435,6 +449,13 @@ npm_repo(
     hashes = ["db52f9f62558baab13353dd39e3200750fc33e6a129a575b46226f493776e230"],
     pkg = "@jridgewell/resolve-uri",
     version = "3.1.2",
+)
+
+npm_repo(
+    name = "jridgewell_source-map_0.3.11",
+    hashes = ["002115a6e70a202b154333b911f30575aa0164e865a83fb1c766047a579d3ce5"],
+    pkg = "@jridgewell/source-map",
+    version = "0.3.11",
 )
 
 npm_repo(
@@ -763,6 +784,20 @@ npm_repo(
 )
 
 npm_repo(
+    name = "types_json-schema_7.0.15",
+    hashes = ["12dcb1dcff7099bff0663fc220551ba53fcf23c136a22375e323bb6626d95724"],
+    pkg = "@types/json-schema",
+    version = "7.0.15",
+)
+
+npm_repo(
+    name = "types_node_26.3.0",
+    hashes = ["69b0a537007774b0d5a3bea12736d3506b6ef451241fbca46213fd9e474b0a17"],
+    pkg = "@types/node",
+    version = "26.3.0",
+)
+
+npm_repo(
     name = "types_react-dom_19.1.7_5d8f97ea",
     hashes = ["154e36ce002e285c43aa499193b14929c83d0f9c447c27740d544cd5c6fa8d4b"],
     pkg = "@types/react-dom",
@@ -784,7 +819,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "vitejs_plugin-react_5.0.0_c3ebc136",
+    name = "vitejs_plugin-react_5.0.0_34add744",
     hashes = ["bfb18cf62cadeaec6de98518e39f14cdbc92903554775dd891fae7d62dd48dcd"],
     pkg = "@vitejs/plugin-react",
     version = "5.0.0",
@@ -805,7 +840,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "vitest_mocker_4.1.11_3f9da55b",
+    name = "vitest_mocker_4.1.11_1a0c7ffa",
     hashes = ["5f42c3959636909c506885ef643f4a4e4d024bd7939934465f280c42164eb142"],
     pkg = "@vitest/mocker",
     version = "4.1.11",
@@ -847,10 +882,178 @@ npm_repo(
 )
 
 npm_repo(
+    name = "webassemblyjs_ast_1.14.1",
+    hashes = ["e0977a28a563d44e2870e481cd0efbe717e9389376c5aa86f86c65565c14bd82"],
+    pkg = "@webassemblyjs/ast",
+    version = "1.14.1",
+)
+
+npm_repo(
+    name = "webassemblyjs_floating-point-hex-parser_1.13.2",
+    hashes = ["edaa813555da3493cac3d1db8e2cb4e22d3fa0664ae4b72ff5e8ee9abcf54ac4"],
+    pkg = "@webassemblyjs/floating-point-hex-parser",
+    version = "1.13.2",
+)
+
+npm_repo(
+    name = "webassemblyjs_helper-api-error_1.13.2",
+    hashes = ["61bbaa607dd4ee3cd10b7e0ceadcd6e0f3049ccd98bb56fa3410aa42145c2e21"],
+    pkg = "@webassemblyjs/helper-api-error",
+    version = "1.13.2",
+)
+
+npm_repo(
+    name = "webassemblyjs_helper-buffer_1.14.1",
+    hashes = ["caffbef034aab6234ab877028c9563c482c36df47cc2644a415ce644b7c39d84"],
+    pkg = "@webassemblyjs/helper-buffer",
+    version = "1.14.1",
+)
+
+npm_repo(
+    name = "webassemblyjs_helper-numbers_1.13.2",
+    hashes = ["e836ef51b3ad1db1645d0ed19f03f2648198b7be81821729b09642e19e2a6c84"],
+    pkg = "@webassemblyjs/helper-numbers",
+    version = "1.13.2",
+)
+
+npm_repo(
+    name = "webassemblyjs_helper-wasm-bytecode_1.13.2",
+    hashes = ["7b57c6bd44cd96b499fd09656a8e00e8db71e207fd86544148b19a9b3fba48f7"],
+    pkg = "@webassemblyjs/helper-wasm-bytecode",
+    version = "1.13.2",
+)
+
+npm_repo(
+    name = "webassemblyjs_helper-wasm-section_1.14.1",
+    hashes = ["4f6e7befc673500371e705e506e5874687a29fa189975479445f28e68b5127dd"],
+    pkg = "@webassemblyjs/helper-wasm-section",
+    version = "1.14.1",
+)
+
+npm_repo(
+    name = "webassemblyjs_ieee754_1.13.2",
+    hashes = ["f63dca3975f83f82f60790a306264dbdaa08ae3e7d588e24a41a3bd7c7cf21f4"],
+    pkg = "@webassemblyjs/ieee754",
+    version = "1.13.2",
+)
+
+npm_repo(
+    name = "webassemblyjs_leb128_1.13.2",
+    hashes = ["6c83b36b56e5454e21d404bd7af60699330f6f3afdede50390524fa2d8e7caaf"],
+    pkg = "@webassemblyjs/leb128",
+    version = "1.13.2",
+)
+
+npm_repo(
+    name = "webassemblyjs_utf8_1.13.2",
+    hashes = ["fe434892731dd34cf4a71c810372414cb0f9c018825801a8e9963617f4e8c383"],
+    pkg = "@webassemblyjs/utf8",
+    version = "1.13.2",
+)
+
+npm_repo(
+    name = "webassemblyjs_wasm-edit_1.14.1",
+    hashes = ["8d83ae3b7d3d0cc1cf7a9b72a50a15de4d403d152e4925bb2d8d04fed467d322"],
+    pkg = "@webassemblyjs/wasm-edit",
+    version = "1.14.1",
+)
+
+npm_repo(
+    name = "webassemblyjs_wasm-gen_1.14.1",
+    hashes = ["ebf25d3d0c0b9aa7101df6cc3916c7d8805023ad59e482713d7a2021a60951c2"],
+    pkg = "@webassemblyjs/wasm-gen",
+    version = "1.14.1",
+)
+
+npm_repo(
+    name = "webassemblyjs_wasm-opt_1.14.1",
+    hashes = ["111bc0e775093d3ae9002da502716432401a36df6d75bccc32fe1b76b43ec05f"],
+    pkg = "@webassemblyjs/wasm-opt",
+    version = "1.14.1",
+)
+
+npm_repo(
+    name = "webassemblyjs_wasm-parser_1.14.1",
+    hashes = ["b778ef710a007cc5fd12168c2b8ccad9e0e7fdca9756533b14b53f6a1d528378"],
+    pkg = "@webassemblyjs/wasm-parser",
+    version = "1.14.1",
+)
+
+npm_repo(
+    name = "webassemblyjs_wast-printer_1.14.1",
+    hashes = ["4f2d1195a11e18160547f5345277ebeb9dcad8c9c589fa3b3d2c23b26fd3bcd3"],
+    pkg = "@webassemblyjs/wast-printer",
+    version = "1.14.1",
+)
+
+npm_repo(
+    name = "webpack-cli_configtest_3.0.1_b867fa0e",
+    hashes = ["b13ab4b4aed51382b61077959876f5e5d8c584e9d354439e5c2da4e39535a4b0"],
+    pkg = "@webpack-cli/configtest",
+    version = "3.0.1",
+)
+
+npm_repo(
+    name = "webpack-cli_info_3.0.1_b867fa0e",
+    hashes = ["5d2dce79215c1a3036d90418f4e3fc93b4c9c1a5139bf2468c67c62fca72c499"],
+    pkg = "@webpack-cli/info",
+    version = "3.0.1",
+)
+
+npm_repo(
+    name = "webpack-cli_serve_3.0.1_b867fa0e",
+    hashes = ["64c328b1c34d25ed8f56a9b034c1f775534d2809e00f14f435f5672b71093f70"],
+    pkg = "@webpack-cli/serve",
+    version = "3.0.1",
+)
+
+npm_repo(
+    name = "xtuc_ieee754_1.2.0",
+    hashes = ["42cb1a267b197da8c43ce170df9dca0e93450f6281705549e20dd4588443edec"],
+    pkg = "@xtuc/ieee754",
+    version = "1.2.0",
+)
+
+npm_repo(
+    name = "xtuc_long_4.2.2",
+    hashes = ["7c8bd26cb0b9aa8cf7eb8fdbab8f4c168629b57ec7dfabcc7d6312b7a748f660"],
+    pkg = "@xtuc/long",
+    version = "4.2.2",
+)
+
+npm_repo(
+    name = "acorn_8.18.0",
+    hashes = ["0ad4c0f28f9bc5bb6f3eb879b4fd38265def6d7e1e5d61f96f78ee6a8a7be94a"],
+    pkg = "acorn",
+    version = "8.18.0",
+)
+
+npm_repo(
     name = "agent-base_7.1.4",
     hashes = ["7dd4a61668a9a4e8d4e903f1a254f94d53dafd3f316f2b9b597c5ad8c79cb57e"],
     pkg = "agent-base",
     version = "7.1.4",
+)
+
+npm_repo(
+    name = "ajv-formats_2.1.1_2cb7a033",
+    hashes = ["b220061cfb4d6077f1b696b05690ee6ebf81ef76fe14510de234719607f7bdc7"],
+    pkg = "ajv-formats",
+    version = "2.1.1",
+)
+
+npm_repo(
+    name = "ajv-keywords_5.1.0_2cb7a033",
+    hashes = ["346ba44c7f92642b93433fe690a7c4d2385dbc44c26a9fa08d9d927b7b3fa351"],
+    pkg = "ajv-keywords",
+    version = "5.1.0",
+)
+
+npm_repo(
+    name = "ajv_8.20.0",
+    hashes = ["b2f0b3a893bbb8cc5efb6814f08b1499e19e31d5dd73683f5893382f48f6e7b3"],
+    pkg = "ajv",
+    version = "8.20.0",
 )
 
 npm_repo(
@@ -882,6 +1085,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "buffer-from_1.1.2",
+    hashes = ["9c2b03d59eca8f463a1927e07273ddaa87785fe3f61626c42b005540e962e343"],
+    pkg = "buffer-from",
+    version = "1.1.2",
+)
+
+npm_repo(
     name = "caniuse-lite_1.0.30001809",
     hashes = ["31aa93f13ffd7fef90b767b1b33f92dc251b4578f17764a44a72ba759528364d"],
     pkg = "caniuse-lite",
@@ -896,6 +1106,41 @@ npm_repo(
 )
 
 npm_repo(
+    name = "chrome-trace-event_1.0.4",
+    hashes = ["9d4bb078891055744ab0c2a61565fa58f3e20945db63c0aeac90483f9d5e73e2"],
+    pkg = "chrome-trace-event",
+    version = "1.0.4",
+)
+
+npm_repo(
+    name = "clone-deep_4.0.1",
+    hashes = ["ed8a94f72d8637cb294ae52410102447fe195e3599f83ed598a30daf7ffe3a4c"],
+    pkg = "clone-deep",
+    version = "4.0.1",
+)
+
+npm_repo(
+    name = "colorette_2.0.20",
+    hashes = ["3f7e2796633b00e3f05c5c19253afc38db5afb1c7a694bcd92bf4acb52264b62"],
+    pkg = "colorette",
+    version = "2.0.20",
+)
+
+npm_repo(
+    name = "commander_12.1.0",
+    hashes = ["56affc6ddafe486f94b428ae2823d059cf60d4dae2f33eaaf1b1ec4306f73173"],
+    pkg = "commander",
+    version = "12.1.0",
+)
+
+npm_repo(
+    name = "commander_2.20.3",
+    hashes = ["3c02903de017a98d4dc3fe2bed4900beb0d04cf7b679dca0915fd8c759652b55"],
+    pkg = "commander",
+    version = "2.20.3",
+)
+
+npm_repo(
     name = "convert-source-map_2.0.0",
     hashes = ["17f7253ec7e4e09f68371192fded2b5241a5cf85e610e5059b1d49e878fe1898"],
     pkg = "convert-source-map",
@@ -907,6 +1152,13 @@ npm_repo(
     hashes = ["0e9342b066986722098d9b108b238033862eae90b3d53ff90581538264d91b60"],
     pkg = "cookie",
     version = "1.1.1",
+)
+
+npm_repo(
+    name = "cross-spawn_7.0.6",
+    hashes = ["188c320cdc413adfec03098fda72af7a9b02152ba13d3a8f87f172d93ced38ea"],
+    pkg = "cross-spawn",
+    version = "7.0.6",
 )
 
 npm_repo(
@@ -938,6 +1190,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "debug_4.4.3_5b645c40",
+    hashes = ["89c1ac9c946ee8905a875837114528e97eeae35e03be3190584b2216af43e4a7"],
+    pkg = "debug",
+    version = "4.4.3",
+)
+
+npm_repo(
     name = "decimal.js_10.6.0",
     hashes = ["433210122e8149972f64054c54b0ce0872e5f15a3c5835aab57ff1a8e6d071b1"],
     pkg = "decimal.js",
@@ -959,10 +1218,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "enhanced-resolve_5.24.5",
+    hashes = ["ddcda3d6585a806614e581ea4ce1cf33a10d9f4b1cdfb6c808dfcda9b5641471"],
+    pkg = "enhanced-resolve",
+    version = "5.24.5",
+)
+
+npm_repo(
     name = "entities_6.0.1",
     hashes = ["a4de957ab0852f6c91eae59a6000ced5a25a04f0b6e1c3062fbad732a6b5479d"],
     pkg = "entities",
     version = "6.0.1",
+)
+
+npm_repo(
+    name = "envinfo_7.21.0",
+    hashes = ["587806a6cd7c8caa701d356e806afe6c1699f3b2ffa7a846b04d18f6e335f83c"],
+    pkg = "envinfo",
+    version = "7.21.0",
 )
 
 npm_repo(
@@ -994,6 +1267,34 @@ npm_repo(
 )
 
 npm_repo(
+    name = "eslint-scope_5.1.1",
+    hashes = ["b5d26255cc994fa39aa49a70a1f068ce0272743b4b8adda8d7f6399f15f43118"],
+    pkg = "eslint-scope",
+    version = "5.1.1",
+)
+
+npm_repo(
+    name = "esrecurse_4.3.0",
+    hashes = ["3ecf9370d7296b47b570c88a11f70b35bb965af8d536536b259eb55f9b793b61"],
+    pkg = "esrecurse",
+    version = "4.3.0",
+)
+
+npm_repo(
+    name = "estraverse_4.3.0",
+    hashes = ["7f262b147df8eeb209d0b7220b4dff6c70a5b1edba157bf335cee0bb71b9f1ae"],
+    pkg = "estraverse",
+    version = "4.3.0",
+)
+
+npm_repo(
+    name = "estraverse_5.3.0",
+    hashes = ["3e8d45da5b8085a4a8d51368ffead5b551a502c286978962a05d5c8e0d72fda6"],
+    pkg = "estraverse",
+    version = "5.3.0",
+)
+
+npm_repo(
     name = "estree-walker_2.0.2",
     hashes = ["302931e539a9c5568d56634119290c4df9a7bde64a2f2dbc646d6013e3b03c58"],
     pkg = "estree-walker",
@@ -1008,6 +1309,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "events_3.3.0",
+    hashes = ["2c30dd630b58299bdfaac8688f763c6f312d29779c500b1e3701a1d4fb3b534b"],
+    pkg = "events",
+    version = "3.3.0",
+)
+
+npm_repo(
     name = "expect-type_1.4.0",
     hashes = ["c44b3fea7bcae8a4ce328b457da171e8debf553cbeb6a049817975b8e050e3a1"],
     pkg = "expect-type",
@@ -1015,10 +1323,45 @@ npm_repo(
 )
 
 npm_repo(
+    name = "fast-deep-equal_3.1.3",
+    hashes = ["b019a0980f27638dc3f85836b0e478f188e00d7a6e5852c0819fa86f56e47b8f"],
+    pkg = "fast-deep-equal",
+    version = "3.1.3",
+)
+
+npm_repo(
+    name = "fast-uri_3.1.6",
+    hashes = ["264af0e32c4b7b7bcb9ce5b4623c82469ee3e69ba5d171920f1762d626db1064"],
+    pkg = "fast-uri",
+    version = "3.1.6",
+)
+
+npm_repo(
+    name = "fastest-levenshtein_1.0.16",
+    hashes = ["650310ac51ee96ae0f900751d47b2846f038b80fd3380f35533605f3704c5b5f"],
+    pkg = "fastest-levenshtein",
+    version = "1.0.16",
+)
+
+npm_repo(
     name = "fdir_6.5.0_5c16dc5f",
     hashes = ["241ddcd9f31e2a1fca405326017dbb8333ce174198e887f0f96387c29f0d365e"],
     pkg = "fdir",
     version = "6.5.0",
+)
+
+npm_repo(
+    name = "find-up_4.1.0",
+    hashes = ["33a9b0535306d2e05e0a27088b68344b52ac767d576ef60b7ab173aa0d5a26eb"],
+    pkg = "find-up",
+    version = "4.1.0",
+)
+
+npm_repo(
+    name = "flat_5.0.2",
+    hashes = ["d772de42fa0c5e2b3d940c351873743d9149e5d343f11523dcfb6619f8feed42"],
+    pkg = "flat",
+    version = "5.0.2",
 )
 
 npm_repo(
@@ -1041,6 +1384,13 @@ npm_repo(
     hashes = ["df9f92ef26a35d4f92cb8a73415dfea8dadaf294a03e60e4d176df82f38d17c9"],
     pkg = "gensync",
     version = "1.0.0-beta.2",
+)
+
+npm_repo(
+    name = "graceful-fs_4.2.11",
+    hashes = ["3961374aa161e6fed80d6f4b6aaf2fb7eafd2c9e5be34e865b375f0114dd099c"],
+    pkg = "graceful-fs",
+    version = "4.2.11",
 )
 
 npm_repo(
@@ -1093,6 +1443,20 @@ npm_repo(
 )
 
 npm_repo(
+    name = "import-local_3.2.0",
+    hashes = ["a8a83d33b55d95831ded0505259757f0667cac4a644be7ada97c7bad9aa958d0"],
+    pkg = "import-local",
+    version = "3.2.0",
+)
+
+npm_repo(
+    name = "interpret_3.1.1",
+    hashes = ["898eea4a6546a9d63c3e884af02dbdcebbe8df5b8b196c19daefd9b42321cc4f"],
+    pkg = "interpret",
+    version = "3.1.1",
+)
+
+npm_repo(
     name = "is-core-module_2.16.2",
     hashes = ["e2f933640de144ca2e96d754b51b1fd6b96e2ad44e72eeffce17aa24436a41b3"],
     pkg = "is-core-module",
@@ -1107,10 +1471,31 @@ npm_repo(
 )
 
 npm_repo(
+    name = "is-plain-object_2.0.4",
+    hashes = ["4893fd94b7cf23cc0c936fdea4ada5d174e53adba6c72e7334b8cec0804ffdc6"],
+    pkg = "is-plain-object",
+    version = "2.0.4",
+)
+
+npm_repo(
     name = "is-potential-custom-element-name_1.0.1",
     hashes = ["b6e425bb136422af133754814046a640c1573349755c63130c424abcee398621"],
     pkg = "is-potential-custom-element-name",
     version = "1.0.1",
+)
+
+npm_repo(
+    name = "isexe_2.0.0",
+    hashes = ["47cfe872e088e28c53b736fef305324b57cc1cfc9f72a9b0f769f92731cb8359"],
+    pkg = "isexe",
+    version = "2.0.0",
+)
+
+npm_repo(
+    name = "isobject_3.0.1",
+    hashes = ["3cc6c92b005a644c93fbc9e3eb450b6a642bbca3443cc9dcc169152961367d37"],
+    pkg = "isobject",
+    version = "3.0.1",
 )
 
 npm_repo(
@@ -1132,6 +1517,13 @@ npm_repo(
     hashes = ["aa3efaadd88bd55d7bbccdad8751b87deb59ce726039e53008869f944564c957"],
     pkg = "istanbul-reports",
     version = "3.2.0",
+)
+
+npm_repo(
+    name = "jest-worker_27.5.1",
+    hashes = ["5859f8ff503e3fda6317490c68ea5e155b97d61119c0cfc9071740822b5a35df"],
+    pkg = "jest-worker",
+    version = "27.5.1",
 )
 
 npm_repo(
@@ -1163,10 +1555,31 @@ npm_repo(
 )
 
 npm_repo(
+    name = "json-schema-traverse_1.0.0",
+    hashes = ["023222622df29fc274bde5d3590e47aa1d4a8e3c1d6e2aba029948ed79799b21"],
+    pkg = "json-schema-traverse",
+    version = "1.0.0",
+)
+
+npm_repo(
     name = "json5_2.2.3",
     hashes = ["08afb33db600d11fc89b98fac4054f19d5d3e0fe527063116150e1ecc2d2377b"],
     pkg = "json5",
     version = "2.2.3",
+)
+
+npm_repo(
+    name = "kind-of_6.0.3",
+    hashes = ["6c24443b5b6ca52d3dce399c1e2c27c4591c7529765513eeaa0c265b0c0e63da"],
+    pkg = "kind-of",
+    version = "6.0.3",
+)
+
+npm_repo(
+    name = "locate-path_5.0.0",
+    hashes = ["ae3d1b9360a435840a81a8c7da29f59630dd793c3f39a08f15f73fd3894053b7"],
+    pkg = "locate-path",
+    version = "5.0.0",
 )
 
 npm_repo(
@@ -1205,6 +1618,27 @@ npm_repo(
 )
 
 npm_repo(
+    name = "merge-stream_2.0.0",
+    hashes = ["24c3be9bb27065e67519a480da43b251c8a0de6def1de79c3c22e96dd597764e"],
+    pkg = "merge-stream",
+    version = "2.0.0",
+)
+
+npm_repo(
+    name = "mime-db_1.54.0",
+    hashes = ["2b21054e65d0eabd58c5002d2713e968dd47b15700bfed4b7281a344ded1c420"],
+    pkg = "mime-db",
+    version = "1.54.0",
+)
+
+npm_repo(
+    name = "minimizer-webpack-plugin_5.6.1_324e53ab",
+    hashes = ["553bcf0e868d13b6e6482ce0b5cf8298a90c7c11494ec0dd6a574beaef96dac2"],
+    pkg = "minimizer-webpack-plugin",
+    version = "5.6.1",
+)
+
+npm_repo(
     name = "ms_2.1.3",
     hashes = ["f6616e15e530ed552f9daa2d3ce71963947c6bc7c98c9b64fd3e673fd02622c6"],
     pkg = "ms",
@@ -1216,6 +1650,13 @@ npm_repo(
     hashes = ["b9dc81cb403ea2510314dd2d1ad8d71934f325db90c1b43805e781b87e3fb009"],
     pkg = "nanoid",
     version = "3.3.18",
+)
+
+npm_repo(
+    name = "neo-async_2.6.2",
+    hashes = ["43a1700df4178bbd3fe86336349830f25f9ce70d492ab1d45b716ceadaec6df4"],
+    pkg = "neo-async",
+    version = "2.6.2",
 )
 
 npm_repo(
@@ -1240,10 +1681,45 @@ npm_repo(
 )
 
 npm_repo(
+    name = "p-limit_2.3.0",
+    hashes = ["384b452409cfeb5c6fa82dc68ebfa498b24717b74fb8d3fe6eb2bb89908db295"],
+    pkg = "p-limit",
+    version = "2.3.0",
+)
+
+npm_repo(
+    name = "p-locate_4.1.0",
+    hashes = ["d95a6ae462e3d967deb0c250bda1c3bbebfe86a58832d27b204c7b74a76fa5f0"],
+    pkg = "p-locate",
+    version = "4.1.0",
+)
+
+npm_repo(
+    name = "p-try_2.2.0",
+    hashes = ["a390b2b89899df950afc0304eaba7cd1f5e3746b2e370758a9b50f177e713790"],
+    pkg = "p-try",
+    version = "2.2.0",
+)
+
+npm_repo(
     name = "parse5_7.3.0",
     hashes = ["9316ca7af41da9e85071b62b9605aa0a6aaeb0463f833c29e7a331e7898f0420"],
     pkg = "parse5",
     version = "7.3.0",
+)
+
+npm_repo(
+    name = "path-exists_4.0.0",
+    hashes = ["dbb535c9302ce9b3f777ece3ff055cc8d88890a1e1deddc045340aef76fb775c"],
+    pkg = "path-exists",
+    version = "4.0.0",
+)
+
+npm_repo(
+    name = "path-key_3.1.1",
+    hashes = ["4b8999acb914830edcd3c5b8fec632b32c6bc759ac3edc86336f5a9e08ba7b92"],
+    pkg = "path-key",
+    version = "3.1.1",
 )
 
 npm_repo(
@@ -1272,6 +1748,13 @@ npm_repo(
     hashes = ["697b463be3cdbd9ffc8f4194fd5019a69ddf95875fb703d78b2b115cc9e740a8"],
     pkg = "picomatch",
     version = "4.0.7",
+)
+
+npm_repo(
+    name = "pkg-dir_4.2.0",
+    hashes = ["a7f4456094d571d70d29f32aa5fa1c738cb8c7087034661078b8678f0153224d"],
+    pkg = "pkg-dir",
+    version = "4.2.0",
 )
 
 npm_repo(
@@ -1317,6 +1800,34 @@ npm_repo(
 )
 
 npm_repo(
+    name = "rechoir_0.8.0",
+    hashes = ["6a9af1f7c2693a1b0d7824812b4db95f02367764bb2601f40bbdaf731b7a8d67"],
+    pkg = "rechoir",
+    version = "0.8.0",
+)
+
+npm_repo(
+    name = "require-from-string_2.0.2",
+    hashes = ["cb694a4965908f7775a0c757f00cf4e624d193cd71d77988fbcca0f597b88d82"],
+    pkg = "require-from-string",
+    version = "2.0.2",
+)
+
+npm_repo(
+    name = "resolve-cwd_3.0.0",
+    hashes = ["a9d99831e70958349d753cff556d1efd10d818cb4affb1f32c1eacc013158ca6"],
+    pkg = "resolve-cwd",
+    version = "3.0.0",
+)
+
+npm_repo(
+    name = "resolve-from_5.0.0",
+    hashes = ["fdf7cffeccad13cf433fe9399b291c5437de4b43c83ea0d535294e1b3d4f25e3"],
+    pkg = "resolve-from",
+    version = "5.0.0",
+)
+
+npm_repo(
     name = "resolve_1.22.12",
     hashes = ["c6a29dbf1f4c0754a94387b379e699f5594216e16ef0d5ee17ccf9518f844dc1"],
     pkg = "resolve",
@@ -1359,6 +1870,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "schema-utils_4.3.3",
+    hashes = ["d76dc381922169c7f03c1ef02de8a5de5c1ad1d60d45d5b44ff453e4357b9aee"],
+    pkg = "schema-utils",
+    version = "4.3.3",
+)
+
+npm_repo(
     name = "semver_6.3.1",
     hashes = ["3c9b042a38e099cbd00a9bd792042aefb62a70b3f0f1ba1a3cbddf07e5eb1230"],
     pkg = "semver",
@@ -1380,6 +1898,27 @@ npm_repo(
 )
 
 npm_repo(
+    name = "shallow-clone_3.0.1",
+    hashes = ["f8e62d218ade8d93130f8ff146ebd6a8df56ed957dfcc318d17b55f43476aa33"],
+    pkg = "shallow-clone",
+    version = "3.0.1",
+)
+
+npm_repo(
+    name = "shebang-command_2.0.0",
+    hashes = ["9acba5bd18a51e9cdf5898380e4df63f803e1844def64ae1a46f88cff86d556e"],
+    pkg = "shebang-command",
+    version = "2.0.0",
+)
+
+npm_repo(
+    name = "shebang-regex_3.0.0",
+    hashes = ["fedbabaa6db26c6be0183f82777dfa852d59a62f8885de93bd32ebc28758958f"],
+    pkg = "shebang-regex",
+    version = "3.0.0",
+)
+
+npm_repo(
     name = "siginfo_2.0.0",
     hashes = ["a20fd853c4514049964aca176d4198d58802b28dc481e82cb57f2101b2c7701b"],
     pkg = "siginfo",
@@ -1391,6 +1930,20 @@ npm_repo(
     hashes = ["f126a6f9fca487a43219d8cb8c3a955279187a966119d548eb5cd47e999d4853"],
     pkg = "source-map-js",
     version = "1.2.1",
+)
+
+npm_repo(
+    name = "source-map-support_0.5.21",
+    hashes = ["5d9b04ef3e6824fdcf91cfcc03ab427fae486bc6859735805593f51b3554f636"],
+    pkg = "source-map-support",
+    version = "0.5.21",
+)
+
+npm_repo(
+    name = "source-map_0.6.1",
+    hashes = ["bdbca10d17ff5a5802d5acfc7b2f22f9f9bf587632a95650d3c5f513c7092b86"],
+    pkg = "source-map",
+    version = "0.6.1",
 )
 
 npm_repo(
@@ -1415,6 +1968,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "supports-color_8.1.1",
+    hashes = ["ea69d9b5801e109932f9f12b5499c06de3fde936119a21c5941b2759d4364fb0"],
+    pkg = "supports-color",
+    version = "8.1.1",
+)
+
+npm_repo(
     name = "supports-preserve-symlinks-flag_1.0.0",
     hashes = ["97da1160af5344534182e72502978374d20875d32c6071cd2dae997be604f7f9"],
     pkg = "supports-preserve-symlinks-flag",
@@ -1426,6 +1986,20 @@ npm_repo(
     hashes = ["8a69700a00d00bdbbadf116f94398cc37f38ecdda559dc6220e17eb977b94abc"],
     pkg = "symbol-tree",
     version = "3.2.4",
+)
+
+npm_repo(
+    name = "tapable_2.3.3",
+    hashes = ["5a57c48d8299820ecd88ce628535d2230cd3862e78234dd029dee1debd1792cd"],
+    pkg = "tapable",
+    version = "2.3.3",
+)
+
+npm_repo(
+    name = "terser_5.50.0",
+    hashes = ["154904ab92f1a9f102afc7d951a6a764ef9803e4afc0903e6a7bbc9812fd0c00"],
+    pkg = "terser",
+    version = "5.50.0",
 )
 
 npm_repo(
@@ -1485,6 +2059,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "undici-types_8.3.0",
+    hashes = ["07a721cb2cd0dd798c24757de34d14e8b640ff8fddef85d662e00b392562a1f2"],
+    pkg = "undici-types",
+    version = "8.3.0",
+)
+
+npm_repo(
     name = "update-browserslist-db_1.3.1_48be4307",
     hashes = ["0c3f182a1c14933648742043e3b03a293dc1b0b71c6632e3e8d049ca5b9aa4e1"],
     pkg = "update-browserslist-db",
@@ -1492,14 +2073,14 @@ npm_repo(
 )
 
 npm_repo(
-    name = "vite_7.1.2",
+    name = "vite_7.1.2_03b546a8",
     hashes = ["2582c2adf5adbb25f80f24c46dc03548ae97ebab24379e984b503ea20b26286d"],
     pkg = "vite",
     version = "7.1.2",
 )
 
 npm_repo(
-    name = "vitest_4.1.11_ed264939",
+    name = "vitest_4.1.11_a7b77df3",
     hashes = ["81875725211b8c43a30213579456954603d471d022587ce0e6842d44d9ed162b"],
     pkg = "vitest",
     version = "4.1.11",
@@ -1513,10 +2094,45 @@ npm_repo(
 )
 
 npm_repo(
+    name = "watchpack_2.5.2",
+    hashes = ["1c07a169876a374944a5a2491c608c9ed302073cab7c1f9510e80c034ecf18dc"],
+    pkg = "watchpack",
+    version = "2.5.2",
+)
+
+npm_repo(
     name = "webidl-conversions_7.0.0",
     hashes = ["fd4d12781018d99e2cc68cf2d997215a0b301761ab26ac2a171116960419e454"],
     pkg = "webidl-conversions",
     version = "7.0.0",
+)
+
+npm_repo(
+    name = "webpack-cli_6.0.1_15068955",
+    hashes = ["f407788079854b0d48fb750da496c59cf00762dce3731520a4b375a377dec183"],
+    pkg = "webpack-cli",
+    version = "6.0.1",
+)
+
+npm_repo(
+    name = "webpack-merge_6.0.1",
+    hashes = ["f4ce5f3d08f2c78839c5a6e463a66f0d4cbd9350d7818c276e160f19d8982452"],
+    pkg = "webpack-merge",
+    version = "6.0.1",
+)
+
+npm_repo(
+    name = "webpack-sources_3.5.1",
+    hashes = ["9748a58b38a2eb10c143fa1ccc12bc5d3ea4d710be9c8c7f432b9652bf5443f4"],
+    pkg = "webpack-sources",
+    version = "3.5.1",
+)
+
+npm_repo(
+    name = "webpack_5.109.2_e56e9508",
+    hashes = ["3edd36c4196801c74b283e8fe662e1fdb9965a947bf996d487d578422539925d"],
+    pkg = "webpack",
+    version = "5.109.2",
 )
 
 npm_repo(
@@ -1541,10 +2157,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "which_2.0.2",
+    hashes = ["a13adf5fddeb769655edce551e81fbb11904b9c9be76d95e41da8c4c499d4edc"],
+    pkg = "which",
+    version = "2.0.2",
+)
+
+npm_repo(
     name = "why-is-node-running_2.3.0",
     hashes = ["d2f668f77953509d0079ef05617ac9f5b5f64ed194f8b05872ad12ba06ec9963"],
     pkg = "why-is-node-running",
     version = "2.3.0",
+)
+
+npm_repo(
+    name = "wildcard_2.0.1",
+    hashes = ["18bac160cb5e07d9fd1c038b2468a6511f6bdce887f5fee1002bc427cbfe6856"],
+    pkg = "wildcard",
+    version = "2.0.1",
 )
 
 npm_repo(
@@ -1579,36 +2209,48 @@ npm_link(
     name = "node_modules",
     lock = "pnpm-lock.yaml",
     packages = [
+        ":acorn_8.18.0",
         ":agent-base_7.1.4",
+        ":ajv-formats_2.1.1_2cb7a033",
+        ":ajv-keywords_5.1.0_2cb7a033",
+        ":ajv_8.20.0",
         ":asamuzakjp_css-color_3.2.0",
         ":assertion-error_2.0.1",
         ":ast-v8-to-istanbul_1.0.5",
         ":babel_code-frame_7.29.7",
         ":babel_compat-data_7.29.7",
-        ":babel_core_7.29.7_cfc6fa9a",
+        ":babel_core_7.29.7_5b645c40",
         ":babel_generator_7.29.8",
         ":babel_helper-compilation-targets_7.29.7",
         ":babel_helper-globals_7.29.7",
-        ":babel_helper-module-imports_7.29.7_cfc6fa9a",
-        ":babel_helper-module-transforms_7.29.7_a924915d",
+        ":babel_helper-module-imports_7.29.7_5b645c40",
+        ":babel_helper-module-transforms_7.29.7_30ffd7b0",
         ":babel_helper-plugin-utils_7.29.7",
         ":babel_helper-string-parser_7.29.7",
         ":babel_helper-validator-identifier_7.29.7",
         ":babel_helper-validator-option_7.29.7",
         ":babel_helpers_7.29.7",
         ":babel_parser_7.29.8",
-        ":babel_plugin-transform-react-jsx-self_7.29.7_17344f07",
-        ":babel_plugin-transform-react-jsx-source_7.29.7_17344f07",
+        ":babel_plugin-transform-react-jsx-self_7.29.7_ce46d344",
+        ":babel_plugin-transform-react-jsx-source_7.29.7_ce46d344",
         ":babel_template_7.29.7",
+        ":babel_traverse_7.29.8_5b645c40",
         ":babel_traverse_7.29.8_cfc6fa9a",
         ":babel_types_7.29.8",
         ":baseline-browser-mapping_2.11.18",
         ":bcoe_v8-coverage_1.0.2",
         ":browserslist_4.28.8",
+        ":buffer-from_1.1.2",
         ":caniuse-lite_1.0.30001809",
         ":chai_6.2.2",
+        ":chrome-trace-event_1.0.4",
+        ":clone-deep_4.0.1",
+        ":colorette_2.0.20",
+        ":commander_12.1.0",
+        ":commander_2.20.3",
         ":convert-source-map_2.0.0",
         ":cookie_1.1.1",
+        ":cross-spawn_7.0.6",
         ":cssstyle_4.6.0",
         ":csstools_color-helpers_5.1.0",
         ":csstools_css-calc_2.1.4_4639dcc2",
@@ -1617,11 +2259,15 @@ npm_link(
         ":csstools_css-tokenizer_3.0.4",
         ":csstype_3.2.3",
         ":data-urls_5.0.0",
+        ":debug_4.4.3_5b645c40",
         ":debug_4.4.3_cfc6fa9a",
         ":decimal.js_10.6.0",
         ":deepmerge_4.3.1",
+        ":discoveryjs_json-ext_0.6.3",
         ":electron-to-chromium_1.5.413",
+        ":enhanced-resolve_5.24.5",
         ":entities_6.0.1",
+        ":envinfo_7.21.0",
         ":es-errors_1.3.0",
         ":es-module-lexer_2.3.2",
         ":esbuild_0.25.12",
@@ -1652,13 +2298,24 @@ npm_link(
         ":esbuild_win32-ia32_0.25.12",
         ":esbuild_win32-x64_0.25.12",
         ":escalade_3.2.0",
+        ":eslint-scope_5.1.1",
+        ":esrecurse_4.3.0",
+        ":estraverse_4.3.0",
+        ":estraverse_5.3.0",
         ":estree-walker_2.0.2",
         ":estree-walker_3.0.3",
+        ":events_3.3.0",
         ":expect-type_1.4.0",
+        ":fast-deep-equal_3.1.3",
+        ":fast-uri_3.1.6",
+        ":fastest-levenshtein_1.0.16",
         ":fdir_6.5.0_5c16dc5f",
+        ":find-up_4.1.0",
+        ":flat_5.0.2",
         ":fsevents_2.3.3",
         ":function-bind_1.1.2",
         ":gensync_1.0.0-beta.2",
+        ":graceful-fs_4.2.11",
         ":has-flag_4.0.0",
         ":hasown_2.0.4",
         ":html-encoding-sniffer_4.0.0",
@@ -1666,44 +2323,68 @@ npm_link(
         ":http-proxy-agent_7.0.2_cfc6fa9a",
         ":https-proxy-agent_7.0.6_cfc6fa9a",
         ":iconv-lite_0.6.3",
+        ":import-local_3.2.0",
+        ":interpret_3.1.1",
         ":is-core-module_2.16.2",
         ":is-module_1.0.0",
+        ":is-plain-object_2.0.4",
         ":is-potential-custom-element-name_1.0.1",
+        ":isexe_2.0.0",
+        ":isobject_3.0.1",
         ":istanbul-lib-coverage_3.2.2",
         ":istanbul-lib-report_3.0.1",
         ":istanbul-reports_3.2.0",
+        ":jest-worker_27.5.1",
         ":jridgewell_gen-mapping_0.3.13",
         ":jridgewell_remapping_2.3.5",
         ":jridgewell_resolve-uri_3.1.2",
+        ":jridgewell_source-map_0.3.11",
         ":jridgewell_sourcemap-codec_1.5.5",
         ":jridgewell_trace-mapping_0.3.31",
         ":js-tokens_10.0.0",
         ":js-tokens_4.0.0",
         ":jsdom_26.1.0_cfc6fa9a",
         ":jsesc_3.1.0",
+        ":json-schema-traverse_1.0.0",
         ":json5_2.2.3",
+        ":kind-of_6.0.3",
+        ":locate-path_5.0.0",
         ":lru-cache_10.4.3",
         ":lru-cache_5.1.1",
         ":magic-string_0.30.21",
         ":magicast_0.5.4",
         ":make-dir_4.0.0",
+        ":merge-stream_2.0.0",
+        ":mime-db_1.54.0",
+        ":minimizer-webpack-plugin_5.6.1_324e53ab",
         ":ms_2.1.3",
         ":nanoid_3.3.18",
         ":napi-rs_lzma-linux-x64-gnu_1.5.1",
+        ":neo-async_2.6.2",
         ":node-releases_2.0.53",
         ":nwsapi_2.2.24",
         ":obug_2.1.4",
+        ":p-limit_2.3.0",
+        ":p-locate_4.1.0",
+        ":p-try_2.2.0",
         ":parse5_7.3.0",
+        ":path-exists_4.0.0",
+        ":path-key_3.1.1",
         ":path-parse_1.0.7",
         ":pathe_2.0.3",
         ":picocolors_1.1.1",
         ":picomatch_4.0.7",
+        ":pkg-dir_4.2.0",
         ":postcss_8.5.26",
         ":punycode_2.3.1",
         ":react-dom_19.1.1_6cb25bb6",
         ":react-refresh_0.17.0",
         ":react-router_7.9.1_a63170c7",
         ":react_19.1.1",
+        ":rechoir_0.8.0",
+        ":require-from-string_2.0.2",
+        ":resolve-cwd_3.0.0",
+        ":resolve-from_5.0.0",
         ":resolve_1.22.12",
         ":rolldown_pluginutils_1.0.0-beta.30",
         ":rollup_4.62.5",
@@ -1738,17 +2419,26 @@ npm_link(
         ":safer-buffer_2.1.2",
         ":saxes_6.0.0",
         ":scheduler_0.26.0",
+        ":schema-utils_4.3.3",
         ":semver_6.3.1",
         ":semver_7.8.5",
         ":set-cookie-parser_2.7.2",
+        ":shallow-clone_3.0.1",
+        ":shebang-command_2.0.0",
+        ":shebang-regex_3.0.0",
         ":siginfo_2.0.0",
         ":source-map-js_1.2.1",
+        ":source-map-support_0.5.21",
+        ":source-map_0.6.1",
         ":stackback_0.0.2",
         ":standard-schema_spec_1.1.0",
         ":std-env_4.2.0",
         ":supports-color_7.2.0",
+        ":supports-color_8.1.1",
         ":supports-preserve-symlinks-flag_1.0.0",
         ":symbol-tree_3.2.4",
+        ":tapable_2.3.3",
+        ":terser_5.50.0",
         ":tinybench_2.9.0",
         ":tinyexec_1.3.0",
         ":tinyglobby_0.2.17",
@@ -1764,30 +2454,60 @@ npm_link(
         ":types_chai_5.2.3",
         ":types_deep-eql_4.0.2",
         ":types_estree_1.0.9",
+        ":types_json-schema_7.0.15",
+        ":types_node_26.3.0",
         ":types_react-dom_19.1.7_5d8f97ea",
         ":types_react_19.1.9",
         ":types_resolve_1.20.2",
+        ":undici-types_8.3.0",
         ":update-browserslist-db_1.3.1_48be4307",
-        ":vite_7.1.2",
-        ":vitejs_plugin-react_5.0.0_c3ebc136",
-        ":vitest_4.1.11_ed264939",
+        ":vite_7.1.2_03b546a8",
+        ":vitejs_plugin-react_5.0.0_34add744",
+        ":vitest_4.1.11_a7b77df3",
         ":vitest_coverage-v8_4.1.11_e94d1b4b",
         ":vitest_expect_4.1.11",
-        ":vitest_mocker_4.1.11_3f9da55b",
+        ":vitest_mocker_4.1.11_1a0c7ffa",
         ":vitest_pretty-format_4.1.11",
         ":vitest_runner_4.1.11",
         ":vitest_snapshot_4.1.11",
         ":vitest_spy_4.1.11",
         ":vitest_utils_4.1.11",
         ":w3c-xmlserializer_5.0.0",
+        ":watchpack_2.5.2",
+        ":webassemblyjs_ast_1.14.1",
+        ":webassemblyjs_floating-point-hex-parser_1.13.2",
+        ":webassemblyjs_helper-api-error_1.13.2",
+        ":webassemblyjs_helper-buffer_1.14.1",
+        ":webassemblyjs_helper-numbers_1.13.2",
+        ":webassemblyjs_helper-wasm-bytecode_1.13.2",
+        ":webassemblyjs_helper-wasm-section_1.14.1",
+        ":webassemblyjs_ieee754_1.13.2",
+        ":webassemblyjs_leb128_1.13.2",
+        ":webassemblyjs_utf8_1.13.2",
+        ":webassemblyjs_wasm-edit_1.14.1",
+        ":webassemblyjs_wasm-gen_1.14.1",
+        ":webassemblyjs_wasm-opt_1.14.1",
+        ":webassemblyjs_wasm-parser_1.14.1",
+        ":webassemblyjs_wast-printer_1.14.1",
         ":webidl-conversions_7.0.0",
+        ":webpack-cli_6.0.1_15068955",
+        ":webpack-cli_configtest_3.0.1_b867fa0e",
+        ":webpack-cli_info_3.0.1_b867fa0e",
+        ":webpack-cli_serve_3.0.1_b867fa0e",
+        ":webpack-merge_6.0.1",
+        ":webpack-sources_3.5.1",
+        ":webpack_5.109.2_e56e9508",
         ":whatwg-encoding_3.1.1",
         ":whatwg-mimetype_4.0.0",
         ":whatwg-url_14.2.0",
+        ":which_2.0.2",
         ":why-is-node-running_2.3.0",
+        ":wildcard_2.0.1",
         ":ws_8.21.3",
         ":xml-name-validator_5.0.0",
         ":xmlchars_2.2.0",
+        ":xtuc_ieee754_1.2.0",
+        ":xtuc_long_4.2.2",
         ":yallist_3.1.1",
     ],
     visibility = ["PUBLIC"],
@@ -1798,36 +2518,48 @@ npm_link(
     hoisted = True,
     lock = "pnpm-lock.yaml",
     packages = [
+        ":acorn_8.18.0",
         ":agent-base_7.1.4",
+        ":ajv-formats_2.1.1_2cb7a033",
+        ":ajv-keywords_5.1.0_2cb7a033",
+        ":ajv_8.20.0",
         ":asamuzakjp_css-color_3.2.0",
         ":assertion-error_2.0.1",
         ":ast-v8-to-istanbul_1.0.5",
         ":babel_code-frame_7.29.7",
         ":babel_compat-data_7.29.7",
-        ":babel_core_7.29.7_cfc6fa9a",
+        ":babel_core_7.29.7_5b645c40",
         ":babel_generator_7.29.8",
         ":babel_helper-compilation-targets_7.29.7",
         ":babel_helper-globals_7.29.7",
-        ":babel_helper-module-imports_7.29.7_cfc6fa9a",
-        ":babel_helper-module-transforms_7.29.7_a924915d",
+        ":babel_helper-module-imports_7.29.7_5b645c40",
+        ":babel_helper-module-transforms_7.29.7_30ffd7b0",
         ":babel_helper-plugin-utils_7.29.7",
         ":babel_helper-string-parser_7.29.7",
         ":babel_helper-validator-identifier_7.29.7",
         ":babel_helper-validator-option_7.29.7",
         ":babel_helpers_7.29.7",
         ":babel_parser_7.29.8",
-        ":babel_plugin-transform-react-jsx-self_7.29.7_17344f07",
-        ":babel_plugin-transform-react-jsx-source_7.29.7_17344f07",
+        ":babel_plugin-transform-react-jsx-self_7.29.7_ce46d344",
+        ":babel_plugin-transform-react-jsx-source_7.29.7_ce46d344",
         ":babel_template_7.29.7",
+        ":babel_traverse_7.29.8_5b645c40",
         ":babel_traverse_7.29.8_cfc6fa9a",
         ":babel_types_7.29.8",
         ":baseline-browser-mapping_2.11.18",
         ":bcoe_v8-coverage_1.0.2",
         ":browserslist_4.28.8",
+        ":buffer-from_1.1.2",
         ":caniuse-lite_1.0.30001809",
         ":chai_6.2.2",
+        ":chrome-trace-event_1.0.4",
+        ":clone-deep_4.0.1",
+        ":colorette_2.0.20",
+        ":commander_12.1.0",
+        ":commander_2.20.3",
         ":convert-source-map_2.0.0",
         ":cookie_1.1.1",
+        ":cross-spawn_7.0.6",
         ":cssstyle_4.6.0",
         ":csstools_color-helpers_5.1.0",
         ":csstools_css-calc_2.1.4_4639dcc2",
@@ -1836,11 +2568,15 @@ npm_link(
         ":csstools_css-tokenizer_3.0.4",
         ":csstype_3.2.3",
         ":data-urls_5.0.0",
+        ":debug_4.4.3_5b645c40",
         ":debug_4.4.3_cfc6fa9a",
         ":decimal.js_10.6.0",
         ":deepmerge_4.3.1",
+        ":discoveryjs_json-ext_0.6.3",
         ":electron-to-chromium_1.5.413",
+        ":enhanced-resolve_5.24.5",
         ":entities_6.0.1",
+        ":envinfo_7.21.0",
         ":es-errors_1.3.0",
         ":es-module-lexer_2.3.2",
         ":esbuild_0.25.12",
@@ -1871,13 +2607,24 @@ npm_link(
         ":esbuild_win32-ia32_0.25.12",
         ":esbuild_win32-x64_0.25.12",
         ":escalade_3.2.0",
+        ":eslint-scope_5.1.1",
+        ":esrecurse_4.3.0",
+        ":estraverse_4.3.0",
+        ":estraverse_5.3.0",
         ":estree-walker_2.0.2",
         ":estree-walker_3.0.3",
+        ":events_3.3.0",
         ":expect-type_1.4.0",
+        ":fast-deep-equal_3.1.3",
+        ":fast-uri_3.1.6",
+        ":fastest-levenshtein_1.0.16",
         ":fdir_6.5.0_5c16dc5f",
+        ":find-up_4.1.0",
+        ":flat_5.0.2",
         ":fsevents_2.3.3",
         ":function-bind_1.1.2",
         ":gensync_1.0.0-beta.2",
+        ":graceful-fs_4.2.11",
         ":has-flag_4.0.0",
         ":hasown_2.0.4",
         ":html-encoding-sniffer_4.0.0",
@@ -1885,44 +2632,68 @@ npm_link(
         ":http-proxy-agent_7.0.2_cfc6fa9a",
         ":https-proxy-agent_7.0.6_cfc6fa9a",
         ":iconv-lite_0.6.3",
+        ":import-local_3.2.0",
+        ":interpret_3.1.1",
         ":is-core-module_2.16.2",
         ":is-module_1.0.0",
+        ":is-plain-object_2.0.4",
         ":is-potential-custom-element-name_1.0.1",
+        ":isexe_2.0.0",
+        ":isobject_3.0.1",
         ":istanbul-lib-coverage_3.2.2",
         ":istanbul-lib-report_3.0.1",
         ":istanbul-reports_3.2.0",
+        ":jest-worker_27.5.1",
         ":jridgewell_gen-mapping_0.3.13",
         ":jridgewell_remapping_2.3.5",
         ":jridgewell_resolve-uri_3.1.2",
+        ":jridgewell_source-map_0.3.11",
         ":jridgewell_sourcemap-codec_1.5.5",
         ":jridgewell_trace-mapping_0.3.31",
         ":js-tokens_10.0.0",
         ":js-tokens_4.0.0",
         ":jsdom_26.1.0_cfc6fa9a",
         ":jsesc_3.1.0",
+        ":json-schema-traverse_1.0.0",
         ":json5_2.2.3",
+        ":kind-of_6.0.3",
+        ":locate-path_5.0.0",
         ":lru-cache_10.4.3",
         ":lru-cache_5.1.1",
         ":magic-string_0.30.21",
         ":magicast_0.5.4",
         ":make-dir_4.0.0",
+        ":merge-stream_2.0.0",
+        ":mime-db_1.54.0",
+        ":minimizer-webpack-plugin_5.6.1_324e53ab",
         ":ms_2.1.3",
         ":nanoid_3.3.18",
         ":napi-rs_lzma-linux-x64-gnu_1.5.1",
+        ":neo-async_2.6.2",
         ":node-releases_2.0.53",
         ":nwsapi_2.2.24",
         ":obug_2.1.4",
+        ":p-limit_2.3.0",
+        ":p-locate_4.1.0",
+        ":p-try_2.2.0",
         ":parse5_7.3.0",
+        ":path-exists_4.0.0",
+        ":path-key_3.1.1",
         ":path-parse_1.0.7",
         ":pathe_2.0.3",
         ":picocolors_1.1.1",
         ":picomatch_4.0.7",
+        ":pkg-dir_4.2.0",
         ":postcss_8.5.26",
         ":punycode_2.3.1",
         ":react-dom_19.1.1_6cb25bb6",
         ":react-refresh_0.17.0",
         ":react-router_7.9.1_a63170c7",
         ":react_19.1.1",
+        ":rechoir_0.8.0",
+        ":require-from-string_2.0.2",
+        ":resolve-cwd_3.0.0",
+        ":resolve-from_5.0.0",
         ":resolve_1.22.12",
         ":rolldown_pluginutils_1.0.0-beta.30",
         ":rollup_4.62.5",
@@ -1957,17 +2728,26 @@ npm_link(
         ":safer-buffer_2.1.2",
         ":saxes_6.0.0",
         ":scheduler_0.26.0",
+        ":schema-utils_4.3.3",
         ":semver_6.3.1",
         ":semver_7.8.5",
         ":set-cookie-parser_2.7.2",
+        ":shallow-clone_3.0.1",
+        ":shebang-command_2.0.0",
+        ":shebang-regex_3.0.0",
         ":siginfo_2.0.0",
         ":source-map-js_1.2.1",
+        ":source-map-support_0.5.21",
+        ":source-map_0.6.1",
         ":stackback_0.0.2",
         ":standard-schema_spec_1.1.0",
         ":std-env_4.2.0",
         ":supports-color_7.2.0",
+        ":supports-color_8.1.1",
         ":supports-preserve-symlinks-flag_1.0.0",
         ":symbol-tree_3.2.4",
+        ":tapable_2.3.3",
+        ":terser_5.50.0",
         ":tinybench_2.9.0",
         ":tinyexec_1.3.0",
         ":tinyglobby_0.2.17",
@@ -1983,30 +2763,60 @@ npm_link(
         ":types_chai_5.2.3",
         ":types_deep-eql_4.0.2",
         ":types_estree_1.0.9",
+        ":types_json-schema_7.0.15",
+        ":types_node_26.3.0",
         ":types_react-dom_19.1.7_5d8f97ea",
         ":types_react_19.1.9",
         ":types_resolve_1.20.2",
+        ":undici-types_8.3.0",
         ":update-browserslist-db_1.3.1_48be4307",
-        ":vite_7.1.2",
-        ":vitejs_plugin-react_5.0.0_c3ebc136",
-        ":vitest_4.1.11_ed264939",
+        ":vite_7.1.2_03b546a8",
+        ":vitejs_plugin-react_5.0.0_34add744",
+        ":vitest_4.1.11_a7b77df3",
         ":vitest_coverage-v8_4.1.11_e94d1b4b",
         ":vitest_expect_4.1.11",
-        ":vitest_mocker_4.1.11_3f9da55b",
+        ":vitest_mocker_4.1.11_1a0c7ffa",
         ":vitest_pretty-format_4.1.11",
         ":vitest_runner_4.1.11",
         ":vitest_snapshot_4.1.11",
         ":vitest_spy_4.1.11",
         ":vitest_utils_4.1.11",
         ":w3c-xmlserializer_5.0.0",
+        ":watchpack_2.5.2",
+        ":webassemblyjs_ast_1.14.1",
+        ":webassemblyjs_floating-point-hex-parser_1.13.2",
+        ":webassemblyjs_helper-api-error_1.13.2",
+        ":webassemblyjs_helper-buffer_1.14.1",
+        ":webassemblyjs_helper-numbers_1.13.2",
+        ":webassemblyjs_helper-wasm-bytecode_1.13.2",
+        ":webassemblyjs_helper-wasm-section_1.14.1",
+        ":webassemblyjs_ieee754_1.13.2",
+        ":webassemblyjs_leb128_1.13.2",
+        ":webassemblyjs_utf8_1.13.2",
+        ":webassemblyjs_wasm-edit_1.14.1",
+        ":webassemblyjs_wasm-gen_1.14.1",
+        ":webassemblyjs_wasm-opt_1.14.1",
+        ":webassemblyjs_wasm-parser_1.14.1",
+        ":webassemblyjs_wast-printer_1.14.1",
         ":webidl-conversions_7.0.0",
+        ":webpack-cli_6.0.1_15068955",
+        ":webpack-cli_configtest_3.0.1_b867fa0e",
+        ":webpack-cli_info_3.0.1_b867fa0e",
+        ":webpack-cli_serve_3.0.1_b867fa0e",
+        ":webpack-merge_6.0.1",
+        ":webpack-sources_3.5.1",
+        ":webpack_5.109.2_e56e9508",
         ":whatwg-encoding_3.1.1",
         ":whatwg-mimetype_4.0.0",
         ":whatwg-url_14.2.0",
+        ":which_2.0.2",
         ":why-is-node-running_2.3.0",
+        ":wildcard_2.0.1",
         ":ws_8.21.3",
         ":xml-name-validator_5.0.0",
         ":xmlchars_2.2.0",
+        ":xtuc_ieee754_1.2.0",
+        ":xtuc_long_4.2.2",
         ":yallist_3.1.1",
     ],
     visibility = ["PUBLIC"],

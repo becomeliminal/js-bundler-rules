@@ -265,6 +265,63 @@ def rollup_bundle(name:str, srcs:list, deps:list=[], config:str="rollup.config.m
     )
 
 
+def webpack_bundle(name:str, srcs:list, deps:list=[], config:str="webpack.config.js",
+                   config_deps:list=[], out_dir:str="dist", node_modules:str="",
+                   env:dict={}, check=None, args:list=[], visibility:list=None,
+                   test_only:bool&testonly=False, labels:list=[]):
+    """A bundle produced by webpack.
+
+    Webpack comes from the consumer's tree for the strongest version of
+    vite's reason: not just plugins but loaders, and both are resolved by the
+    webpack they load into. The rule passes nothing the config could set.
+
+    config_deps matters more here than anywhere. A webpack config is
+    JavaScript that can require anything -- a shared banner, a helper that
+    computes entry points, another config to merge -- and each of those files
+    is an input the build genuinely reads. Please stages sources at their
+    real paths, so naming them is the whole implementation.
+
+    Unlike rollup, webpack fails the build on an unresolved import by
+    default, so no onwarn recipe is needed here.
+
+    Args:
+        name: Target name.
+        srcs: Entry modules and everything else the build reads.
+        deps: js_library and ts_library targets the sources import by package
+              name, and npm_repo targets.
+        config: The webpack config, relative to this package. Its
+                output.path should resolve against __dirname, which is this
+                package's directory in the staged tree.
+        config_deps: Every file the config requires, directly or through
+                     what it requires.
+        out_dir: Where the config writes, matching output.path's last
+                 segment. Hoisted like vite_bundle's.
+        node_modules: The tree the build resolves through, holding webpack,
+                      webpack-cli, and the config's loaders and plugins.
+        env: Environment variables for the action.
+        check: A ts_check covering these sources; required when any source is
+               TypeScript, False to bundle unchecked TypeScript deliberately.
+        args: Further webpack flags.
+        visibility: Visibility specification.
+        test_only: If True, only visible to test rules.
+        labels: Additional labels.
+    """
+    return js_run_binary(
+        name = name,
+        package = "webpack-cli",
+        bin = "webpack-cli",
+        deps = deps + _checked("webpack_bundle", name, [config] + srcs, check),
+        node_modules = node_modules,
+        srcs = [config] + srcs + config_deps,
+        out_dirs = [out_dir],
+        args = ["build", "--config", config] + args,
+        env = env,
+        visibility = visibility,
+        test_only = test_only,
+        labels = labels + ["webpack_bundle"],
+    )
+
+
 def terser_minified(name:str, srcs:list, compress:bool=True, mangle:bool=True,
                     node_modules:str="", args:list=[], visibility:list=None,
                     test_only:bool&testonly=False, labels:list=[]):
