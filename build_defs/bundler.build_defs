@@ -239,3 +239,67 @@ def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
         test_only = test_only,
         labels = labels + ["vite_bundle"],
     )
+
+
+def vitest_test(name:str, srcs:list, deps:list=[], data:list=[],
+                config:str="vite.config.ts", config_deps:list=[],
+                node_modules:str="", env:dict={}, args:list=[],
+                visibility:list=None, labels:list=[],
+                timeout:int=0, flaky:bool|int=0, size:str=None):
+    """Tests run by vitest.
+
+    Vitest is vite: the same config file, the same plugin pipeline, the same
+    transform. A component tested here is transformed exactly as it will be
+    bundled, which is why this shares vite_bundle's config rather than having
+    one of its own -- point it at a different config and the thing under test is
+    not the thing that ships. That coupling is also why this rule lives here
+    rather than beside the other test runners.
+
+    Like vite, it comes from the consumer's tree. A repo's tests import describe
+    and expect from the vitest it pinned, and its config imports plugins that
+    have to match.
+
+    Each test is reported to Please by name rather than the file being one
+    result. vitest writes JUnit natively, so unlike node's own runner there is
+    nothing to convert.
+
+    Args:
+        name: Target name.
+        srcs: Test files, and anything they import that is not a dep.
+        deps: js_library and ts_library targets the tests import by package
+              name, and npm_repo targets.
+        data: Targets the tests read rather than import.
+        config: The vite config, relative to this package. Shared with
+                vite_bundle on purpose.
+        config_deps: Anything the config imports or extends.
+        node_modules: The tree the tests resolve through, which holds vitest.
+        env: Environment variables for the run.
+        args: Further vitest flags.
+        visibility: Visibility specification.
+        labels: Additional labels.
+        timeout: Test timeout in seconds.
+        flaky: True to mark the test flaky, or an integer for reruns.
+        size: Test size.
+    """
+    return js_test(
+        name = name,
+        srcs = [config] + srcs + config_deps,
+        deps = deps,
+        data = data,
+        node_modules = node_modules,
+        runner = "vitest",
+        runner_args = [
+            # `run`, not the default: vitest watches otherwise, and a test that
+            # never exits is not a test.
+            "run",
+            "--config", config,
+            "--reporter=junit",
+            "--outputFile=$RESULTS_FILE",
+        ] + args,
+        env = env,
+        visibility = visibility,
+        labels = labels + ["vitest"],
+        timeout = timeout,
+        flaky = flaky,
+        size = size,
+    )

@@ -15,7 +15,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "babel_core_7.29.7",
+    name = "babel_core_7.29.7_cfc6fa9a",
     hashes = ["46dd458b3d2bc29daa0e9e01f13b399ab544a8013f27ac6c51b56b831c8a0ed3"],
     pkg = "@babel/core",
     version = "7.29.7",
@@ -43,14 +43,14 @@ npm_repo(
 )
 
 npm_repo(
-    name = "babel_helper-module-imports_7.29.7",
+    name = "babel_helper-module-imports_7.29.7_cfc6fa9a",
     hashes = ["4bdf46cf597b875ce16770f151159ca34f96c20ba3c112dc8d7f6c6d6cce770c"],
     pkg = "@babel/helper-module-imports",
     version = "7.29.7",
 )
 
 npm_repo(
-    name = "babel_helper-module-transforms_7.29.7_a0c91a86",
+    name = "babel_helper-module-transforms_7.29.7_a924915d",
     hashes = ["dbb3b9b10b0a2828f5af58a6317685b1a150464c6bd54995069c526aba45e6e4"],
     pkg = "@babel/helper-module-transforms",
     version = "7.29.7",
@@ -99,14 +99,14 @@ npm_repo(
 )
 
 npm_repo(
-    name = "babel_plugin-transform-react-jsx-self_7.29.7_a0c91a86",
+    name = "babel_plugin-transform-react-jsx-self_7.29.7_17344f07",
     hashes = ["fdbe8ac6d7d22e28bd2f013496c233de0906a261cc7e1a7b3eee9bb5fcc70bf0"],
     pkg = "@babel/plugin-transform-react-jsx-self",
     version = "7.29.7",
 )
 
 npm_repo(
-    name = "babel_plugin-transform-react-jsx-source_7.29.7_a0c91a86",
+    name = "babel_plugin-transform-react-jsx-source_7.29.7_17344f07",
     hashes = ["8afa100bf1bafc073813b589980414576b20c66bf3598af229d30b92183fa1a9"],
     pkg = "@babel/plugin-transform-react-jsx-source",
     version = "7.29.7",
@@ -120,7 +120,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "babel_traverse_7.29.8",
+    name = "babel_traverse_7.29.8_cfc6fa9a",
     hashes = ["cf16861f356fd766361ba4d85d5462b6320e0e59f05cb55c762d8f5dff83e234"],
     pkg = "@babel/traverse",
     version = "7.29.8",
@@ -131,6 +131,13 @@ npm_repo(
     hashes = ["514a4ed09355fe1417f03e89c5a5f518745e2eb75a4069d25b55a3e7298069de"],
     pkg = "@babel/types",
     version = "7.29.8",
+)
+
+npm_repo(
+    name = "bcoe_v8-coverage_1.0.2",
+    hashes = ["7b7688046f3470b5f681184fe65a7372dc83c89889a2abd91e18cd546f469e8f"],
+    pkg = "@bcoe/v8-coverage",
+    version = "1.0.2",
 )
 
 npm_repo(
@@ -644,6 +651,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "standard-schema_spec_1.1.0",
+    hashes = ["a7cb7268be280ab518d450f8c3b07c86f23417225c0ab53691ed59b3067cceaf"],
+    pkg = "@standard-schema/spec",
+    version = "1.1.0",
+)
+
+npm_repo(
     name = "types_babel_core_7.20.5",
     hashes = ["1865223be6b834c44abf5ebedafb1707019b4941be8021469980c7ef4c2e1155"],
     pkg = "@types/babel__core",
@@ -672,6 +686,20 @@ npm_repo(
 )
 
 npm_repo(
+    name = "types_chai_5.2.3",
+    hashes = ["5f0c52e34238e17d2d9a2d6e9b85530765afae645f265e0e14263ebeecdd7f94"],
+    pkg = "@types/chai",
+    version = "5.2.3",
+)
+
+npm_repo(
+    name = "types_deep-eql_4.0.2",
+    hashes = ["b63d185ff2cd2223bd6962b12b10342df4c5a4c25fd20017d2d9f335c35f3607"],
+    pkg = "@types/deep-eql",
+    version = "4.0.2",
+)
+
+npm_repo(
     name = "types_estree_1.0.9",
     hashes = ["ec8f3c0dfb21497db5a3480c45a6cf6f9b18d3b337b2ea4d03e3ef2a9c2bb358"],
     pkg = "@types/estree",
@@ -693,10 +721,80 @@ npm_repo(
 )
 
 npm_repo(
-    name = "vitejs_plugin-react_5.0.0_3f9da55b",
+    name = "vitejs_plugin-react_5.0.0_c3ebc136",
     hashes = ["bfb18cf62cadeaec6de98518e39f14cdbc92903554775dd891fae7d62dd48dcd"],
     pkg = "@vitejs/plugin-react",
     version = "5.0.0",
+)
+
+npm_repo(
+    name = "vitest_coverage-v8_4.1.11_e94d1b4b",
+    hashes = ["bf0d8071f48375c40d358148c56de3c7a88a92b04b58c806362684940d55b0a1"],
+    pkg = "@vitest/coverage-v8",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_expect_4.1.11",
+    hashes = ["503d668851ce760fb60bb2b4681452089d8658a5fbd2b1f626dece4c1fbcc57f"],
+    pkg = "@vitest/expect",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_mocker_4.1.11_3f9da55b",
+    hashes = ["5f42c3959636909c506885ef643f4a4e4d024bd7939934465f280c42164eb142"],
+    pkg = "@vitest/mocker",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_pretty-format_4.1.11",
+    hashes = ["4eff485284e6338a567b63be5f6a74c0b42b9e30e0164a8006d832c26130e51b"],
+    pkg = "@vitest/pretty-format",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_runner_4.1.11",
+    hashes = ["335051b85fce0ad3788c67b84b7949835b5eeeb20b785d8e3741eb396fc23d58"],
+    pkg = "@vitest/runner",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_snapshot_4.1.11",
+    hashes = ["6893221f95ccea0c56dfbcc6e95ae2198fd086e6de5e11caf12baf1cf2b0c605"],
+    pkg = "@vitest/snapshot",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_spy_4.1.11",
+    hashes = ["9b15875da96e769a19b3c9e2c316459528c57b9c20168c5abaa1ce050b7c8490"],
+    pkg = "@vitest/spy",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_utils_4.1.11",
+    hashes = ["ac1150697c2b1b5b14322f3ac85de74a405228291de1265f2e453c6db9544ee6"],
+    pkg = "@vitest/utils",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "assertion-error_2.0.1",
+    hashes = ["73f4a5b3c9b38e4f3123188d4d85a7933ee5fe2f77f8ff04e8867b0938c20f56"],
+    pkg = "assertion-error",
+    version = "2.0.1",
+)
+
+npm_repo(
+    name = "ast-v8-to-istanbul_1.0.5",
+    hashes = ["368fe903d79ec509c76f01f2aa08599968efd23922b87b4b34209227aebb6824"],
+    pkg = "ast-v8-to-istanbul",
+    version = "1.0.5",
 )
 
 npm_repo(
@@ -721,6 +819,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "chai_6.2.2",
+    hashes = ["702cd574375345c56198e96b52f55abeb445cd73a52cf7f9ee0d57bba4055b58"],
+    pkg = "chai",
+    version = "6.2.2",
+)
+
+npm_repo(
     name = "convert-source-map_2.0.0",
     hashes = ["17f7253ec7e4e09f68371192fded2b5241a5cf85e610e5059b1d49e878fe1898"],
     pkg = "convert-source-map",
@@ -742,7 +847,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "debug_4.4.3",
+    name = "debug_4.4.3_cfc6fa9a",
     hashes = ["89c1ac9c946ee8905a875837114528e97eeae35e03be3190584b2216af43e4a7"],
     pkg = "debug",
     version = "4.4.3",
@@ -753,6 +858,13 @@ npm_repo(
     hashes = ["96e255b15164c62d79746c87b0610b8ac11fab43c8f5abaa7828c46bdd163c5c"],
     pkg = "electron-to-chromium",
     version = "1.5.413",
+)
+
+npm_repo(
+    name = "es-module-lexer_2.3.2",
+    hashes = ["99b4da5f3bd7cc4483f3d892ee9037b10a1da26ac5bec374038cf0bd4a52e1a7"],
+    pkg = "es-module-lexer",
+    version = "2.3.2",
 )
 
 npm_repo(
@@ -767,6 +879,20 @@ npm_repo(
     hashes = ["ba2755afc0e6c6705326711fd218ebe107a527eccbd6485155fde98ed000bee7"],
     pkg = "escalade",
     version = "3.2.0",
+)
+
+npm_repo(
+    name = "estree-walker_3.0.3",
+    hashes = ["bbbdfdc16cd9ef099e474f55a4aa344103c01853727136a76ee165fa9d1c72b3"],
+    pkg = "estree-walker",
+    version = "3.0.3",
+)
+
+npm_repo(
+    name = "expect-type_1.4.0",
+    hashes = ["c44b3fea7bcae8a4ce328b457da171e8debf553cbeb6a049817975b8e050e3a1"],
+    pkg = "expect-type",
+    version = "1.4.0",
 )
 
 npm_repo(
@@ -789,6 +915,48 @@ npm_repo(
     hashes = ["df9f92ef26a35d4f92cb8a73415dfea8dadaf294a03e60e4d176df82f38d17c9"],
     pkg = "gensync",
     version = "1.0.0-beta.2",
+)
+
+npm_repo(
+    name = "has-flag_4.0.0",
+    hashes = ["77a7eb1411d927bb8a5ca7069dbe168886d63c88f446f0b81500a2cf23ddb5b1"],
+    pkg = "has-flag",
+    version = "4.0.0",
+)
+
+npm_repo(
+    name = "html-escaper_2.0.2",
+    hashes = ["8ab75514cf8515cf43f7b69fef645b952c6577026554eb306cc4c17b37c6fad7"],
+    pkg = "html-escaper",
+    version = "2.0.2",
+)
+
+npm_repo(
+    name = "istanbul-lib-coverage_3.2.2",
+    hashes = ["55807e4747867e8a34d54d0900fab3a5bba7d44230f796fcc7dc62be2efecc8e"],
+    pkg = "istanbul-lib-coverage",
+    version = "3.2.2",
+)
+
+npm_repo(
+    name = "istanbul-lib-report_3.0.1",
+    hashes = ["5e76c0ef8344193fddd98a3c0da90f06d4a54b36110466a8b8538f538d470d3d"],
+    pkg = "istanbul-lib-report",
+    version = "3.0.1",
+)
+
+npm_repo(
+    name = "istanbul-reports_3.2.0",
+    hashes = ["aa3efaadd88bd55d7bbccdad8751b87deb59ce726039e53008869f944564c957"],
+    pkg = "istanbul-reports",
+    version = "3.2.0",
+)
+
+npm_repo(
+    name = "js-tokens_10.0.0",
+    hashes = ["b6867f1af4cf2c6e46fd94871944bf49fcc32ab1730bc829807812a87960c9cd"],
+    pkg = "js-tokens",
+    version = "10.0.0",
 )
 
 npm_repo(
@@ -820,6 +988,27 @@ npm_repo(
 )
 
 npm_repo(
+    name = "magic-string_0.30.21",
+    hashes = ["fa49762567dca44e8ccf327f365d250e04c482bf7a4ed0ae7d03659b09ac656f"],
+    pkg = "magic-string",
+    version = "0.30.21",
+)
+
+npm_repo(
+    name = "magicast_0.5.4",
+    hashes = ["0c93c0967461fdfc174a3ef5a35bda5853679d2d984b9109b6eeb5533640f3a2"],
+    pkg = "magicast",
+    version = "0.5.4",
+)
+
+npm_repo(
+    name = "make-dir_4.0.0",
+    hashes = ["91497bdb7c98b5c3de4dd26111b1ca4a1bc74670e981ef3637d9c9d71ea6d962"],
+    pkg = "make-dir",
+    version = "4.0.0",
+)
+
+npm_repo(
     name = "ms_2.1.3",
     hashes = ["f6616e15e530ed552f9daa2d3ce71963947c6bc7c98c9b64fd3e673fd02622c6"],
     pkg = "ms",
@@ -838,6 +1027,20 @@ npm_repo(
     hashes = ["725122ff2b5634d447dfad1635312f16b737bdf6c1726165b4ce0336a20ed89a"],
     pkg = "node-releases",
     version = "2.0.53",
+)
+
+npm_repo(
+    name = "obug_2.1.4",
+    hashes = ["87618f4dd0510e47759d5527a34c05aae0752c5aef8417e30898a8db4afb5375"],
+    pkg = "obug",
+    version = "2.1.4",
+)
+
+npm_repo(
+    name = "pathe_2.0.3",
+    hashes = ["6e3b73bc5dbb7f8a108ff5d8459b07da04062e822c662339416525510696df36"],
+    pkg = "pathe",
+    version = "2.0.3",
 )
 
 npm_repo(
@@ -911,10 +1114,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "semver_7.8.5",
+    hashes = ["d85045d4300d7d57c891336b95df532e73f34c22ffcd222452b6d08b9d127d5d"],
+    pkg = "semver",
+    version = "7.8.5",
+)
+
+npm_repo(
     name = "set-cookie-parser_2.7.2",
     hashes = ["1fdf9181ca54f9cdbd4d6bcfc59d28d9f0495fc2743029169d8213987210596c"],
     pkg = "set-cookie-parser",
     version = "2.7.2",
+)
+
+npm_repo(
+    name = "siginfo_2.0.0",
+    hashes = ["a20fd853c4514049964aca176d4198d58802b28dc481e82cb57f2101b2c7701b"],
+    pkg = "siginfo",
+    version = "2.0.0",
 )
 
 npm_repo(
@@ -925,10 +1142,52 @@ npm_repo(
 )
 
 npm_repo(
+    name = "stackback_0.0.2",
+    hashes = ["3e663c82d1ccf9748ed446b648ec21a7dd6c5895ecf4a95310a60a320ca55858"],
+    pkg = "stackback",
+    version = "0.0.2",
+)
+
+npm_repo(
+    name = "std-env_4.2.0",
+    hashes = ["d3e2bc287e997da66639920c5f7b86c0ff3ecb69e332c7b14912150488e3a40a"],
+    pkg = "std-env",
+    version = "4.2.0",
+)
+
+npm_repo(
+    name = "supports-color_7.2.0",
+    hashes = ["f16acafd1634624e60c24a5538004c4e168c82607f10dbe28395e9df3e7d5e4a"],
+    pkg = "supports-color",
+    version = "7.2.0",
+)
+
+npm_repo(
+    name = "tinybench_2.9.0",
+    hashes = ["3a38e953c2366359670fb41e7efae2d8a818ac12615fbea6f9d0614010582e39"],
+    pkg = "tinybench",
+    version = "2.9.0",
+)
+
+npm_repo(
+    name = "tinyexec_1.3.0",
+    hashes = ["8b08a81c6a960fa8591df6ec374058e686c89bf9f3c080a0d3cff123478ff3d4"],
+    pkg = "tinyexec",
+    version = "1.3.0",
+)
+
+npm_repo(
     name = "tinyglobby_0.2.17",
     hashes = ["afb4afae9175f8b873ac13e1d21cea0997a0bcb40c3598613a834490058cb562"],
     pkg = "tinyglobby",
     version = "0.2.17",
+)
+
+npm_repo(
+    name = "tinyrainbow_3.1.1",
+    hashes = ["cdb1b980964665438e90dd184d7cfbe2c1544a73b6cc949c92c2592cb8791744"],
+    pkg = "tinyrainbow",
+    version = "3.1.1",
 )
 
 npm_repo(
@@ -946,6 +1205,20 @@ npm_repo(
 )
 
 npm_repo(
+    name = "vitest_4.1.11_3a98bee1",
+    hashes = ["81875725211b8c43a30213579456954603d471d022587ce0e6842d44d9ed162b"],
+    pkg = "vitest",
+    version = "4.1.11",
+)
+
+npm_repo(
+    name = "why-is-node-running_2.3.0",
+    hashes = ["d2f668f77953509d0079ef05617ac9f5b5f64ed194f8b05872ad12ba06ec9963"],
+    pkg = "why-is-node-running",
+    version = "2.3.0",
+)
+
+npm_repo(
     name = "yallist_3.1.1",
     hashes = ["50f14ae6cfe8360cb2259ba3e93305e069036f13251d69d3cbee9e1d4775ca04"],
     pkg = "yallist",
@@ -956,33 +1229,38 @@ npm_link(
     name = "node_modules",
     lock = "pnpm-lock.yaml",
     packages = [
+        ":assertion-error_2.0.1",
+        ":ast-v8-to-istanbul_1.0.5",
         ":babel_code-frame_7.29.7",
         ":babel_compat-data_7.29.7",
-        ":babel_core_7.29.7",
+        ":babel_core_7.29.7_cfc6fa9a",
         ":babel_generator_7.29.8",
         ":babel_helper-compilation-targets_7.29.7",
         ":babel_helper-globals_7.29.7",
-        ":babel_helper-module-imports_7.29.7",
-        ":babel_helper-module-transforms_7.29.7_a0c91a86",
+        ":babel_helper-module-imports_7.29.7_cfc6fa9a",
+        ":babel_helper-module-transforms_7.29.7_a924915d",
         ":babel_helper-plugin-utils_7.29.7",
         ":babel_helper-string-parser_7.29.7",
         ":babel_helper-validator-identifier_7.29.7",
         ":babel_helper-validator-option_7.29.7",
         ":babel_helpers_7.29.7",
         ":babel_parser_7.29.8",
-        ":babel_plugin-transform-react-jsx-self_7.29.7_a0c91a86",
-        ":babel_plugin-transform-react-jsx-source_7.29.7_a0c91a86",
+        ":babel_plugin-transform-react-jsx-self_7.29.7_17344f07",
+        ":babel_plugin-transform-react-jsx-source_7.29.7_17344f07",
         ":babel_template_7.29.7",
-        ":babel_traverse_7.29.8",
+        ":babel_traverse_7.29.8_cfc6fa9a",
         ":babel_types_7.29.8",
         ":baseline-browser-mapping_2.11.18",
+        ":bcoe_v8-coverage_1.0.2",
         ":browserslist_4.28.8",
         ":caniuse-lite_1.0.30001809",
+        ":chai_6.2.2",
         ":convert-source-map_2.0.0",
         ":cookie_1.1.1",
         ":csstype_3.2.3",
-        ":debug_4.4.3",
+        ":debug_4.4.3_cfc6fa9a",
         ":electron-to-chromium_1.5.413",
+        ":es-module-lexer_2.3.2",
         ":esbuild_0.25.12",
         ":esbuild_aix-ppc64_0.25.12",
         ":esbuild_android-arm64_0.25.12",
@@ -1011,22 +1289,35 @@ npm_link(
         ":esbuild_win32-ia32_0.25.12",
         ":esbuild_win32-x64_0.25.12",
         ":escalade_3.2.0",
+        ":estree-walker_3.0.3",
+        ":expect-type_1.4.0",
         ":fdir_6.5.0_5c16dc5f",
         ":fsevents_2.3.3",
         ":gensync_1.0.0-beta.2",
+        ":has-flag_4.0.0",
+        ":html-escaper_2.0.2",
+        ":istanbul-lib-coverage_3.2.2",
+        ":istanbul-lib-report_3.0.1",
+        ":istanbul-reports_3.2.0",
         ":jridgewell_gen-mapping_0.3.13",
         ":jridgewell_remapping_2.3.5",
         ":jridgewell_resolve-uri_3.1.2",
         ":jridgewell_sourcemap-codec_1.5.5",
         ":jridgewell_trace-mapping_0.3.31",
+        ":js-tokens_10.0.0",
         ":js-tokens_4.0.0",
         ":jsesc_3.1.0",
         ":json5_2.2.3",
         ":lru-cache_5.1.1",
+        ":magic-string_0.30.21",
+        ":magicast_0.5.4",
+        ":make-dir_4.0.0",
         ":ms_2.1.3",
         ":nanoid_3.3.18",
         ":napi-rs_lzma-linux-x64-gnu_1.5.1",
         ":node-releases_2.0.53",
+        ":obug_2.1.4",
+        ":pathe_2.0.3",
         ":picocolors_1.1.1",
         ":picomatch_4.0.7",
         ":postcss_8.5.26",
@@ -1063,19 +1354,40 @@ npm_link(
         ":rollup_rollup-win32-x64-msvc_4.62.5",
         ":scheduler_0.26.0",
         ":semver_6.3.1",
+        ":semver_7.8.5",
         ":set-cookie-parser_2.7.2",
+        ":siginfo_2.0.0",
         ":source-map-js_1.2.1",
+        ":stackback_0.0.2",
+        ":standard-schema_spec_1.1.0",
+        ":std-env_4.2.0",
+        ":supports-color_7.2.0",
+        ":tinybench_2.9.0",
+        ":tinyexec_1.3.0",
         ":tinyglobby_0.2.17",
+        ":tinyrainbow_3.1.1",
         ":types_babel_core_7.20.5",
         ":types_babel_generator_7.27.0",
         ":types_babel_template_7.4.4",
         ":types_babel_traverse_7.28.0",
+        ":types_chai_5.2.3",
+        ":types_deep-eql_4.0.2",
         ":types_estree_1.0.9",
         ":types_react-dom_19.1.7_5d8f97ea",
         ":types_react_19.1.9",
         ":update-browserslist-db_1.3.1_48be4307",
         ":vite_7.1.2",
-        ":vitejs_plugin-react_5.0.0_3f9da55b",
+        ":vitejs_plugin-react_5.0.0_c3ebc136",
+        ":vitest_4.1.11_3a98bee1",
+        ":vitest_coverage-v8_4.1.11_e94d1b4b",
+        ":vitest_expect_4.1.11",
+        ":vitest_mocker_4.1.11_3f9da55b",
+        ":vitest_pretty-format_4.1.11",
+        ":vitest_runner_4.1.11",
+        ":vitest_snapshot_4.1.11",
+        ":vitest_spy_4.1.11",
+        ":vitest_utils_4.1.11",
+        ":why-is-node-running_2.3.0",
         ":yallist_3.1.1",
     ],
     visibility = ["PUBLIC"],
