@@ -468,6 +468,20 @@ npm_repo(
 )
 
 npm_repo(
+    name = "rollup_plugin-node-resolve_16.0.3_b77bf5cd",
+    hashes = ["7d25e2b297ecf73542673e8ce4ca150443c3caf40269406371b94d883e0a7ced"],
+    pkg = "@rollup/plugin-node-resolve",
+    version = "16.0.3",
+)
+
+npm_repo(
+    name = "rollup_pluginutils_5.4.0_b77bf5cd",
+    hashes = ["c4df1e6a0def471252dddb45a0975e7fb21faa492b8ba1e93b2c35c3ee11c6da"],
+    pkg = "@rollup/pluginutils",
+    version = "5.4.0",
+)
+
+npm_repo(
     name = "rollup_rollup-android-arm-eabi_4.62.5",
     cpu = ["arm"],
     hashes = ["754cb9a221bb7f9a6f8fac86b230fc21e71d277da4d2b4295282325d76a3c6d2"],
@@ -763,6 +777,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "types_resolve_1.20.2",
+    hashes = ["d7ef981d611d08b7c7b3e203fab19d71168a27c6b8ce869a3ad49464f6de6a12"],
+    pkg = "@types/resolve",
+    version = "1.20.2",
+)
+
+npm_repo(
     name = "vitejs_plugin-react_5.0.0_c3ebc136",
     hashes = ["bfb18cf62cadeaec6de98518e39f14cdbc92903554775dd891fae7d62dd48dcd"],
     pkg = "@vitejs/plugin-react",
@@ -924,6 +945,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "deepmerge_4.3.1",
+    hashes = ["4003a0a348276a95543fa969f561f6b5968629acbbb59d66018dd23e7b8f1d5c"],
+    pkg = "deepmerge",
+    version = "4.3.1",
+)
+
+npm_repo(
     name = "electron-to-chromium_1.5.413",
     hashes = ["96e255b15164c62d79746c87b0610b8ac11fab43c8f5abaa7828c46bdd163c5c"],
     pkg = "electron-to-chromium",
@@ -935,6 +963,13 @@ npm_repo(
     hashes = ["a4de957ab0852f6c91eae59a6000ced5a25a04f0b6e1c3062fbad732a6b5479d"],
     pkg = "entities",
     version = "6.0.1",
+)
+
+npm_repo(
+    name = "es-errors_1.3.0",
+    hashes = ["d14dd1c35b4bd3b8aca3219fd3627eb7f3eb49cf6b4c8a7ca58b91fd7a190993"],
+    pkg = "es-errors",
+    version = "1.3.0",
 )
 
 npm_repo(
@@ -956,6 +991,13 @@ npm_repo(
     hashes = ["ba2755afc0e6c6705326711fd218ebe107a527eccbd6485155fde98ed000bee7"],
     pkg = "escalade",
     version = "3.2.0",
+)
+
+npm_repo(
+    name = "estree-walker_2.0.2",
+    hashes = ["302931e539a9c5568d56634119290c4df9a7bde64a2f2dbc646d6013e3b03c58"],
+    pkg = "estree-walker",
+    version = "2.0.2",
 )
 
 npm_repo(
@@ -988,6 +1030,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "function-bind_1.1.2",
+    hashes = ["704402651b02a1454f17d445fc7dd716efc282d059407126d58ef30a47e807aa"],
+    pkg = "function-bind",
+    version = "1.1.2",
+)
+
+npm_repo(
     name = "gensync_1.0.0-beta.2",
     hashes = ["df9f92ef26a35d4f92cb8a73415dfea8dadaf294a03e60e4d176df82f38d17c9"],
     pkg = "gensync",
@@ -999,6 +1048,13 @@ npm_repo(
     hashes = ["77a7eb1411d927bb8a5ca7069dbe168886d63c88f446f0b81500a2cf23ddb5b1"],
     pkg = "has-flag",
     version = "4.0.0",
+)
+
+npm_repo(
+    name = "hasown_2.0.4",
+    hashes = ["e9d2b03f95573600e1c13124ce618e3142ed2c538d164595bedcd4408b8a4e4c"],
+    pkg = "hasown",
+    version = "2.0.4",
 )
 
 npm_repo(
@@ -1034,6 +1090,20 @@ npm_repo(
     hashes = ["7127ec148f994f031eff658a50dc0629f6010775a8202213b0526ec5e30fc8f4"],
     pkg = "iconv-lite",
     version = "0.6.3",
+)
+
+npm_repo(
+    name = "is-core-module_2.16.2",
+    hashes = ["e2f933640de144ca2e96d754b51b1fd6b96e2ad44e72eeffce17aa24436a41b3"],
+    pkg = "is-core-module",
+    version = "2.16.2",
+)
+
+npm_repo(
+    name = "is-module_1.0.0",
+    hashes = ["22bf997e4deeb4a29682d4235c9abfea0b183810bbc9baab1edc858afbc2512c"],
+    pkg = "is-module",
+    version = "1.0.0",
 )
 
 npm_repo(
@@ -1177,6 +1247,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "path-parse_1.0.7",
+    hashes = ["a07a198ca727816296616928237bfab6571f211750d798030b3b7a3f4a5473a3"],
+    pkg = "path-parse",
+    version = "1.0.7",
+)
+
+npm_repo(
     name = "pathe_2.0.3",
     hashes = ["6e3b73bc5dbb7f8a108ff5d8459b07da04062e822c662339416525510696df36"],
     pkg = "pathe",
@@ -1237,6 +1314,13 @@ npm_repo(
     hashes = ["754c21ed5078d3d211a443c9e4137031ecd72e1725d0ef3d235443c294eea2a5"],
     pkg = "react",
     version = "19.1.1",
+)
+
+npm_repo(
+    name = "resolve_1.22.12",
+    hashes = ["c6a29dbf1f4c0754a94387b379e699f5594216e16ef0d5ee17ccf9518f844dc1"],
+    pkg = "resolve",
+    version = "1.22.12",
 )
 
 npm_repo(
@@ -1328,6 +1412,13 @@ npm_repo(
     hashes = ["f16acafd1634624e60c24a5538004c4e168c82607f10dbe28395e9df3e7d5e4a"],
     pkg = "supports-color",
     version = "7.2.0",
+)
+
+npm_repo(
+    name = "supports-preserve-symlinks-flag_1.0.0",
+    hashes = ["97da1160af5344534182e72502978374d20875d32c6071cd2dae997be604f7f9"],
+    pkg = "supports-preserve-symlinks-flag",
+    version = "1.0.0",
 )
 
 npm_repo(
@@ -1528,8 +1619,10 @@ npm_link(
         ":data-urls_5.0.0",
         ":debug_4.4.3_cfc6fa9a",
         ":decimal.js_10.6.0",
+        ":deepmerge_4.3.1",
         ":electron-to-chromium_1.5.413",
         ":entities_6.0.1",
+        ":es-errors_1.3.0",
         ":es-module-lexer_2.3.2",
         ":esbuild_0.25.12",
         ":esbuild_aix-ppc64_0.25.12",
@@ -1559,17 +1652,22 @@ npm_link(
         ":esbuild_win32-ia32_0.25.12",
         ":esbuild_win32-x64_0.25.12",
         ":escalade_3.2.0",
+        ":estree-walker_2.0.2",
         ":estree-walker_3.0.3",
         ":expect-type_1.4.0",
         ":fdir_6.5.0_5c16dc5f",
         ":fsevents_2.3.3",
+        ":function-bind_1.1.2",
         ":gensync_1.0.0-beta.2",
         ":has-flag_4.0.0",
+        ":hasown_2.0.4",
         ":html-encoding-sniffer_4.0.0",
         ":html-escaper_2.0.2",
         ":http-proxy-agent_7.0.2_cfc6fa9a",
         ":https-proxy-agent_7.0.6_cfc6fa9a",
         ":iconv-lite_0.6.3",
+        ":is-core-module_2.16.2",
+        ":is-module_1.0.0",
         ":is-potential-custom-element-name_1.0.1",
         ":istanbul-lib-coverage_3.2.2",
         ":istanbul-lib-report_3.0.1",
@@ -1596,6 +1694,7 @@ npm_link(
         ":nwsapi_2.2.24",
         ":obug_2.1.4",
         ":parse5_7.3.0",
+        ":path-parse_1.0.7",
         ":pathe_2.0.3",
         ":picocolors_1.1.1",
         ":picomatch_4.0.7",
@@ -1605,8 +1704,11 @@ npm_link(
         ":react-refresh_0.17.0",
         ":react-router_7.9.1_a63170c7",
         ":react_19.1.1",
+        ":resolve_1.22.12",
         ":rolldown_pluginutils_1.0.0-beta.30",
         ":rollup_4.62.5",
+        ":rollup_plugin-node-resolve_16.0.3_b77bf5cd",
+        ":rollup_pluginutils_5.4.0_b77bf5cd",
         ":rollup_rollup-android-arm-eabi_4.62.5",
         ":rollup_rollup-android-arm64_4.62.5",
         ":rollup_rollup-darwin-arm64_4.62.5",
@@ -1645,6 +1747,7 @@ npm_link(
         ":standard-schema_spec_1.1.0",
         ":std-env_4.2.0",
         ":supports-color_7.2.0",
+        ":supports-preserve-symlinks-flag_1.0.0",
         ":symbol-tree_3.2.4",
         ":tinybench_2.9.0",
         ":tinyexec_1.3.0",
@@ -1663,6 +1766,7 @@ npm_link(
         ":types_estree_1.0.9",
         ":types_react-dom_19.1.7_5d8f97ea",
         ":types_react_19.1.9",
+        ":types_resolve_1.20.2",
         ":update-browserslist-db_1.3.1_48be4307",
         ":vite_7.1.2",
         ":vitejs_plugin-react_5.0.0_c3ebc136",
@@ -1734,8 +1838,10 @@ npm_link(
         ":data-urls_5.0.0",
         ":debug_4.4.3_cfc6fa9a",
         ":decimal.js_10.6.0",
+        ":deepmerge_4.3.1",
         ":electron-to-chromium_1.5.413",
         ":entities_6.0.1",
+        ":es-errors_1.3.0",
         ":es-module-lexer_2.3.2",
         ":esbuild_0.25.12",
         ":esbuild_aix-ppc64_0.25.12",
@@ -1765,17 +1871,22 @@ npm_link(
         ":esbuild_win32-ia32_0.25.12",
         ":esbuild_win32-x64_0.25.12",
         ":escalade_3.2.0",
+        ":estree-walker_2.0.2",
         ":estree-walker_3.0.3",
         ":expect-type_1.4.0",
         ":fdir_6.5.0_5c16dc5f",
         ":fsevents_2.3.3",
+        ":function-bind_1.1.2",
         ":gensync_1.0.0-beta.2",
         ":has-flag_4.0.0",
+        ":hasown_2.0.4",
         ":html-encoding-sniffer_4.0.0",
         ":html-escaper_2.0.2",
         ":http-proxy-agent_7.0.2_cfc6fa9a",
         ":https-proxy-agent_7.0.6_cfc6fa9a",
         ":iconv-lite_0.6.3",
+        ":is-core-module_2.16.2",
+        ":is-module_1.0.0",
         ":is-potential-custom-element-name_1.0.1",
         ":istanbul-lib-coverage_3.2.2",
         ":istanbul-lib-report_3.0.1",
@@ -1802,6 +1913,7 @@ npm_link(
         ":nwsapi_2.2.24",
         ":obug_2.1.4",
         ":parse5_7.3.0",
+        ":path-parse_1.0.7",
         ":pathe_2.0.3",
         ":picocolors_1.1.1",
         ":picomatch_4.0.7",
@@ -1811,8 +1923,11 @@ npm_link(
         ":react-refresh_0.17.0",
         ":react-router_7.9.1_a63170c7",
         ":react_19.1.1",
+        ":resolve_1.22.12",
         ":rolldown_pluginutils_1.0.0-beta.30",
         ":rollup_4.62.5",
+        ":rollup_plugin-node-resolve_16.0.3_b77bf5cd",
+        ":rollup_pluginutils_5.4.0_b77bf5cd",
         ":rollup_rollup-android-arm-eabi_4.62.5",
         ":rollup_rollup-android-arm64_4.62.5",
         ":rollup_rollup-darwin-arm64_4.62.5",
@@ -1851,6 +1966,7 @@ npm_link(
         ":standard-schema_spec_1.1.0",
         ":std-env_4.2.0",
         ":supports-color_7.2.0",
+        ":supports-preserve-symlinks-flag_1.0.0",
         ":symbol-tree_3.2.4",
         ":tinybench_2.9.0",
         ":tinyexec_1.3.0",
@@ -1869,6 +1985,7 @@ npm_link(
         ":types_estree_1.0.9",
         ":types_react-dom_19.1.7_5d8f97ea",
         ":types_react_19.1.9",
+        ":types_resolve_1.20.2",
         ":update-browserslist-db_1.3.1_48be4307",
         ":vite_7.1.2",
         ":vitejs_plugin-react_5.0.0_c3ebc136",

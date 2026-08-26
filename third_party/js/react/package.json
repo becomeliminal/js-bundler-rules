@@ -13,6 +13,8 @@
     "@types/react-dom": "19.1.7",
     "vitest": "4.1.11",
     "@vitest/coverage-v8": "4.1.11",
-    "jsdom": "26.1.0"
+    "jsdom": "26.1.0",
+    "rollup": "4.62.5",
+    "@rollup/plugin-node-resolve": "16.0.3"
   }
 }

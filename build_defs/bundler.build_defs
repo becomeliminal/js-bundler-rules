@@ -206,6 +206,65 @@ def esbuild_bundle(name:str, entry_point:str="", entry_points:list=[],
     )
 
 
+def rollup_bundle(name:str, srcs:list, deps:list=[], config:str="rollup.config.mjs",
+                  config_deps:list=[], out_dir:str="dist", node_modules:str="",
+                  env:dict={}, check=None, args:list=[], visibility:list=None,
+                  test_only:bool&testonly=False, labels:list=[]):
+    """A bundle produced by rollup.
+
+    Rollup comes from the consumer's tree, for vite's reason rather than
+    esbuild's: a rollup.config.mjs imports plugins, and a plugin has to match
+    the rollup it is loaded into -- @rollup/plugin-node-resolve is not
+    optional decoration but the thing that makes bare imports resolve at all,
+    so any real config loads at least one. A plugin-owned rollup would
+    silently mismatch whatever the consumer pinned.
+
+    Nothing is passed that the config could also set, same as vite_bundle:
+    the config file is the interface rollup's own users already know.
+
+    One default worth knowing about rather than discovering: an import
+    nothing resolves is a warning to rollup, not an error -- the bundle
+    builds green carrying an external import that explodes at runtime. A
+    config that wants the build to fail says so with onwarn, throwing on
+    UNRESOLVED_IMPORT; the test fixture shows the shape.
+
+    Args:
+        name: Target name.
+        srcs: Entry modules and everything else the build reads.
+        deps: js_library and ts_library targets the sources import by package
+              name, and npm_repo targets.
+        config: The rollup config, relative to this package.
+        config_deps: Anything the config imports. A rollup config is
+                     JavaScript that can import anything, so the chain is
+                     named here and staged at its real paths.
+        out_dir: Where the config writes, matching output.dir -- or the
+                 directory of output.file. Hoisted like vite_bundle's.
+        node_modules: The tree the build resolves through, holding rollup and
+                      the config's plugins.
+        env: Environment variables for the action.
+        check: A ts_check covering these sources; required when any source is
+               TypeScript, False to bundle unchecked TypeScript deliberately.
+        args: Further rollup flags.
+        visibility: Visibility specification.
+        test_only: If True, only visible to test rules.
+        labels: Additional labels.
+    """
+    return js_run_binary(
+        name = name,
+        package = "rollup",
+        bin = "rollup",
+        deps = deps + _checked("rollup_bundle", name, [config] + srcs, check),
+        node_modules = node_modules,
+        srcs = [config] + srcs + config_deps,
+        out_dirs = [out_dir],
+        args = ["--config", config] + args,
+        env = env,
+        visibility = visibility,
+        test_only = test_only,
+        labels = labels + ["rollup_bundle"],
+    )
+
+
 def terser_minified(name:str, srcs:list, compress:bool=True, mangle:bool=True,
                     node_modules:str="", args:list=[], visibility:list=None,
                     test_only:bool&testonly=False, labels:list=[]):
