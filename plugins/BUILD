@@ -12,7 +12,7 @@ plugin_repo(
     plugin = "js-rules",
     # Pinned past deps on js_run_binary, without which a bundler cannot see any
     # first-party library.
-    revision = "b001916",
+    revision = "d50da30",
 )
 
 plugin_repo(

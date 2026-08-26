@@ -1,6 +1,13 @@
 subinclude("///js//build_defs:npm")
 
 npm_repo(
+    name = "asamuzakjp_css-color_3.2.0",
+    hashes = ["b65bd3770651faf0b081aad7c2b4b7d4ec575f466c4cc881313e4a3ed0a38759"],
+    pkg = "@asamuzakjp/css-color",
+    version = "3.2.0",
+)
+
+npm_repo(
     name = "babel_code-frame_7.29.7",
     hashes = ["fa8b176fa0b5d1d72b41ad33443f1f4f75933157a45010dffb51719f40c19c67"],
     pkg = "@babel/code-frame",
@@ -138,6 +145,41 @@ npm_repo(
     hashes = ["7b7688046f3470b5f681184fe65a7372dc83c89889a2abd91e18cd546f469e8f"],
     pkg = "@bcoe/v8-coverage",
     version = "1.0.2",
+)
+
+npm_repo(
+    name = "csstools_color-helpers_5.1.0",
+    hashes = ["b95d5f63268d0d884b2c5caeecba9f08b81ff1ca4d75923c12673afca080d7aa"],
+    pkg = "@csstools/color-helpers",
+    version = "5.1.0",
+)
+
+npm_repo(
+    name = "csstools_css-calc_2.1.4_4639dcc2",
+    hashes = ["2971adbbee310145798494965c74d2228bcede97b2f9dd369f8d5e6909340236"],
+    pkg = "@csstools/css-calc",
+    version = "2.1.4",
+)
+
+npm_repo(
+    name = "csstools_css-color-parser_3.1.0_4639dcc2",
+    hashes = ["492d6a310a91735b721329f89e3e99304ef6e87c98df70c20eed3a97a64220da"],
+    pkg = "@csstools/css-color-parser",
+    version = "3.1.0",
+)
+
+npm_repo(
+    name = "csstools_css-parser-algorithms_3.0.5_856d5ffa",
+    hashes = ["11418fddd5e05444e4b24705d5313e5e26ba9b7a07c9099062fdab3206653e7e"],
+    pkg = "@csstools/css-parser-algorithms",
+    version = "3.0.5",
+)
+
+npm_repo(
+    name = "csstools_css-tokenizer_3.0.4",
+    hashes = ["0a92d4d311b7acf320aadcb632acde29569711f8eadcca9f0e980f3af93f4339"],
+    pkg = "@csstools/css-tokenizer",
+    version = "3.0.4",
 )
 
 npm_repo(
@@ -784,6 +826,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "agent-base_7.1.4",
+    hashes = ["7dd4a61668a9a4e8d4e903f1a254f94d53dafd3f316f2b9b597c5ad8c79cb57e"],
+    pkg = "agent-base",
+    version = "7.1.4",
+)
+
+npm_repo(
     name = "assertion-error_2.0.1",
     hashes = ["73f4a5b3c9b38e4f3123188d4d85a7933ee5fe2f77f8ff04e8867b0938c20f56"],
     pkg = "assertion-error",
@@ -840,10 +889,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "cssstyle_4.6.0",
+    hashes = ["c3698bac3074af4449a75345eabc31d5b43fdeb8267cffe0b2907c196fde5929"],
+    pkg = "cssstyle",
+    version = "4.6.0",
+)
+
+npm_repo(
     name = "csstype_3.2.3",
     hashes = ["f3501f8ee1c73f7568fecb22c11231162c0467e59262461da5579519307427a3"],
     pkg = "csstype",
     version = "3.2.3",
+)
+
+npm_repo(
+    name = "data-urls_5.0.0",
+    hashes = ["207c4648a8378e07c1816b15ed67b966d250dd099c488f4b2918ea9fad54f52a"],
+    pkg = "data-urls",
+    version = "5.0.0",
 )
 
 npm_repo(
@@ -854,10 +917,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "decimal.js_10.6.0",
+    hashes = ["433210122e8149972f64054c54b0ce0872e5f15a3c5835aab57ff1a8e6d071b1"],
+    pkg = "decimal.js",
+    version = "10.6.0",
+)
+
+npm_repo(
     name = "electron-to-chromium_1.5.413",
     hashes = ["96e255b15164c62d79746c87b0610b8ac11fab43c8f5abaa7828c46bdd163c5c"],
     pkg = "electron-to-chromium",
     version = "1.5.413",
+)
+
+npm_repo(
+    name = "entities_6.0.1",
+    hashes = ["a4de957ab0852f6c91eae59a6000ced5a25a04f0b6e1c3062fbad732a6b5479d"],
+    pkg = "entities",
+    version = "6.0.1",
 )
 
 npm_repo(
@@ -925,10 +1002,45 @@ npm_repo(
 )
 
 npm_repo(
+    name = "html-encoding-sniffer_4.0.0",
+    hashes = ["11c97fd835c46da51a793b369dbee136da1bdfd41417a17b93f9b53fad77d4cb"],
+    pkg = "html-encoding-sniffer",
+    version = "4.0.0",
+)
+
+npm_repo(
     name = "html-escaper_2.0.2",
     hashes = ["8ab75514cf8515cf43f7b69fef645b952c6577026554eb306cc4c17b37c6fad7"],
     pkg = "html-escaper",
     version = "2.0.2",
+)
+
+npm_repo(
+    name = "http-proxy-agent_7.0.2_cfc6fa9a",
+    hashes = ["785f73faa92bfba8d61da20bf59325ab2b3dca1bbc0bbac523406f404d8a6f02"],
+    pkg = "http-proxy-agent",
+    version = "7.0.2",
+)
+
+npm_repo(
+    name = "https-proxy-agent_7.0.6_cfc6fa9a",
+    hashes = ["960f89e8e5240882f64249d04a538421dd39d62ffacc138544647cc3251bc0e0"],
+    pkg = "https-proxy-agent",
+    version = "7.0.6",
+)
+
+npm_repo(
+    name = "iconv-lite_0.6.3",
+    hashes = ["7127ec148f994f031eff658a50dc0629f6010775a8202213b0526ec5e30fc8f4"],
+    pkg = "iconv-lite",
+    version = "0.6.3",
+)
+
+npm_repo(
+    name = "is-potential-custom-element-name_1.0.1",
+    hashes = ["b6e425bb136422af133754814046a640c1573349755c63130c424abcee398621"],
+    pkg = "is-potential-custom-element-name",
+    version = "1.0.1",
 )
 
 npm_repo(
@@ -967,6 +1079,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "jsdom_26.1.0_cfc6fa9a",
+    hashes = ["5619b4779f68dec3ae076a97ccc5b8e4aeceaef7d4821ebcfcc1eb124b192000"],
+    pkg = "jsdom",
+    version = "26.1.0",
+)
+
+npm_repo(
     name = "jsesc_3.1.0",
     hashes = ["0c712225ccca9a70bf83f2ac2f52a268c858c7df3b3df196f1623239d80d3c09"],
     pkg = "jsesc",
@@ -978,6 +1097,13 @@ npm_repo(
     hashes = ["08afb33db600d11fc89b98fac4054f19d5d3e0fe527063116150e1ecc2d2377b"],
     pkg = "json5",
     version = "2.2.3",
+)
+
+npm_repo(
+    name = "lru-cache_10.4.3",
+    hashes = ["0ea17b527beaaaac504ea7a7aaab90db0581dc9a2e117bfbdba44789f15496ed"],
+    pkg = "lru-cache",
+    version = "10.4.3",
 )
 
 npm_repo(
@@ -1030,10 +1156,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "nwsapi_2.2.24",
+    hashes = ["0292f789b63e5cbd5f8cdcdb91748ffad2a8b718a38c5263deaf37ed9e568053"],
+    pkg = "nwsapi",
+    version = "2.2.24",
+)
+
+npm_repo(
     name = "obug_2.1.4",
     hashes = ["87618f4dd0510e47759d5527a34c05aae0752c5aef8417e30898a8db4afb5375"],
     pkg = "obug",
     version = "2.1.4",
+)
+
+npm_repo(
+    name = "parse5_7.3.0",
+    hashes = ["9316ca7af41da9e85071b62b9605aa0a6aaeb0463f833c29e7a331e7898f0420"],
+    pkg = "parse5",
+    version = "7.3.0",
 )
 
 npm_repo(
@@ -1062,6 +1202,13 @@ npm_repo(
     hashes = ["9ea29f58a51822c17bc7eb198d4f0fb2cd66fa02feb193efb6ece17ce011a882"],
     pkg = "postcss",
     version = "8.5.26",
+)
+
+npm_repo(
+    name = "punycode_2.3.1",
+    hashes = ["e4ce59f9fbac44349abab87279ab658f6b4614916bec5e088ae3be9323e193bb"],
+    pkg = "punycode",
+    version = "2.3.1",
 )
 
 npm_repo(
@@ -1097,6 +1244,27 @@ npm_repo(
     hashes = ["4639a03c2f5dc13c66485cb2ef1e4b53ee6067c255159ee67b93b534e50410af"],
     pkg = "rollup",
     version = "4.62.5",
+)
+
+npm_repo(
+    name = "rrweb-cssom_0.8.0",
+    hashes = ["6b975deba1561fbc7c6ce1e3982e354e958a34cc36097491083b472c8a922370"],
+    pkg = "rrweb-cssom",
+    version = "0.8.0",
+)
+
+npm_repo(
+    name = "safer-buffer_2.1.2",
+    hashes = ["78812f65ae3b98071ce1c9bacbe0666f4220d0b2753c2a11530eb27df440a3b3"],
+    pkg = "safer-buffer",
+    version = "2.1.2",
+)
+
+npm_repo(
+    name = "saxes_6.0.0",
+    hashes = ["1cdf52fbbe1ccbd175c365d2b8e63f46e590e74aff23fa6a44a6ec51522e96db"],
+    pkg = "saxes",
+    version = "6.0.0",
 )
 
 npm_repo(
@@ -1163,6 +1331,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "symbol-tree_3.2.4",
+    hashes = ["8a69700a00d00bdbbadf116f94398cc37f38ecdda559dc6220e17eb977b94abc"],
+    pkg = "symbol-tree",
+    version = "3.2.4",
+)
+
+npm_repo(
     name = "tinybench_2.9.0",
     hashes = ["3a38e953c2366359670fb41e7efae2d8a818ac12615fbea6f9d0614010582e39"],
     pkg = "tinybench",
@@ -1191,6 +1366,34 @@ npm_repo(
 )
 
 npm_repo(
+    name = "tldts-core_6.1.86",
+    hashes = ["f75448d0aa827cc18c8344c8e0f703a68d977f294d81f16d73e8126a0a9bfe84"],
+    pkg = "tldts-core",
+    version = "6.1.86",
+)
+
+npm_repo(
+    name = "tldts_6.1.86",
+    hashes = ["80d90fdad94b1c9f2415bb64829a00a5d577f3b2ce97c566e5b080d5b420ccc6"],
+    pkg = "tldts",
+    version = "6.1.86",
+)
+
+npm_repo(
+    name = "tough-cookie_5.1.2",
+    hashes = ["73baea52c8cdd34f301126e7b4e47c19ec43e228d49c9db5230b1dc3039ac43b"],
+    pkg = "tough-cookie",
+    version = "5.1.2",
+)
+
+npm_repo(
+    name = "tr46_5.1.1",
+    hashes = ["62dbfa0e7959c7bf972b157afcbedd7432116891c374b7de3f78224bd7e4d7e6"],
+    pkg = "tr46",
+    version = "5.1.1",
+)
+
+npm_repo(
     name = "update-browserslist-db_1.3.1_48be4307",
     hashes = ["0c3f182a1c14933648742043e3b03a293dc1b0b71c6632e3e8d049ca5b9aa4e1"],
     pkg = "update-browserslist-db",
@@ -1205,10 +1408,45 @@ npm_repo(
 )
 
 npm_repo(
-    name = "vitest_4.1.11_3a98bee1",
+    name = "vitest_4.1.11_ed264939",
     hashes = ["81875725211b8c43a30213579456954603d471d022587ce0e6842d44d9ed162b"],
     pkg = "vitest",
     version = "4.1.11",
+)
+
+npm_repo(
+    name = "w3c-xmlserializer_5.0.0",
+    hashes = ["7fea0c33bb82228932e677a4c7aaaad45bdb04541d8517e40700355cbefebd03"],
+    pkg = "w3c-xmlserializer",
+    version = "5.0.0",
+)
+
+npm_repo(
+    name = "webidl-conversions_7.0.0",
+    hashes = ["fd4d12781018d99e2cc68cf2d997215a0b301761ab26ac2a171116960419e454"],
+    pkg = "webidl-conversions",
+    version = "7.0.0",
+)
+
+npm_repo(
+    name = "whatwg-encoding_3.1.1",
+    hashes = ["86295e4f0565d4d0de730180dcc32ccf8c4a001831d361a1493b4e9a25e5c8d3"],
+    pkg = "whatwg-encoding",
+    version = "3.1.1",
+)
+
+npm_repo(
+    name = "whatwg-mimetype_4.0.0",
+    hashes = ["d1618a0f551c0b9d770f9ae15b54313956713d1430298e59dfc4f5d4b4bb5183"],
+    pkg = "whatwg-mimetype",
+    version = "4.0.0",
+)
+
+npm_repo(
+    name = "whatwg-url_14.2.0",
+    hashes = ["b26982a9855af10a5cd8fedbdba5ac73db4b8eab1f81528104f585039fac863e"],
+    pkg = "whatwg-url",
+    version = "14.2.0",
 )
 
 npm_repo(
@@ -1216,6 +1454,27 @@ npm_repo(
     hashes = ["d2f668f77953509d0079ef05617ac9f5b5f64ed194f8b05872ad12ba06ec9963"],
     pkg = "why-is-node-running",
     version = "2.3.0",
+)
+
+npm_repo(
+    name = "ws_8.21.3",
+    hashes = ["df3454ef205791ce50b5b9241762dcf9bfe1aa9f7f01d3057229be7dac0c2dc3"],
+    pkg = "ws",
+    version = "8.21.3",
+)
+
+npm_repo(
+    name = "xml-name-validator_5.0.0",
+    hashes = ["3d40b1428dae32a6328ea20543abaafb72101a2652a95f43ec8757fef213f0be"],
+    pkg = "xml-name-validator",
+    version = "5.0.0",
+)
+
+npm_repo(
+    name = "xmlchars_2.2.0",
+    hashes = ["bdf900298963e4bd95b76aa95e96d29f05687e6ae662d617061778267b576da8"],
+    pkg = "xmlchars",
+    version = "2.2.0",
 )
 
 npm_repo(
@@ -1229,6 +1488,8 @@ npm_link(
     name = "node_modules",
     lock = "pnpm-lock.yaml",
     packages = [
+        ":agent-base_7.1.4",
+        ":asamuzakjp_css-color_3.2.0",
         ":assertion-error_2.0.1",
         ":ast-v8-to-istanbul_1.0.5",
         ":babel_code-frame_7.29.7",
@@ -1257,9 +1518,18 @@ npm_link(
         ":chai_6.2.2",
         ":convert-source-map_2.0.0",
         ":cookie_1.1.1",
+        ":cssstyle_4.6.0",
+        ":csstools_color-helpers_5.1.0",
+        ":csstools_css-calc_2.1.4_4639dcc2",
+        ":csstools_css-color-parser_3.1.0_4639dcc2",
+        ":csstools_css-parser-algorithms_3.0.5_856d5ffa",
+        ":csstools_css-tokenizer_3.0.4",
         ":csstype_3.2.3",
+        ":data-urls_5.0.0",
         ":debug_4.4.3_cfc6fa9a",
+        ":decimal.js_10.6.0",
         ":electron-to-chromium_1.5.413",
+        ":entities_6.0.1",
         ":es-module-lexer_2.3.2",
         ":esbuild_0.25.12",
         ":esbuild_aix-ppc64_0.25.12",
@@ -1295,7 +1565,12 @@ npm_link(
         ":fsevents_2.3.3",
         ":gensync_1.0.0-beta.2",
         ":has-flag_4.0.0",
+        ":html-encoding-sniffer_4.0.0",
         ":html-escaper_2.0.2",
+        ":http-proxy-agent_7.0.2_cfc6fa9a",
+        ":https-proxy-agent_7.0.6_cfc6fa9a",
+        ":iconv-lite_0.6.3",
+        ":is-potential-custom-element-name_1.0.1",
         ":istanbul-lib-coverage_3.2.2",
         ":istanbul-lib-report_3.0.1",
         ":istanbul-reports_3.2.0",
@@ -1306,8 +1581,10 @@ npm_link(
         ":jridgewell_trace-mapping_0.3.31",
         ":js-tokens_10.0.0",
         ":js-tokens_4.0.0",
+        ":jsdom_26.1.0_cfc6fa9a",
         ":jsesc_3.1.0",
         ":json5_2.2.3",
+        ":lru-cache_10.4.3",
         ":lru-cache_5.1.1",
         ":magic-string_0.30.21",
         ":magicast_0.5.4",
@@ -1316,11 +1593,14 @@ npm_link(
         ":nanoid_3.3.18",
         ":napi-rs_lzma-linux-x64-gnu_1.5.1",
         ":node-releases_2.0.53",
+        ":nwsapi_2.2.24",
         ":obug_2.1.4",
+        ":parse5_7.3.0",
         ":pathe_2.0.3",
         ":picocolors_1.1.1",
         ":picomatch_4.0.7",
         ":postcss_8.5.26",
+        ":punycode_2.3.1",
         ":react-dom_19.1.1_6cb25bb6",
         ":react-refresh_0.17.0",
         ":react-router_7.9.1_a63170c7",
@@ -1352,6 +1632,9 @@ npm_link(
         ":rollup_rollup-win32-ia32-msvc_4.62.5",
         ":rollup_rollup-win32-x64-gnu_4.62.5",
         ":rollup_rollup-win32-x64-msvc_4.62.5",
+        ":rrweb-cssom_0.8.0",
+        ":safer-buffer_2.1.2",
+        ":saxes_6.0.0",
         ":scheduler_0.26.0",
         ":semver_6.3.1",
         ":semver_7.8.5",
@@ -1362,10 +1645,15 @@ npm_link(
         ":standard-schema_spec_1.1.0",
         ":std-env_4.2.0",
         ":supports-color_7.2.0",
+        ":symbol-tree_3.2.4",
         ":tinybench_2.9.0",
         ":tinyexec_1.3.0",
         ":tinyglobby_0.2.17",
         ":tinyrainbow_3.1.1",
+        ":tldts-core_6.1.86",
+        ":tldts_6.1.86",
+        ":tough-cookie_5.1.2",
+        ":tr46_5.1.1",
         ":types_babel_core_7.20.5",
         ":types_babel_generator_7.27.0",
         ":types_babel_template_7.4.4",
@@ -1378,7 +1666,7 @@ npm_link(
         ":update-browserslist-db_1.3.1_48be4307",
         ":vite_7.1.2",
         ":vitejs_plugin-react_5.0.0_c3ebc136",
-        ":vitest_4.1.11_3a98bee1",
+        ":vitest_4.1.11_ed264939",
         ":vitest_coverage-v8_4.1.11_e94d1b4b",
         ":vitest_expect_4.1.11",
         ":vitest_mocker_4.1.11_3f9da55b",
@@ -1387,19 +1675,27 @@ npm_link(
         ":vitest_snapshot_4.1.11",
         ":vitest_spy_4.1.11",
         ":vitest_utils_4.1.11",
+        ":w3c-xmlserializer_5.0.0",
+        ":webidl-conversions_7.0.0",
+        ":whatwg-encoding_3.1.1",
+        ":whatwg-mimetype_4.0.0",
+        ":whatwg-url_14.2.0",
         ":why-is-node-running_2.3.0",
+        ":ws_8.21.3",
+        ":xml-name-validator_5.0.0",
+        ":xmlchars_2.2.0",
         ":yallist_3.1.1",
     ],
     visibility = ["PUBLIC"],
 )
 
-# The same closure, npm's layout: no symlinks, so a tool can be told not to
-# resolve them and still find everything. Only a development server needs this.
 npm_link(
     name = "hoisted",
-    lock = "pnpm-lock.yaml",
     hoisted = True,
+    lock = "pnpm-lock.yaml",
     packages = [
+        ":agent-base_7.1.4",
+        ":asamuzakjp_css-color_3.2.0",
         ":assertion-error_2.0.1",
         ":ast-v8-to-istanbul_1.0.5",
         ":babel_code-frame_7.29.7",
@@ -1428,9 +1724,18 @@ npm_link(
         ":chai_6.2.2",
         ":convert-source-map_2.0.0",
         ":cookie_1.1.1",
+        ":cssstyle_4.6.0",
+        ":csstools_color-helpers_5.1.0",
+        ":csstools_css-calc_2.1.4_4639dcc2",
+        ":csstools_css-color-parser_3.1.0_4639dcc2",
+        ":csstools_css-parser-algorithms_3.0.5_856d5ffa",
+        ":csstools_css-tokenizer_3.0.4",
         ":csstype_3.2.3",
+        ":data-urls_5.0.0",
         ":debug_4.4.3_cfc6fa9a",
+        ":decimal.js_10.6.0",
         ":electron-to-chromium_1.5.413",
+        ":entities_6.0.1",
         ":es-module-lexer_2.3.2",
         ":esbuild_0.25.12",
         ":esbuild_aix-ppc64_0.25.12",
@@ -1466,7 +1771,12 @@ npm_link(
         ":fsevents_2.3.3",
         ":gensync_1.0.0-beta.2",
         ":has-flag_4.0.0",
+        ":html-encoding-sniffer_4.0.0",
         ":html-escaper_2.0.2",
+        ":http-proxy-agent_7.0.2_cfc6fa9a",
+        ":https-proxy-agent_7.0.6_cfc6fa9a",
+        ":iconv-lite_0.6.3",
+        ":is-potential-custom-element-name_1.0.1",
         ":istanbul-lib-coverage_3.2.2",
         ":istanbul-lib-report_3.0.1",
         ":istanbul-reports_3.2.0",
@@ -1477,8 +1787,10 @@ npm_link(
         ":jridgewell_trace-mapping_0.3.31",
         ":js-tokens_10.0.0",
         ":js-tokens_4.0.0",
+        ":jsdom_26.1.0_cfc6fa9a",
         ":jsesc_3.1.0",
         ":json5_2.2.3",
+        ":lru-cache_10.4.3",
         ":lru-cache_5.1.1",
         ":magic-string_0.30.21",
         ":magicast_0.5.4",
@@ -1487,11 +1799,14 @@ npm_link(
         ":nanoid_3.3.18",
         ":napi-rs_lzma-linux-x64-gnu_1.5.1",
         ":node-releases_2.0.53",
+        ":nwsapi_2.2.24",
         ":obug_2.1.4",
+        ":parse5_7.3.0",
         ":pathe_2.0.3",
         ":picocolors_1.1.1",
         ":picomatch_4.0.7",
         ":postcss_8.5.26",
+        ":punycode_2.3.1",
         ":react-dom_19.1.1_6cb25bb6",
         ":react-refresh_0.17.0",
         ":react-router_7.9.1_a63170c7",
@@ -1523,6 +1838,9 @@ npm_link(
         ":rollup_rollup-win32-ia32-msvc_4.62.5",
         ":rollup_rollup-win32-x64-gnu_4.62.5",
         ":rollup_rollup-win32-x64-msvc_4.62.5",
+        ":rrweb-cssom_0.8.0",
+        ":safer-buffer_2.1.2",
+        ":saxes_6.0.0",
         ":scheduler_0.26.0",
         ":semver_6.3.1",
         ":semver_7.8.5",
@@ -1533,10 +1851,15 @@ npm_link(
         ":standard-schema_spec_1.1.0",
         ":std-env_4.2.0",
         ":supports-color_7.2.0",
+        ":symbol-tree_3.2.4",
         ":tinybench_2.9.0",
         ":tinyexec_1.3.0",
         ":tinyglobby_0.2.17",
         ":tinyrainbow_3.1.1",
+        ":tldts-core_6.1.86",
+        ":tldts_6.1.86",
+        ":tough-cookie_5.1.2",
+        ":tr46_5.1.1",
         ":types_babel_core_7.20.5",
         ":types_babel_generator_7.27.0",
         ":types_babel_template_7.4.4",
@@ -1549,7 +1872,7 @@ npm_link(
         ":update-browserslist-db_1.3.1_48be4307",
         ":vite_7.1.2",
         ":vitejs_plugin-react_5.0.0_c3ebc136",
-        ":vitest_4.1.11_3a98bee1",
+        ":vitest_4.1.11_ed264939",
         ":vitest_coverage-v8_4.1.11_e94d1b4b",
         ":vitest_expect_4.1.11",
         ":vitest_mocker_4.1.11_3f9da55b",
@@ -1558,7 +1881,15 @@ npm_link(
         ":vitest_snapshot_4.1.11",
         ":vitest_spy_4.1.11",
         ":vitest_utils_4.1.11",
+        ":w3c-xmlserializer_5.0.0",
+        ":webidl-conversions_7.0.0",
+        ":whatwg-encoding_3.1.1",
+        ":whatwg-mimetype_4.0.0",
+        ":whatwg-url_14.2.0",
         ":why-is-node-running_2.3.0",
+        ":ws_8.21.3",
+        ":xml-name-validator_5.0.0",
+        ":xmlchars_2.2.0",
         ":yallist_3.1.1",
     ],
     visibility = ["PUBLIC"],

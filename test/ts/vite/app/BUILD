@@ -58,9 +58,12 @@ build_rule(
 vitest_test(
     name = "unit_test",
     srcs = [
+        "src/App.dom.test.tsx",
         "src/App.test.tsx",
+        "src/App.tsx",
         "src/data.ts",
     ],
+    deps = ["//test/lib/greeter"],
     node_modules = "//third_party/js/react:node_modules",
 )
 
