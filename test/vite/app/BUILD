@@ -50,3 +50,16 @@ build_rule(
     no_test_output = True,
     test_cmd = "$TEST",
 )
+
+# Vitest is vite: the same config file, the same plugin pipeline, the same
+# transform. A component tested here is transformed exactly as it will be
+# bundled -- which is why this shares vite_bundle's config rather than having
+# one of its own.
+vitest_test(
+    name = "unit_test",
+    srcs = [
+        "src/App.test.tsx",
+        "src/data.ts",
+    ],
+    node_modules = "//third_party/js/react:node_modules",
+)
