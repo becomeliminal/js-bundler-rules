@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-DIR=test/esbuild/site
+DIR=test/ts/esbuild/site
 
 # esbuild names its outputs after the entry point, so unlike vite these can be
 # named rather than found.

@@ -41,9 +41,21 @@ third_party/js/
 
 test/
   lib/       first-party libraries every fixture shares
-  esbuild/   what esbuild_bundle is tested against
-  vite/      what vite_bundle is tested against
+  js/        fixtures whose sources are plain JavaScript
+    esbuild/
+    vite/
+  ts/        fixtures whose sources are TypeScript
+    esbuild/
+    vite/
 ```
+
+Split by language before bundler, because that is the axis where a bundler
+behaves differently. `@vitejs/plugin-react` transforming a `.jsx` is a different
+path from the same plugin transforming a `.tsx`, and a repo that has not adopted
+TypeScript should not have to write its build config in it -- `test/js/vite`
+uses a `vite.config.js`. Splitting this way makes a missing combination visible
+as an empty directory; the one that was missing when this split was made was
+exactly vite with plain JavaScript.
 
 esbuild is pinned by this plugin; **vite is pinned by the consumer**. That
 asymmetry is deliberate: a `vite.config.ts` imports plugins, and a plugin has to
