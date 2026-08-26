@@ -397,18 +397,47 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
     # config stays theirs and this adds one line to it.
     wrapper = genrule(
         name = tag(name, "config"),
-        srcs = [config],
+        srcs = {"config": [config], "libs": deps},
         outs = ["_dev.config.mjs"],
         cmd = " && ".join([
+            # The first-party packages, by name, from the same lib.jsons the
+            # overlay reads. Two things must be told about each: the optimizer,
+            # or the served module is a cached prebundle rather than the
+            # developer's source; and the watcher, whose default is to ignore
+            # everything under node_modules.
+            'NAMES=$("$TOOLS_PLEASE_JS" packages --dir .)',
+            "EXCLUDE=$(for n in $NAMES; do printf \"'%s',\" \"$n\"; done)",
+            # The watcher prunes traversal at every directory the ignore
+            # matches, so negating the package's contents is not enough: each
+            # ancestor -- the scope directory and the package directory itself
+            # -- must be negated too, or the walk never reaches the files the
+            # deeper negation names.
+            # One negation per ancestor, including node_modules itself: the
+            # watcher vite bundles (chokidar 3) tests each directory against
+            # the ignore and prunes traversal there, and it matches the bare
+            # node_modules directory against its own **/node_modules/** default
+            # -- so without the first negation the walk never starts, and
+            # without the others it stops one level short of the files the
+            # last pattern names. Every one was found by watching it fail.
+            'IGNORE=$([ -n "$NAMES" ] && printf "\'!**/node_modules\',"; ' +
+            "for n in $NAMES; do " +
+            'case "$n" in @*/*) printf "\'!**/node_modules/%s\'," "${n%%/*}";; esac; ' +
+            'printf "\'!**/node_modules/%s\'," "$n"; ' +
+            'printf "\'!**/node_modules/%s/**\'," "$n"; done)',
             'echo "import { mergeConfig } from \'vite\';" > "$OUT"',
-            'echo "import user from \'./$(basename $SRCS)\';" >> "$OUT"',
+            'echo "import user from \'./$(basename $SRCS_CONFIG)\';" >> "$OUT"',
             'echo "const base = typeof user === \'function\'" >> "$OUT"',
             'echo "  ? await user({ command: \'serve\', mode: \'development\' })" >> "$OUT"',
             'echo "  : user;" >> "$OUT"',
+            'echo "export default mergeConfig(base, {" >> "$OUT"',
             # Sources are symlinked in from the repository, and resolving those
             # links would put them somewhere with no node_modules beside them.
-            'echo "export default mergeConfig(base, { resolve: { preserveSymlinks: true } });" >> "$OUT"',
+            'echo "  resolve: { preserveSymlinks: true }," >> "$OUT"',
+            'echo "  optimizeDeps: { exclude: [$EXCLUDE] }," >> "$OUT"',
+            'echo "  server: { watch: { ignored: [$IGNORE] } }," >> "$OUT"',
+            'echo "});" >> "$OUT"',
         ]),
+        tools = {"please_js": ["///js//tools/please_js"]},
     )
 
     return js_binary(
@@ -422,6 +451,7 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
         link_srcs = srcs,
         deps = deps,
         node_modules = node_modules,
+        link_deps = True,
         runner = "vite",
         # No subcommand: `vite` with no arguments is the dev server, and naming
         # it `dev` would be an alias for the same thing.

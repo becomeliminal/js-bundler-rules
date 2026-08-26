@@ -12,7 +12,7 @@ plugin_repo(
     plugin = "js-rules",
     # Pinned past deps on js_run_binary, without which a bundler cannot see any
     # first-party library.
-    revision = "8b16141",
+    revision = "03efbfa",
 )
 
 plugin_repo(
@@ -26,5 +26,5 @@ plugin_repo(
     name = "ts",
     owner = "becomeliminal",
     plugin = "ts-rules",
-    revision = "4298510",
+    revision = "352f66c",
 )
