@@ -6,7 +6,12 @@ subinclude("//build_defs:bundler", "///js//build_defs:js", "///ts//build_defs:ts
 esbuild_bundle(
     name = "app",
     entry_point = "main.ts",
-    out_dir = "dist",
+    out = "main.js",
+    # The stylesheet main.ts imports, as its own declared output. This fixture
+    # is the reason the argument exists: it used out_dir purely because CSS made
+    # a second file, and a directory for what is really two named files meant
+    # nothing downstream could depend on either by name.
+    out_css = "main.css",
     srcs = ["styles.css"],
     deps = ["//test/lib/layers"],
     check = ":typecheck",
