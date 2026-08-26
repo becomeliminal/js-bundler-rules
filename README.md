@@ -7,46 +7,43 @@ Layer 3 of a JavaScript stack for the [Please](https://please.build) build syste
 | 0 | [node-rules](https://github.com/becomeliminal/node-rules) | a pinned, hermetic node |
 | 1 | [js-rules](https://github.com/becomeliminal/js-rules) | packages, `node_modules`, running programs |
 | 2 | [ts-rules](https://github.com/becomeliminal/ts-rules) | compiling and type-checking TypeScript |
-| 3 | **js-bundler-rules** | `esbuild_bundle`, `vite_bundle` |
+| 3 | **js-bundler-rules** | `esbuild_bundle`, `vite_bundle`, `rollup_bundle`, `webpack_bundle`, `terser_minified`, `vitest_test`, `vite_dev` |
 
 ## Regenerating a lockfile
 
-Lockfiles are maintained by pnpm, the way `go.mod` is maintained by `go`. This
-does not need pnpm installed: corepack ships inside the node toolchain this repo
-already pins, so the same node the build uses can drive it.
+Each tree under `third_party/js/` has an `npm_update` target, and that is the
+one sanctioned way its lockfile and generated `BUILD` change: edit the tree's
+`package.json`, then
 
 ```sh
-plz build //third_party/node:node
-N=$PWD/plz-out/bin/third_party/node/node
-cd third_party/js/<tree>
-COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
-  "$N/bin/node" "$N/lib/node_modules/corepack/dist/corepack.js" pnpm install --lockfile-only
-cd -
-plz run ///js//tools/please_js -- update \
-  --lockfile third_party/js/<tree>/pnpm-lock.yaml \
-  --out third_party/js/<tree>/BUILD \
-  --lock-label pnpm-lock.yaml
+plz run //third_party/js:update-react
 ```
 
-These instructions live here rather than in a comment at the top of the lockfile
-because **pnpm strips comments whenever it rewrites one**.
+It drives pnpm through the corepack inside the pinned node toolchain --
+nothing installed -- then regenerates the `BUILD`. Policy flags (react's
+`--hoisted-link`, which vite_dev's symlink-free layout needs) are recorded on
+the target, so every repin applies the same policy.
 
 ## Layout
 
 ```
 third_party/js/
   esbuild/   the bundler this plugin pins, overridable by the Esbuild config key
-  react/     an application's tree: vite, react, react-router, and their types
+  terser/    the minifier this plugin pins, for the same reason
+  react/     the consumer's tree: vite, react, rollup, webpack, vitest, jsdom
   tiny/      one zero-dependency package, for the smallest third-party case
 
 test/
   lib/       first-party libraries every fixture shares
   js/        fixtures whose sources are plain JavaScript
     esbuild/
-    vite/
+    vite/    app, library mode, multi-page, snapshots
+    rollup/
+    webpack/
+    terser/
   ts/        fixtures whose sources are TypeScript
-    esbuild/
-    vite/
+    esbuild/  including tsconfig path aliases
+    vite/    app, SSR, the HMR dev server
 ```
 
 Split by language before bundler, because that is the axis where a bundler
@@ -57,11 +54,21 @@ uses a `vite.config.js`. Splitting this way makes a missing combination visible
 as an empty directory; the one that was missing when this split was made was
 exactly vite with plain JavaScript.
 
-esbuild is pinned by this plugin; **vite is pinned by the consumer**. That
-asymmetry is deliberate: a `vite.config.ts` imports plugins, and a plugin has to
-match the vite major it is loaded into, so a plugin-owned vite would silently
-mismatch whatever `@vitejs/plugin-react` a consumer pinned. esbuild has no such
-ecosystem, which is the only reason this plugin can own that one.
+esbuild and terser are pinned by this plugin; **vite, rollup and webpack are
+pinned by the consumer**. That asymmetry is deliberate: their configs import
+plugins and loaders, and a plugin has to match the major it is loaded into, so
+a plugin-owned copy would silently mismatch whatever the consumer pinned.
+esbuild and terser have no such ecosystem, which is the only reason this
+plugin can own those two.
+
+## The dependency boundary, proven
+
+Nothing in this stack reimplements module resolution: each bundler resolves
+imports itself, against the `node_modules` the build assembled from declared
+deps. `test/verify_boundary.sh` proves the consequence across five
+independent resolvers -- esbuild, rollup, webpack, vite and vitest: remove a
+declared dep and every tool's own resolution fails, restore it and every one
+succeeds. Native semantics, graph discipline.
 
 ## A bundle cannot be built from TypeScript nothing checks
 
