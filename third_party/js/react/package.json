@@ -15,6 +15,8 @@
     "@vitest/coverage-v8": "4.1.11",
     "jsdom": "26.1.0",
     "rollup": "4.62.5",
-    "@rollup/plugin-node-resolve": "16.0.3"
+    "@rollup/plugin-node-resolve": "16.0.3",
+    "webpack": "5.109.2",
+    "webpack-cli": "6.0.1"
   }
 }
