@@ -327,6 +327,12 @@ def vitest_test(name:str, srcs:list, deps:list=[], data:list=[],
         data = data,
         node_modules = node_modules,
         runner = "vitest",
+        # CI mode: a missing snapshot fails the test rather than being written.
+        # Without it vitest creates the file in the sandbox, the run passes,
+        # and the snapshot is discarded with the tmp dir -- a test that asserts
+        # nothing and never says so. Writing snapshots is vitest_update's job,
+        # the only one allowed to touch the source tree.
+        env = {"CI": "true"} | env,
         runner_args = [
             # `run`, not the default: vitest watches otherwise, and a test that
             # never exits is not a test.
@@ -335,12 +341,85 @@ def vitest_test(name:str, srcs:list, deps:list=[], data:list=[],
             "--reporter=junit",
             "--outputFile=$RESULTS_FILE",
         ] + args,
-        env = env,
         visibility = visibility,
         labels = labels + ["vitest"],
         timeout = timeout,
         flaky = flaky,
         size = size,
+    )
+
+
+def vitest_update(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
+                  config_deps:list=[], node_modules:str="", env:dict={},
+                  args:list=[], visibility:list=None, labels:list=[]):
+    """Rewrites committed snapshots. `plz run` only.
+
+    A separate target rather than a flag on the test, because it writes to the
+    source tree -- the same shape as npm_update, and for the same reason: a
+    snapshot is a source, reviewed and committed, and a build action can touch
+    neither the network nor the sources. vitest_test refuses to write one (its
+    CI mode makes a missing snapshot a failure); this is the one sanctioned way
+    they change.
+
+    The test files are symlinked from the repository rather than copied, and a
+    wrapper config resolves each snapshot beside the file's real path -- so a
+    rewritten snapshot, and an inline snapshot vitest edits into the test file
+    itself, lands in the developer's tree, while vitest and everything the
+    tests import still resolve through the node_modules Please assembled.
+
+    Args:
+        name: Target name.
+        srcs: The same test files the vitest_test names.
+        deps: The same deps the vitest_test names.
+        config: The vite config, shared with the test on purpose: a snapshot
+                written under one pipeline and asserted under another would
+                not survive the round trip.
+        config_deps: Anything the config imports or extends.
+        node_modules: The tree the tests resolve through, which holds vitest.
+        env: Environment variables for the run.
+        args: Further vitest flags -- a test name filter, most usefully.
+        visibility: Visibility specification.
+        labels: Additional labels.
+    """
+    wrapper = genrule(
+        name = tag(name, "config"),
+        srcs = [config],
+        outs = ["_update.config.mjs"],
+        cmd = " && ".join([
+            'echo "import { mergeConfig } from \'vite\';" > "$OUT"',
+            'echo "import { realpathSync } from \'node:fs\';" >> "$OUT"',
+            'echo "import { dirname, join, basename } from \'node:path\';" >> "$OUT"',
+            'echo "import user from \'./$(basename $SRCS)\';" >> "$OUT"',
+            'echo "const base = typeof user === \'function\'" >> "$OUT"',
+            'echo "  ? await user({ command: \'serve\', mode: \'test\' })" >> "$OUT"',
+            'echo "  : user;" >> "$OUT"',
+            'echo "export default mergeConfig(base, {" >> "$OUT"',
+            # The tests are symlinks into the repository; resolving them away
+            # would put them somewhere with no node_modules beside them.
+            'echo "  resolve: { preserveSymlinks: true }," >> "$OUT"',
+            # The snapshot goes beside the file the developer edits, not beside
+            # the symlink: realpath of the linked test is the source file, so
+            # __snapshots__ is created in the repository, which is the point.
+            'echo "  test: { resolveSnapshotPath: (t, ext) =>" >> "$OUT"',
+            'echo "    join(dirname(realpathSync(t)), \'__snapshots__\', basename(t) + ext) }," >> "$OUT"',
+            'echo "});" >> "$OUT"',
+        ]),
+    )
+
+    return js_binary(
+        name = name,
+        # Copied config, linked tests: node loads a config by real path, so a
+        # linked one would resolve its plugins from the source tree. The tests
+        # must be links -- their real path is where the snapshots belong.
+        srcs = [config, wrapper] + config_deps,
+        link_srcs = srcs,
+        deps = deps,
+        node_modules = node_modules,
+        runner = "vitest",
+        runner_args = ["run", "--update", "--config", "_update.config.mjs"] + args,
+        env = env,
+        visibility = visibility,
+        labels = labels + ["vitest_update"],
     )
 
 
