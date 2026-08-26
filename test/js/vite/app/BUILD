@@ -25,3 +25,16 @@ build_rule(
     no_test_output = True,
     test_cmd = "$TEST",
 )
+
+# The same runner over the same config, with no TypeScript involved. vitest
+# transforms .jsx through @vitejs/plugin-react exactly as it does .tsx.
+vitest_test(
+    name = "unit_test",
+    srcs = [
+        "src/App.jsx",
+        "src/App.test.jsx",
+    ],
+    config = "vite.config.js",
+    deps = ["//test/lib/greeter"],
+    node_modules = "//third_party/js/react:node_modules",
+)
