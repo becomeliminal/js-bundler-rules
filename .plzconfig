@@ -16,6 +16,18 @@ DefaultValue = esbuild
 Help = npm package within that tree publishing the bundler.
 Inherit = true
 
+[PluginConfig "terser"]
+ConfigKey = Terser
+DefaultValue = ///bundler//third_party/js/terser:node_modules
+Help = node_modules tree holding terser. Owned by this plugin for the same reason esbuild is: no plugin ecosystem to keep in step with a consumer's config.
+Inherit = true
+
+[PluginConfig "terser_package"]
+ConfigKey = TerserPackage
+DefaultValue = terser
+Help = npm package within that tree publishing the minifier.
+Inherit = true
+
 [Plugin "js"]
 Target = //plugins:js
 ; The toolchain belongs to the repo being built, so a consumer supplies its own.
