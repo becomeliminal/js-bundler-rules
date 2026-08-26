@@ -72,6 +72,7 @@ def esbuild_bundle(name:str, entry_point:str="", entry_points:list=[],
                    metafile:bool=False,
                    splitting:bool=False, external:list=[],
                    define:dict={}, node_modules:str="", env:dict={},
+                   tsconfig:str="", tsconfig_deps:list=[],
                    check=None, args:list=[], visibility:list=None,
                    test_only:bool&testonly=False, labels:list=[]):
     """A bundle produced by esbuild.
@@ -110,6 +111,13 @@ def esbuild_bundle(name:str, entry_point:str="", entry_points:list=[],
                 platform.
         target: Language target, e.g. "es2022" or "node22".
         minify: Minify the output.
+        tsconfig: A tsconfig esbuild reads paths from. This is the one
+                  tsconfig setting with demand of its own: a repo using path
+                  aliases cannot bundle without it, because esbuild resolves
+                  the alias, not node. Types in it are ignored -- esbuild
+                  strips them without reading, which is what check is for.
+        tsconfig_deps: The configs it extends -- files, or a ts_config
+                       target, which carries its own chain.
         check: A ts_check target covering these sources, made a dependency of
                the bundle so the bundle cannot be produced while it fails.
                Required when any source is TypeScript; pass False to bundle
@@ -170,6 +178,13 @@ def esbuild_bundle(name:str, entry_point:str="", entry_points:list=[],
         flags += [f"--metafile={name}.meta.json"]
     if splitting:
         flags += ["--splitting"]
+    if tsconfig:
+        flags += [f"--tsconfig={tsconfig}"]
+    # Files in the chain ride srcs, staged at their real paths, which is all
+    # extends needs; a ts_config target rides deps, where transitive staging
+    # brings its whole chain.
+    tsconfig_dep_files = [t for t in tsconfig_deps if not t.startswith(":") and not t.startswith("//")]
+    tsconfig_dep_targets = [t for t in tsconfig_deps if t.startswith(":") or t.startswith("//")]
     flags += [f"--external:{e}" for e in external]
     flags += [f"--define:{k}={v}" for k, v in sorted(define.items())]
 
@@ -193,9 +208,9 @@ def esbuild_bundle(name:str, entry_point:str="", entry_points:list=[],
         # is not a corner case, since vite depends on esbuild, so any consumer
         # with vite already has one.
         tool_modules = CONFIG.BUNDLER.ESBUILD,
-        deps = deps + _checked("esbuild_bundle", name, [entry_point] + srcs, check),
+        deps = deps + tsconfig_dep_targets + _checked("esbuild_bundle", name, [entry_point] + srcs, check),
         node_modules = node_modules,
-        srcs = entries + srcs,
+        srcs = entries + srcs + ([tsconfig] if tsconfig else []) + tsconfig_dep_files,
         outs = outs,
         out_dirs = [out_dir] if out_dir else [],
         args = flags + args,
