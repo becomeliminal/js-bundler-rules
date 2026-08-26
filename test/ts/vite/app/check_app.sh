@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-DIR=test/vite/app
+DIR=test/ts/vite/app
 
 # vite content-hashes its filenames, which is the reason the rule declares a
 # directory rather than files. Find the bundle rather than naming it.
