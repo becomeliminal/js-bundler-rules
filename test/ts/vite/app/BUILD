@@ -76,5 +76,5 @@ vite_dev(
         "src/**/*",
     ]),
     deps = ["//test/lib/greeter"],
-    node_modules = "//third_party/js/react:hoisted",
+    node_modules = "//third_party/js/react:node_modules",
 )

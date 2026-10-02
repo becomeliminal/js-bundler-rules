@@ -10,9 +10,9 @@ plugin_repo(
     name = "js",
     owner = "becomeliminal",
     plugin = "js-rules",
-    # Pinned past deps on js_run_binary, without which a bundler cannot see any
-    # first-party library.
-    revision = "d50da30",
+    # Pinned past link-tree: runtimes and build actions link the tree rather
+    # than copy it, which is what lets vite_dev run on the store layout.
+    revision = "d11d38945b87e2d6132da6fb537419a68f0e4c0b",
 )
 
 plugin_repo(

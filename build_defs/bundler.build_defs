@@ -633,6 +633,44 @@ def vitest_update(name:str, srcs:list, deps:list=[], config:str="vite.config.ts"
     )
 
 
+_VITE_DEV_CONFIG = """
+// Sources are symlinked into this run directory from the repository, and vite
+// resolves them to their real paths there -- where no plz tree sits beside
+// them, and where a stray node_modules from an npm install might. So a bare
+// import from any file in the repository is resolved as if it were imported
+// from this run directory: it always reaches the tree plz built, through which
+// the store layout resolves every package's own dependencies as siblings.
+const runDir = process.cwd();
+const marker = path.sep + "plz-out" + path.sep;
+if (!runDir.includes(marker)) {
+  throw new Error("vite_dev: expected to run under plz-out, ran in " + runDir);
+}
+const repoRoot = runDir.slice(0, runDir.indexOf(marker));
+const anchor = path.join(runDir, "index.html");
+const bare = (s) => !s.startsWith(".") && !s.startsWith("/") && !s.startsWith("\0") && !s.includes(":");
+const fromPlzTree = {
+  name: "plz-resolve-from-tree",
+  enforce: "pre",
+  async resolveId(source, importer, options) {
+    if (!importer || !bare(source) || importer.includes(marker)) return null;
+    return this.resolve(source, anchor, { ...options, skipSelf: true });
+  },
+};
+
+export default mergeConfig(base, {
+  plugins: [fromPlzTree],
+  // The tree is a build output: vite's cache goes beside the run, never into it.
+  cacheDir: path.join(runDir, ".vite"),
+  optimizeDeps: { exclude: EXCLUDE },
+  server: {
+    // Real paths are in the repository, so that is what vite may serve.
+    fs: { allow: [runDir, repoRoot] },
+    watch: { ignored: IGNORE },
+  },
+});
+"""
+
+
 def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
              config_deps:list=[], node_modules:str="", env:dict={},
              args:list=[], visibility:list=None, labels:list=[]):
@@ -680,10 +718,11 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
     Port, proxy, host, allowedHosts and server.fs.allow are deliberately absent:
     they live in vite.config.ts, where a vite user already knows to put them.
     """
-    # The rule chose a tree with no symlinks in it, so the rule supplies the
-    # setting that tree needs, rather than leaving it in the consumer's config
-    # where it would look like their choice. Wrapping rather than rewriting: the
-    # config stays theirs and this adds one line to it.
+    # The server runs on the same store-layout tree builds and tests use, so
+    # nothing is copied for it. The rule supplies what that needs -- resolving
+    # the repository's sources through the tree -- rather than leaving it in the
+    # consumer's config where it would look like their choice. Wrapping rather
+    # than rewriting: the config stays theirs.
     wrapper = genrule(
         name = tag(name, "config"),
         srcs = {"config": [config], "libs": deps},
@@ -714,18 +753,14 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
             'printf "\'!**/node_modules/%s\'," "$n"; ' +
             'printf "\'!**/node_modules/%s/**\'," "$n"; done)',
             'echo "import { mergeConfig } from \'vite\';" > "$OUT"',
+            'echo "import path from \'node:path\';" >> "$OUT"',
             'echo "import user from \'./$(basename $SRCS_CONFIG)\';" >> "$OUT"',
             'echo "const base = typeof user === \'function\'" >> "$OUT"',
             'echo "  ? await user({ command: \'serve\', mode: \'development\' })" >> "$OUT"',
             'echo "  : user;" >> "$OUT"',
-            'echo "export default mergeConfig(base, {" >> "$OUT"',
-            # Sources are symlinked in from the repository, and resolving those
-            # links would put them somewhere with no node_modules beside them.
-            'echo "  resolve: { preserveSymlinks: true }," >> "$OUT"',
-            'echo "  optimizeDeps: { exclude: [$EXCLUDE] }," >> "$OUT"',
-            'echo "  server: { watch: { ignored: [$IGNORE] } }," >> "$OUT"',
-            'echo "});" >> "$OUT"',
-        ]),
+            'echo "const EXCLUDE = [$EXCLUDE];" >> "$OUT"',
+            'echo "const IGNORE = [$IGNORE];" >> "$OUT"',
+        ]) + " && cat >> \"$OUT\" <<'PLZ_DEV_CONFIG'\n" + _VITE_DEV_CONFIG + "\nPLZ_DEV_CONFIG",
         tools = {"please_js": ["///js//tools/please_js"]},
     )
 
