@@ -12,7 +12,7 @@ plugin_repo(
     plugin = "js-rules",
     # Pinned past link-tree: runtimes and build actions link the tree rather
     # than copy it, which is what lets vite_dev run on the store layout.
-    revision = "3778c65926443a643fc1e077bd5a869e2f49b837",
+    revision = "c00c91c8055e3a1d7d94567e37ad8e79b6467731",
 )
 
 plugin_repo(
@@ -26,5 +26,5 @@ plugin_repo(
     name = "ts",
     owner = "becomeliminal",
     plugin = "ts-rules",
-    revision = "fa3818a",
+    revision = "47e83184fcb181aa10402c9c4d1e16026a72c808",
 )
