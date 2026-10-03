@@ -18,3 +18,11 @@ npm_update(
     name = "update-terser",
     dir = "third_party/js/terser",
 )
+
+# An Astro site's tree, for astro_build, astro_check and astro_dev. Hoisted
+# like react/, because astro_dev serves through vite_dev's layout.
+npm_update(
+    name = "update-astro",
+    args = ["--hoisted-link"],
+    dir = "third_party/js/astro",
+)

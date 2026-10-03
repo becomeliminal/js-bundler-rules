@@ -643,45 +643,65 @@ def vitest_update(name:str, srcs:list, deps:list=[], config:str="vite.config.ts"
     )
 
 
+def _dev_config(name:str, config:str, deps:list, out:str, merge_from:str, export:str):
+    """The development server's config: the consumer's, loaded and wrapped.
+
+    Shared by vite_dev and astro_dev, which differ only in where the vite
+    config sits -- the whole config, or an Astro config's vite section -- and
+    so only in the export line that applies withPlzDev to it, and in where
+    mergeConfig comes from: vite for vite_dev; astro/config for astro_dev,
+    since vite is Astro's own dependency rather than one the tree exposes.
+    """
+    return genrule(
+        name = tag(name, "config"),
+        srcs = {"config": [config], "libs": deps},
+        outs = [out],
+        cmd = " && ".join([
+            # The first-party packages, by name, from the same lib.jsons the
+            # overlay reads. Two things must be told about each: the optimizer,
+            # or the served module is a cached prebundle rather than the
+            # developer's source; and the watcher, whose default is to ignore
+            # everything under node_modules.
+            'NAMES=$("$TOOLS_PLEASE_JS" packages --dir .)',
+            "EXCLUDE=$(for n in $NAMES; do printf \"'%s',\" \"$n\"; done)",
+            # The watcher prunes traversal at every directory the ignore
+            # matches, so negating the package's contents is not enough: each
+            # ancestor -- the scope directory and the package directory itself
+            # -- must be negated too, or the walk never reaches the files the
+            # deeper negation names.
+            # One negation per ancestor, including node_modules itself: the
+            # watcher vite bundles (chokidar 3) tests each directory against
+            # the ignore and prunes traversal there, and it matches the bare
+            # node_modules directory against its own **/node_modules/** default
+            # -- so without the first negation the walk never starts, and
+            # without the others it stops one level short of the files the
+            # last pattern names. Every one was found by watching it fail.
+            'IGNORE=$([ -n "$NAMES" ] && printf "\'!**/node_modules\',"; ' +
+            "for n in $NAMES; do " +
+            'case "$n" in @*/*) printf "\'!**/node_modules/%s\'," "${n%%/*}";; esac; ' +
+            'printf "\'!**/node_modules/%s\'," "$n"; ' +
+            'printf "\'!**/node_modules/%s/**\'," "$n"; done)',
+            f'echo "import {{ mergeConfig }} from \'{merge_from}\';" > "$OUT"',
+            'echo "import path from \'node:path\';" >> "$OUT"',
+            'echo "import fs from \'node:fs\';" >> "$OUT"',
+            'echo "import user from \'./$(basename $SRCS_CONFIG)\';" >> "$OUT"',
+            'echo "const base = typeof user === \'function\'" >> "$OUT"',
+            'echo "  ? await user({ command: \'serve\', mode: \'development\' })" >> "$OUT"',
+            'echo "  : user;" >> "$OUT"',
+            'echo "const EXCLUDE = [$EXCLUDE];" >> "$OUT"',
+            'echo "const IGNORE = [$IGNORE];" >> "$OUT"',
+        ]) + " && cat >> \"$OUT\" <<'PLZ_DEV_CONFIG'\n" + _VITE_DEV_CONFIG + "\n" + export + "\nPLZ_DEV_CONFIG",
+        tools = {"please_js": ["///js//tools/please_js"]},
+    )
+
+
 _VITE_DEV_CONFIG = """
-// Sources are symlinked into this run directory from the repository, and vite
-// resolves them to their real paths there -- where no plz tree sits beside
-// them, and where a stray node_modules from an npm install might. So a bare
-// import from any file in the repository is resolved as if it were imported
-// from this run directory: it always reaches the tree plz built, through which
-// the store layout resolves every package's own dependencies as siblings.
 const runDir = process.cwd();
 const marker = path.sep + "plz-out" + path.sep;
 if (!runDir.includes(marker)) {
   throw new Error("vite_dev: expected to run under plz-out, ran in " + runDir);
 }
 const repoRoot = runDir.slice(0, runDir.indexOf(marker));
-const anchor = path.join(runDir, "index.html");
-const bare = (s) => !s.startsWith(".") && !s.startsWith("/") && !s.startsWith("\0") && !s.includes(":");
-const fromPlzTree = {
-  name: "plz-resolve-from-tree",
-  enforce: "pre",
-  async resolveId(source, importer, options) {
-    if (!importer || !bare(source) || importer.includes(marker)) return null;
-    return this.resolve(source, anchor, { ...options, skipSelf: true });
-  },
-};
-// A stylesheet's @import is resolved by vite's own resolver -- its aliases and
-// vite:resolve -- which consults no plugin, so fromPlzTree never sees it, and
-// a bare @import of a package from a source in the repository walked up from
-// the real path and missed the tree. Aliases are the one hook that resolver
-// honours, so the same reroute is also an alias: every bare specifier, with a
-// resolver that resolves an import from a repository file against this run
-// directory and leaves every other import alone. It goes after the
-// application's own aliases, so "@/" and the like still match first.
-const fromPlzTreeAlias = {
-  find: /^(?![./\0])(?![^/]*:)(.+)$/,
-  replacement: "$1",
-  customResolver(source, importer, options) {
-    if (!importer || importer.includes(marker)) return null;
-    return this.resolve(source, anchor, { ...options, skipSelf: true });
-  },
-};
 
 // The sources were linked into this run directory when it started (js-rules'
 // link-sources, from links.json), and that is all a link made at start can
@@ -700,6 +720,29 @@ const skipped = (rel) => rel.split(path.sep).some((seg) =>
   links.skip.dirs.includes(seg) ||
   links.skip.prefixes.some((p) => seg.startsWith(p)) ||
   links.skip.suffixes.some((x) => seg.endsWith(x)));
+// Sources are symlinked into this run directory from the repository, and vite
+// resolves a symlink to its real path -- in the repository, where no plz tree
+// sits beside it and a stray npm install might. Everything that then looks up
+// from a module's path went wrong there: a bare import, a stylesheet's
+// @import, the nearest tsconfig and what it extends (astro/tsconfigs/strict),
+// whether a server-rendered import stays a node import. So a module from the
+// repository keeps the path of its link here as its id: every lookup happens
+// beside the tree, exactly as in a build, where the sources are staged next
+// to node_modules. Third-party packages keep their real paths, which the
+// store layout needs to find each package's dependencies as siblings.
+const linkSets = links.sets
+  .map((set) => ({ real: path.join(repoRoot, set.from) + path.sep, link: path.join(runDir, set.into) + path.sep }))
+  .sort((a, b) => b.real.length - a.real.length);
+const linkIds = {
+  name: "plz-link-ids",
+  enforce: "pre",
+  async resolveId(source, importer, options) {
+    const resolved = await this.resolve(source, importer, { ...options, skipSelf: true });
+    if (!resolved || resolved.external) return resolved;
+    const set = linkSets.find((s) => resolved.id.startsWith(s.real));
+    return set ? { ...resolved, id: set.link + resolved.id.slice(set.real.length) } : resolved;
+  },
+};
 const live = links.sets.flatMap((set) => (set.live ?? []).map((dir) => ({
   real: path.join(repoRoot, set.from, dir),
   from: path.join(repoRoot, set.from),
@@ -734,8 +777,11 @@ const liveLinks = {
   },
 };
 
-const merged = mergeConfig(base, {
-  plugins: [fromPlzTree, liveLinks],
+// What the development server adds to a vite config: vite_dev applies it to
+// the application's config, astro_dev to the vite section of an Astro one.
+const withPlzDev = (viteConfig) => {
+const merged = mergeConfig(viteConfig, {
+  plugins: [linkIds, liveLinks],
   // The tree is a build output: vite's cache goes beside the run, never into it.
   cacheDir: path.join(runDir, ".vite"),
   optimizeDeps: { exclude: EXCLUDE },
@@ -745,17 +791,8 @@ const merged = mergeConfig(base, {
     watch: { ignored: IGNORE },
   },
 });
-const ownAliases = merged.resolve?.alias ?? [];
-merged.resolve = {
-  ...merged.resolve,
-  alias: [
-    ...(Array.isArray(ownAliases)
-      ? ownAliases
-      : Object.entries(ownAliases).map(([find, replacement]) => ({ find, replacement }))),
-    fromPlzTreeAlias,
-  ],
+return merged;
 };
-export default merged;
 """
 
 
@@ -773,12 +810,15 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
     symlinked next to them -- which would write into the source tree, and would
     create exactly the stray node_modules js-rules warns about.
 
-    Inverting it works because of two vite defaults rather than any trick here:
-    resolve.preserveSymlinks is false, so a symlinked source resolves to its
-    real path and a module's id is the file the developer edits; and
-    server.watch.followSymlinks is chokidar's, which is true, so the watcher
-    watches that real file. Vite therefore serves, resolves and hot-swaps real
-    files while nothing outside plz-out is touched.
+    A module from the repository keeps its link's path here as its id, rather
+    than the real path vite would resolve it to, so everything that looks up
+    from a module's path -- a bare import, a stylesheet's @import, the
+    nearest tsconfig and what it extends, whether a server-rendered import
+    stays a node import -- happens beside the tree, exactly as in a build,
+    where sources are staged next to node_modules. Third-party packages keep
+    their real paths, which the store layout needs. The watcher follows each
+    link (chokidar's followSymlinks), so an edit to the real file hot-swaps
+    the module, while nothing outside plz-out is touched.
 
     Files created after the server started are served too, with no restart:
     by URL, through a config-relative alias such as "@/", from public/, and
@@ -790,11 +830,6 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
     first-party library's source directories. Files at the package's top
     level are linked as declared, since that is where BUILD, package.json
     and node_modules live. test/ts/vite/app/verify_hmr.sh proves each case.
-
-    A bare import from a source in the repository -- a module's, or a
-    stylesheet's @import, which vite resolves without consulting plugins --
-    is resolved against the run directory, so it reaches the tree Please
-    built and never a stray npm install beside the real file.
 
     What this gives that running vite by hand does not: Please assembles
     node_modules first, with first-party libraries overlaid. In a monorepo those
@@ -827,47 +862,8 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
     # the repository's sources through the tree -- rather than leaving it in the
     # consumer's config where it would look like their choice. Wrapping rather
     # than rewriting: the config stays theirs.
-    wrapper = genrule(
-        name = tag(name, "config"),
-        srcs = {"config": [config], "libs": deps},
-        outs = ["_dev.config.mjs"],
-        cmd = " && ".join([
-            # The first-party packages, by name, from the same lib.jsons the
-            # overlay reads. Two things must be told about each: the optimizer,
-            # or the served module is a cached prebundle rather than the
-            # developer's source; and the watcher, whose default is to ignore
-            # everything under node_modules.
-            'NAMES=$("$TOOLS_PLEASE_JS" packages --dir .)',
-            "EXCLUDE=$(for n in $NAMES; do printf \"'%s',\" \"$n\"; done)",
-            # The watcher prunes traversal at every directory the ignore
-            # matches, so negating the package's contents is not enough: each
-            # ancestor -- the scope directory and the package directory itself
-            # -- must be negated too, or the walk never reaches the files the
-            # deeper negation names.
-            # One negation per ancestor, including node_modules itself: the
-            # watcher vite bundles (chokidar 3) tests each directory against
-            # the ignore and prunes traversal there, and it matches the bare
-            # node_modules directory against its own **/node_modules/** default
-            # -- so without the first negation the walk never starts, and
-            # without the others it stops one level short of the files the
-            # last pattern names. Every one was found by watching it fail.
-            'IGNORE=$([ -n "$NAMES" ] && printf "\'!**/node_modules\',"; ' +
-            "for n in $NAMES; do " +
-            'case "$n" in @*/*) printf "\'!**/node_modules/%s\'," "${n%%/*}";; esac; ' +
-            'printf "\'!**/node_modules/%s\'," "$n"; ' +
-            'printf "\'!**/node_modules/%s/**\'," "$n"; done)',
-            'echo "import { mergeConfig } from \'vite\';" > "$OUT"',
-            'echo "import path from \'node:path\';" >> "$OUT"',
-            'echo "import fs from \'node:fs\';" >> "$OUT"',
-            'echo "import user from \'./$(basename $SRCS_CONFIG)\';" >> "$OUT"',
-            'echo "const base = typeof user === \'function\'" >> "$OUT"',
-            'echo "  ? await user({ command: \'serve\', mode: \'development\' })" >> "$OUT"',
-            'echo "  : user;" >> "$OUT"',
-            'echo "const EXCLUDE = [$EXCLUDE];" >> "$OUT"',
-            'echo "const IGNORE = [$IGNORE];" >> "$OUT"',
-        ]) + " && cat >> \"$OUT\" <<'PLZ_DEV_CONFIG'\n" + _VITE_DEV_CONFIG + "\nPLZ_DEV_CONFIG",
-        tools = {"please_js": ["///js//tools/please_js"]},
-    )
+    wrapper = _dev_config(name, config, deps, "_dev.config.mjs", "vite",
+                          "export default withPlzDev(base);")
 
     return js_binary(
         name = name,
@@ -892,4 +888,150 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
         env = env,
         visibility = visibility,
         labels = labels + ["vite_dev"],
+    )
+
+
+def astro_build(name:str, srcs:list, deps:list=[], config:str="astro.config.mjs",
+                config_deps:list=[], out_dir:str="dist", node_modules:str="",
+                env:dict={}, check=None, args:list=[], visibility:list=None,
+                test_only:bool&testonly=False, labels:list=[]):
+    """A static site produced by Astro's own build.
+
+    The vite_bundle of an Astro project. Astro drives vite internally and has
+    a config of its own, so it is run through its own CLI rather than through
+    vite's -- and, like vite, from the consumer's tree, because an Astro
+    config imports integrations that must match the Astro they are loaded
+    into.
+
+    Like vite_bundle, the output is the out_dir itself: Astro writes it under
+    a directory of this target's own, and that one is hoisted, so the target's
+    output is <out_dir>/ and two builds in one package cannot collide.
+
+    Args:
+        name: Target name.
+        srcs: Everything the build reads: src/ (pages, content collections,
+              components, styles), public/, and any .env file.
+        deps: js_library and ts_library targets the sources import by package
+              name, and npm_repo targets.
+        config: The Astro config, relative to this package.
+        config_deps: Anything the config imports or extends.
+        out_dir: The directory the site is, and the target's output.
+                 Overrides outDir in the config.
+        node_modules: The tree the build resolves through, holding astro.
+        env: Environment variables for the action. Anything the config or the
+             pages read from process.env has to come through here.
+        check: An astro_check (or ts_check) over these sources, made a
+               dependency so the site cannot be produced while it fails.
+               Required when any source is TypeScript, as for vite_bundle;
+               False to build unchecked TypeScript deliberately.
+        args: Further astro build flags.
+        visibility: Visibility specification.
+        test_only: If True, only visible to test rules.
+        labels: Additional labels.
+    """
+    wrapper = f"_{name}"
+    return js_run_binary(
+        name = name,
+        package = "astro",
+        bin = "astro",
+        deps = deps + _checked("astro_build", name, srcs, check),
+        node_modules = node_modules,
+        srcs = [config] + srcs + config_deps,
+        # Astro names its output files by content, so nothing can be declared.
+        out_dirs = [wrapper],
+        args = ["build", "--config", config, "--outDir", f"{wrapper}/{out_dir}"] + args,
+        env = env,
+        visibility = visibility,
+        test_only = test_only,
+        labels = labels + ["astro_build"],
+    )
+
+
+def astro_check(name:str, srcs:list, deps:list=[], config:str="astro.config.mjs",
+                config_deps:list=[], tsconfig:str="tsconfig.json", node_modules:str="",
+                args:list=[], visibility:list=None, test_only:bool&testonly=False,
+                labels:list=[]):
+    """Type-checks an Astro project: its .astro components as well as its
+    TypeScript, which ts_check cannot read.
+
+    `astro check` (from @astrojs/check, which the consumer's tree must hold)
+    runs Astro's language server over the project and fails on any error.
+    It writes nothing but its report, which this captures as the target's
+    output, so a passing check is a cached file and a failing one a build
+    failure.
+
+    Args:
+        name: Target name.
+        srcs: The sources to check: .astro, .ts, content collections.
+        deps: js_library and ts_library targets the sources import by name.
+        config: The Astro config, relative to this package.
+        config_deps: Anything the config imports or extends.
+        tsconfig: The project's tsconfig.
+        node_modules: The tree holding astro, @astrojs/check and typescript.
+        args: Further astro check flags.
+        visibility: Visibility specification.
+        test_only: If True, only visible to test rules.
+        labels: Additional labels.
+    """
+    return js_run_binary(
+        name = name,
+        package = "astro",
+        bin = "astro",
+        deps = deps,
+        node_modules = node_modules,
+        srcs = [config, tsconfig] + srcs + config_deps,
+        args = ["check", "--config", config] + args,
+        stdout = f"{name}.checked",
+        visibility = visibility,
+        test_only = test_only,
+        labels = labels + ["astro_check"],
+    )
+
+
+def astro_dev(name:str, srcs:list, deps:list=[], config:str="astro.config.mjs",
+              config_deps:list=[], tsconfig:str="tsconfig.json", node_modules:str="", env:dict={},
+              args:list=[], visibility:list=None, labels:list=[]):
+    """An Astro development server, for `plz run`.
+
+    vite_dev for an Astro project, and the same machinery: the server runs in
+    plz-out, the sources are linked in from the repository and kept in step
+    as files come and go, first-party libraries are served from their
+    sources, and a bare import from a repository file -- a module's or a
+    stylesheet's -- resolves through the tree Please built. Astro runs vite
+    itself, so that machinery goes into the vite section of the Astro config
+    rather than into a vite config.
+
+    Args:
+        name: Target name.
+        srcs: Everything the server reads: src/, public/, any .env file.
+        deps: js_library and ts_library targets the sources import by name.
+        config: The Astro config, relative to this package. The same one
+                astro_build uses.
+        config_deps: Anything the config imports or extends.
+        tsconfig: The project's tsconfig. Copied rather than linked, like the
+                  config: Astro reads it once, and its extends (typically
+                  astro/tsconfigs/strict) must resolve through the tree here,
+                  not from its real path in the repository.
+        node_modules: The tree the server resolves through, holding astro.
+        env: Environment variables for the server.
+        args: Further astro dev flags.
+        visibility: Visibility specification.
+        labels: Additional labels.
+    """
+    wrapper = _dev_config(name, config, deps, "_dev.astro.config.mjs", "astro/config",
+                          "export default { ...base, vite: withPlzDev(base.vite ?? {}) };")
+    return js_binary(
+        name = name,
+        # Copied and linked as vite_dev does, for the same reasons.
+        srcs = [config, wrapper, tsconfig] + config_deps,
+        link_srcs = srcs,
+        deps = deps,
+        node_modules = node_modules,
+        link_deps = True,
+        link_live = True,
+        runner = "astro",
+        runner_args = ["dev", "--config", "_dev.astro.config.mjs"] + args,
+        env = env,
+        visibility = visibility,
+        labels = labels + ["astro_dev"],
     )

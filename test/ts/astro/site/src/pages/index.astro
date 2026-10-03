@@ -1,0 +1,18 @@
+---
+// A first-party package's stylesheet, imported by package name from a page.
+import "@test/greeter/greeter.css";
+
+const title: string = "astro_build";
+---
+<html lang="en">
+  <head><title>{title}</title></head>
+  <body>
+    <p class="greeter" id="greeting"></p>
+    <script>
+      // A first-party library by package name, in a script Astro bundles for
+      // the browser: it must resolve through the tree the action stages.
+      import { greet } from "@test/greeter";
+      document.getElementById("greeting")!.textContent = greet("astro");
+    </script>
+  </body>
+</html>
