@@ -839,6 +839,10 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
         deps = deps,
         node_modules = node_modules,
         link_deps = True,
+        # Source directories linked whole and kept in step by liveLinks, so a
+        # file created mid-session is served. vitest_update leaves this off:
+        # vitest globs its run directory for tests, and must find only its own.
+        link_live = True,
         runner = "vite",
         # No subcommand: `vite` with no arguments is the dev server, and naming
         # it `dev` would be an alias for the same thing.

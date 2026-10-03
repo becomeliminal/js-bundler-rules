@@ -148,6 +148,10 @@ mv "$NEW_DIR/deeper/Thing.ts" "$NEW_DIR/deeper/Renamed.ts"
 check "a renamed file is served under its new name" 1 "$(served /src/zz_dir/deeper/Renamed.ts NEW_DIR_MARKER 1)"
 check "  ... and not its old one" 0 "$(served /src/zz_dir/deeper/Thing.ts NEW_DIR_MARKER 0)"
 
+# A whole directory deleted: every link under it goes, not only a file's.
+rm -rf "$NEW_DIR"
+check "a deleted directory's files stop being served" 0 "$(served /src/zz_dir/deeper/Renamed.ts NEW_DIR_MARKER 0)"
+
 # The principle the design exists to honour: the server created nothing in the
 # source tree. Compared against the snapshot, minus this script's own files.
 AFTER=$(mktemp)
