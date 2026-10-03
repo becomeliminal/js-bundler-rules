@@ -1,0 +1,11 @@
+{
+  "name": "astro-pin",
+  "private": true,
+  "dependencies": {
+    "astro": "7.1.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "typescript": "5.9.3"
+  }
+}
