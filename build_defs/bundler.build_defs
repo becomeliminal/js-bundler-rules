@@ -657,8 +657,59 @@ const fromPlzTree = {
   },
 };
 
+// The sources were linked into this run directory when it started (js-rules'
+// link-sources, from links.json), and that is all a link made at start can
+// know. A file created since -- reached by URL, through a config-relative
+// alias such as "@/" (resolved against this directory, since the config is a
+// copy here), from public/, or by a tool that globs this directory, like
+// Tailwind -- needs its link to exist here too. So the source directories the
+// spec marks live are watched, and each file added or removed under one is
+// linked or unlinked, by the same skip rules link-sources applied.
+//
+// On vite's own watcher, not a second one: events arrive in the order they
+// happened, so a new file's link exists before the edit that imports it is
+// handled. A separate process would race that.
+const links = JSON.parse(fs.readFileSync(path.join(runDir, "links.json"), "utf8"));
+const skipped = (rel) => rel.split(path.sep).some((seg) =>
+  links.skip.dirs.includes(seg) ||
+  links.skip.prefixes.some((p) => seg.startsWith(p)) ||
+  links.skip.suffixes.some((x) => seg.endsWith(x)));
+const live = links.sets.flatMap((set) => (set.live ?? []).map((dir) => ({
+  real: path.join(repoRoot, set.from, dir),
+  from: path.join(repoRoot, set.from),
+  into: path.join(runDir, set.into),
+})));
+// The link a source file has, or would have, in this run; null if it is in no
+// live directory or is skipped.
+const linkFor = (file) => {
+  const l = live.find((d) => file.startsWith(d.real + path.sep));
+  if (!l) return null;
+  const rel = path.relative(l.from, file);
+  return skipped(rel) ? null : path.join(l.into, rel);
+};
+const liveLinks = {
+  name: "plz-live-links",
+  configureServer(server) {
+    server.watcher.add(live.map((d) => d.real));
+    server.watcher.on("add", (file) => {
+      const at = linkFor(file);
+      if (!at) return;
+      // A real file in the way is the build's -- the copied config, a
+      // generated manifest -- and is left alone, as link-sources does.
+      if (fs.lstatSync(at, { throwIfNoEntry: false })?.isSymbolicLink() === false) return;
+      fs.mkdirSync(path.dirname(at), { recursive: true });
+      fs.rmSync(at, { force: true });
+      fs.symlinkSync(file, at);
+    });
+    server.watcher.on("unlink", (file) => {
+      const at = linkFor(file);
+      if (at && fs.lstatSync(at, { throwIfNoEntry: false })?.isSymbolicLink()) fs.rmSync(at);
+    });
+  },
+};
+
 export default mergeConfig(base, {
-  plugins: [fromPlzTree],
+  plugins: [fromPlzTree, liveLinks],
   // The tree is a build output: vite's cache goes beside the run, never into it.
   cacheDir: path.join(runDir, ".vite"),
   optimizeDeps: { exclude: EXCLUDE },
@@ -691,6 +742,17 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
     server.watch.followSymlinks is chokidar's, which is true, so the watcher
     watches that real file. Vite therefore serves, resolves and hot-swaps real
     files while nothing outside plz-out is touched.
+
+    Files created after the server started are served too, with no restart:
+    by URL, through a config-relative alias such as "@/", from public/, and
+    to tools that glob the run directory, like Tailwind. Every top-level
+    directory of the package holding a declared source (src/, public/) is
+    live: a plugin on vite's own watcher links each file added under one and
+    unlinks each file removed, in event order, so a new file's link exists
+    before the edit importing it is handled. The same holds for a
+    first-party library's source directories. Files at the package's top
+    level are linked as declared, since that is where BUILD, package.json
+    and node_modules live. test/ts/vite/app/verify_hmr.sh proves each case.
 
     What this gives that running vite by hand does not: Please assembles
     node_modules first, with first-party libraries overlaid. In a monorepo those
@@ -754,6 +816,7 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
             'printf "\'!**/node_modules/%s/**\'," "$n"; done)',
             'echo "import { mergeConfig } from \'vite\';" > "$OUT"',
             'echo "import path from \'node:path\';" >> "$OUT"',
+            'echo "import fs from \'node:fs\';" >> "$OUT"',
             'echo "import user from \'./$(basename $SRCS_CONFIG)\';" >> "$OUT"',
             'echo "const base = typeof user === \'function\'" >> "$OUT"',
             'echo "  ? await user({ command: \'serve\', mode: \'development\' })" >> "$OUT"',

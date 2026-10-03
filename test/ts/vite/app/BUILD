@@ -73,6 +73,7 @@ vite_dev(
     name = "dev",
     srcs = glob([
         "index.html",
+        "public/**/*",
         "src/**/*",
     ]),
     deps = ["//test/lib/greeter"],

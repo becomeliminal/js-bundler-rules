@@ -6,7 +6,10 @@ subinclude("///ts//build_defs:ts")
 ts_library(
     name = "greeter",
     package = "@test/greeter",
-    srcs = ["index.ts"],
+    srcs = [
+        "index.ts",
+        "parts/punctuation.ts",
+    ],
     tsconfig_deps = ["//:tsconfig.json"],
     visibility = ["//test/..."],
 )
