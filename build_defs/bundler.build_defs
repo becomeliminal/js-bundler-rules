@@ -253,7 +253,9 @@ def rollup_bundle(name:str, srcs:list, deps:list=[], config:str="rollup.config.m
                      JavaScript that can import anything, so the chain is
                      named here and staged at its real paths.
         out_dir: Where the config writes, matching output.dir -- or the
-                 directory of output.file. Hoisted like vite_bundle's.
+                 directory of output.file. Hoisted: the outputs are its
+                 contents, at the package root, as the config decides
+                 where it is.
         node_modules: The tree the build resolves through, holding rollup and
                       the config's plugins.
         env: Environment variables for the action.
@@ -310,7 +312,8 @@ def webpack_bundle(name:str, srcs:list, deps:list=[], config:str="webpack.config
         config_deps: Every file the config requires, directly or through
                      what it requires.
         out_dir: Where the config writes, matching output.path's last
-                 segment. Hoisted like vite_bundle's.
+                 segment. Hoisted: the outputs are its contents, at the
+                 package root, as the config decides where it is.
         node_modules: The tree the build resolves through, holding webpack,
                       webpack-cli, and the config's loaders and plugins.
         env: Environment variables for the action.
@@ -451,7 +454,12 @@ def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
         config_deps: Anything the config imports or extends. Please stages srcs
                      at their real paths, so carrying the chain is the whole
                      implementation -- nothing is rewritten.
-        out_dir: Where vite writes, matching build.outDir in the config.
+        out_dir: The directory the build is, and the target's output: vite
+                 writes it under a directory of this target's own, and that
+                 one is hoisted, so the output is <out_dir>/ itself and not
+                 its contents spilled into the package. Two builds in one
+                 package -- a client and an SSR build -- then cannot collide
+                 on assets/. Overrides build.outDir in the config.
         check: A ts_check target covering these sources, made a dependency of
                the bundle so the bundle cannot be produced while it fails.
                Required when any source is TypeScript; pass False to bundle
@@ -467,7 +475,11 @@ def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
         test_only: If True, only visible to test rules.
         labels: Additional labels.
     """
-    flags = ["build", "--config", config, "--outDir", out_dir]
+    # Please hoists a directory output's contents into the package. Writing
+    # the build one level down, under this target's own name, makes what is
+    # hoisted the out_dir itself, which no other target in the package names.
+    wrapper = f"_{name}"
+    flags = ["build", "--config", config, "--outDir", f"{wrapper}/{out_dir}"]
     if mode:
         flags += ["--mode", mode]
 
@@ -478,10 +490,8 @@ def vite_bundle(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
         deps = deps + _checked("vite_bundle", name, [config] + srcs, check),
         node_modules = node_modules,
         srcs = [config] + srcs + config_deps,
-        # vite content-hashes filenames, so nothing here can be declared. Please
-        # hoists a directory output's contents, so this target's outputs are
-        # index.html and assets/, not a dist/.
-        out_dirs = [out_dir],
+        # vite content-hashes filenames, so nothing here can be declared.
+        out_dirs = [wrapper],
         args = flags + args,
         env = env,
         visibility = visibility,

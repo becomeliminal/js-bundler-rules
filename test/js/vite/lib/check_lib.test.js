@@ -6,7 +6,7 @@ const { pathToFileURL } = require("node:url");
 // Importable, not merely present: loading the output and calling it is what
 // proves the bundle is a working module -- and that @test/greeter was
 // resolved into it, since nothing else could answer.
-const dir = "test/js/vite/lib";
+const dir = "test/js/vite/lib/dist";
 
 // With no package.json in the output to say otherwise, node reads .js as
 // CommonJS -- so that is the extension vite gives the cjs build, and the es

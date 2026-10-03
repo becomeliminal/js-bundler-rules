@@ -5,7 +5,7 @@ const { pathToFileURL } = require("node:url");
 
 test("the server bundle renders the app to markup under node", async () => {
   const mod = await import(
-    pathToFileURL(path.resolve("test/ts/vite/ssr/entry-server.mjs"))
+    pathToFileURL(path.resolve("test/ts/vite/ssr/dist/entry-server.mjs"))
   );
   const html = mod.render();
   // The first-party library answered through react's server renderer.
