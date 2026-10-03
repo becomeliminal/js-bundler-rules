@@ -10,6 +10,8 @@ ts_library(
         "index.ts",
         "parts/punctuation.ts",
     ],
+    # Copied into the package as is: test/ts/vite/app's CSS @imports it.
+    assets = ["greeter.css"],
     tsconfig_deps = ["//:tsconfig.json"],
     visibility = ["//test/..."],
 )

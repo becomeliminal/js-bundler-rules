@@ -1,5 +1,8 @@
 /* Same drafting hand as //test/site, different instrument: this page is a
    measurement, so the numbers lead and the prose follows. */
+/* A first-party package's stylesheet, by package name: vite resolves a CSS
+   @import through its own resolver, not through plugins. */
+@import "@test/greeter/greeter.css";
 :root {
   --paper: #f7f6f2; --panel: #fffffe; --ink: #12263f; --ink-soft: #52697f;
   --rule: #ccd6df; --rule-faint: #e6ebef; --signal: #a9660f;

@@ -21,6 +21,9 @@ CSS=$(find "$DIR/assets" -name "index-*.css" | head -1)
 [ -n "$CSS" ] || { echo "no stylesheet emitted" >&2; exit 1; }
 grep -q "$(basename "$CSS")" "$DIR/index.html" \
   || { echo "index.html does not reference the stylesheet vite emitted" >&2; exit 1; }
+# styles.css @imports @test/greeter's stylesheet by package name.
+grep -q "GREETER_CSS_MARKER" "$CSS" \
+  || { echo "@test/greeter/greeter.css never reached the stylesheet" >&2; exit 1; }
 
 grep -q "createRoot" "$JS" \
   || { echo "react-dom missing: the consumer tree was not resolved" >&2; exit 1; }

@@ -104,6 +104,12 @@ check "an app edit reaches the browser" 1 "$(served /src/App.tsx HMR_APP_MARKER 
 edit 's|Hello, |HMR_LIB_MARKER |' "$LIB_SRC"
 check "a library edit reaches the browser" 1 "$(served /node_modules/@test/greeter/index.ts HMR_LIB_MARKER 1)"
 
+# A CSS @import of a first-party package, by name. vite resolves it through
+# its own resolver -- aliases and vite:resolve, never plugins -- from the
+# stylesheet's real path in the repository, where no plz tree sits.
+check "a CSS @import of a first-party package resolves" 1 \
+  "$(served /src/styles.css GREETER_CSS_MARKER 1)"
+
 # The update propagated, not merely re-servable: vite logged an hmr update.
 check "hmr update was pushed to the client" 1 "$(grep -c 'hmr update' "$LOG" | awk '{print ($1>0)?1:0}')"
 
