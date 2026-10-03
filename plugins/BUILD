@@ -13,7 +13,7 @@ plugin_repo(
     # Pinned past link-sources: vite_dev's sources and first-party libraries
     # are linked from one spec whose live directories its watcher keeps in
     # step, and a run never resolves its tree from the source tree.
-    revision = "18dce2310767a6b5ec824125ec4da041983810e1",
+    revision = "2228527241198b0a3a133b1e6d593a28a4e34b24",
 )
 
 plugin_repo(
