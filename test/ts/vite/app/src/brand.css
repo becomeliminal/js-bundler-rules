@@ -1,0 +1,3 @@
+/* Imported by styles.css: the nested @import of a first-party package's
+   stylesheet that verify_hmr.sh and check_app.sh assert reaches the page. */
+@import "@test/greeter/greeter.css";

@@ -643,7 +643,7 @@ def vitest_update(name:str, srcs:list, deps:list=[], config:str="vite.config.ts"
     )
 
 
-def _dev_config(name:str, config:str, deps:list, out:str, merge_from:str, export:str):
+def _dev_config(name:str, config:str, deps:list, node_modules:str, out:str, merge_from:str, export:str):
     """The development server's config: the consumer's, loaded and wrapped.
 
     Shared by vite_dev and astro_dev, which differ only in where the vite
@@ -654,7 +654,7 @@ def _dev_config(name:str, config:str, deps:list, out:str, merge_from:str, export
     """
     return genrule(
         name = tag(name, "config"),
-        srcs = {"config": [config], "libs": deps},
+        srcs = {"config": [config], "libs": deps, "tree": [node_modules or CONFIG.JS.NODE_MODULES]},
         outs = [out],
         cmd = " && ".join([
             # The first-party packages, by name, from the same lib.jsons the
@@ -690,6 +690,11 @@ def _dev_config(name:str, config:str, deps:list, out:str, merge_from:str, export
             'echo "  : user;" >> "$OUT"',
             'echo "const EXCLUDE = [$EXCLUDE];" >> "$OUT"',
             'echo "const IGNORE = [$IGNORE];" >> "$OUT"',
+            # The application's own third-party dependencies: the top of the
+            # tree, scoped packages one level down. A bare import in the
+            # application's source can only name one of these.
+            "DIRECT=$(cd $SRCS_TREE && for d in *; do case \"$d\" in @*) for p in \"$d\"/*; do printf \"'%s',\" \"$p\"; done;; *) printf \"'%s',\" \"$d\";; esac; done)",
+            'echo "const DIRECT = [$DIRECT];" >> "$OUT"',
         ]) + " && cat >> \"$OUT\" <<'PLZ_DEV_CONFIG'\n" + _VITE_DEV_CONFIG + "\n" + export + "\nPLZ_DEV_CONFIG",
         tools = {"please_js": ["///js//tools/please_js"]},
     )
@@ -790,6 +795,13 @@ const merged = mergeConfig(viteConfig, {
     fs: { allow: [runDir, repoRoot] },
     watch: { ignored: IGNORE },
   },
+  // One resolver ignores plugins, linkIds included: the one vite uses for a
+  // stylesheet's @import. It resolves a nested @import from the real path of
+  // the stylesheet holding it, in the repository, where no tree sits. A
+  // deduped package resolves from the root -- this run directory -- instead,
+  // so every package a bare import in the application's own files can name
+  // is deduped: its third-party dependencies and the first-party libraries.
+  resolve: { dedupe: [...DIRECT, ...EXCLUDE] },
 });
 return merged;
 };
@@ -862,7 +874,7 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
     # the repository's sources through the tree -- rather than leaving it in the
     # consumer's config where it would look like their choice. Wrapping rather
     # than rewriting: the config stays theirs.
-    wrapper = _dev_config(name, config, deps, "_dev.config.mjs", "vite",
+    wrapper = _dev_config(name, config, deps, node_modules, "_dev.config.mjs", "vite",
                           "export default withPlzDev(base);")
 
     return js_binary(
@@ -1018,7 +1030,7 @@ def astro_dev(name:str, srcs:list, deps:list=[], config:str="astro.config.mjs",
         visibility: Visibility specification.
         labels: Additional labels.
     """
-    wrapper = _dev_config(name, config, deps, "_dev.astro.config.mjs", "astro/config",
+    wrapper = _dev_config(name, config, deps, node_modules, "_dev.astro.config.mjs", "astro/config",
                           "export default { ...base, vite: withPlzDev(base.vite ?? {}) };")
     return js_binary(
         name = name,

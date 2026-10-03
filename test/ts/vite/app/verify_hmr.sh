@@ -146,8 +146,18 @@ check "a new library module is served" 1 "$(served /node_modules/@test/greeter/p
 # SPA fallback answers instead) rather than a dangling link lingering.
 rm "$NEW_FILE"
 check "a deleted file stops being served" 0 "$(served /src/zz_new.ts NEW_FILE_MARKER 0)"
-check "  ... and its link is gone" 0 \
-  "$(find plz-out/gen/$APP -path '*_run/src/zz_new.ts' 2>/dev/null | wc -l | tr -d ' ')"
+# Polled like the fetches: the unlink is handled on the watcher's event, which
+# can trail the moment the file stopped being served.
+links_left() {
+  n=x
+  for _ in $(seq 1 30); do
+    n=$(find plz-out/gen/$APP -path '*_run/src/zz_new.ts' 2>/dev/null | wc -l | tr -d ' ')
+    [ "$n" = 0 ] && break
+    sleep 0.3
+  done
+  echo "$n"
+}
+check "  ... and its link is gone" 0 "$(links_left)"
 
 # Renamed: an unlink and an add. The new name is served; the old one is not.
 mv "$NEW_DIR/deeper/Thing.ts" "$NEW_DIR/deeper/Renamed.ts"
