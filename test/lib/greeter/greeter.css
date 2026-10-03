@@ -1,0 +1,3 @@
+/* A stylesheet a first-party package ships beside its modules, imported by
+   package name from an app's CSS (test/ts/vite/app/src/styles.css). */
+.greeter { --greeter-marker: GREETER_CSS_MARKER; }

@@ -666,6 +666,22 @@ const fromPlzTree = {
     return this.resolve(source, anchor, { ...options, skipSelf: true });
   },
 };
+// A stylesheet's @import is resolved by vite's own resolver -- its aliases and
+// vite:resolve -- which consults no plugin, so fromPlzTree never sees it, and
+// a bare @import of a package from a source in the repository walked up from
+// the real path and missed the tree. Aliases are the one hook that resolver
+// honours, so the same reroute is also an alias: every bare specifier, with a
+// resolver that resolves an import from a repository file against this run
+// directory and leaves every other import alone. It goes after the
+// application's own aliases, so "@/" and the like still match first.
+const fromPlzTreeAlias = {
+  find: /^(?![./\0])(?![^/]*:)(.+)$/,
+  replacement: "$1",
+  customResolver(source, importer, options) {
+    if (!importer || importer.includes(marker)) return null;
+    return this.resolve(source, anchor, { ...options, skipSelf: true });
+  },
+};
 
 // The sources were linked into this run directory when it started (js-rules'
 // link-sources, from links.json), and that is all a link made at start can
@@ -718,7 +734,7 @@ const liveLinks = {
   },
 };
 
-export default mergeConfig(base, {
+const merged = mergeConfig(base, {
   plugins: [fromPlzTree, liveLinks],
   // The tree is a build output: vite's cache goes beside the run, never into it.
   cacheDir: path.join(runDir, ".vite"),
@@ -729,6 +745,17 @@ export default mergeConfig(base, {
     watch: { ignored: IGNORE },
   },
 });
+const ownAliases = merged.resolve?.alias ?? [];
+merged.resolve = {
+  ...merged.resolve,
+  alias: [
+    ...(Array.isArray(ownAliases)
+      ? ownAliases
+      : Object.entries(ownAliases).map(([find, replacement]) => ({ find, replacement }))),
+    fromPlzTreeAlias,
+  ],
+};
+export default merged;
 """
 
 
@@ -763,6 +790,11 @@ def vite_dev(name:str, srcs:list, deps:list=[], config:str="vite.config.ts",
     first-party library's source directories. Files at the package's top
     level are linked as declared, since that is where BUILD, package.json
     and node_modules live. test/ts/vite/app/verify_hmr.sh proves each case.
+
+    A bare import from a source in the repository -- a module's, or a
+    stylesheet's @import, which vite resolves without consulting plugins --
+    is resolved against the run directory, so it reaches the tree Please
+    built and never a stray npm install beside the real file.
 
     What this gives that running vite by hand does not: Please assembles
     node_modules first, with first-party libraries overlaid. In a monorepo those
