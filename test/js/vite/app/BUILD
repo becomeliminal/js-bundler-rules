@@ -14,10 +14,28 @@ vite_bundle(
     node_modules = "//third_party/js/react:node_modules",
 )
 
+# A second build in the same package -- the shape of a client build beside an
+# SSR build. Both emit index.html and assets/; each target's output is its own
+# out_dir, so neither claims the other's files.
+vite_bundle(
+    name = "app_twin",
+    srcs = glob([
+        "index.html",
+        "src/**/*",
+    ]),
+    config = "vite.config.js",
+    out_dir = "twin",
+    deps = ["//test/lib/greeter"],
+    node_modules = "//third_party/js/react:node_modules",
+)
+
 build_rule(
     name = "app_test",
     srcs = ["check_app.sh"],
-    data = [":app"],
+    data = [
+        ":app",
+        ":app_twin",
+    ],
     outs = ["app_test"],
     cmd = "cp $SRCS $OUT",
     binary = True,

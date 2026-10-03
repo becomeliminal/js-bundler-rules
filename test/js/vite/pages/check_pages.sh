@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-DIR=test/js/vite/pages
+DIR=test/js/vite/pages/dist
 
 # Every page exists, at the path its input dictated.
 [ -f "$DIR/index.html" ] || { echo "front page missing" >&2; exit 1; }
