@@ -10,9 +10,10 @@ plugin_repo(
     name = "js",
     owner = "becomeliminal",
     plugin = "js-rules",
-    # Pinned past link-tree: runtimes and build actions link the tree rather
-    # than copy it, which is what lets vite_dev run on the store layout.
-    revision = "5469bb2a0b196435076c372ad1f954467b5e7b41",
+    # Pinned past link-sources: vite_dev's sources and first-party libraries
+    # are linked from one spec whose live directories its watcher keeps in
+    # step, and a run never resolves its tree from the source tree.
+    revision = "2228527241198b0a3a133b1e6d593a28a4e34b24",
 )
 
 plugin_repo(
