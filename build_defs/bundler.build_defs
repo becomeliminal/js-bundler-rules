@@ -686,6 +686,9 @@ def _dev_config(name:str, config:str, deps:list, node_modules:str, out:str, merg
             'case "$n" in @*/*) printf "\'!**/node_modules/%s\'," "${n%%/*}";; esac; ' +
             'printf "\'!**/node_modules/%s\'," "$n"; ' +
             'printf "\'!**/node_modules/%s/**\'," "$n"; done)',
+            # The output may sit in a directory of its own (storybook_dev's
+            # config directory), which remote execution does not create.
+            'mkdir -p "$(dirname "$OUT")"',
             f'echo "import {{ mergeConfig }} from \'{merge_from}\';" > "$OUT"',
             'echo "import path from \'node:path\';" >> "$OUT"',
             'echo "import fs from \'node:fs\';" >> "$OUT"',
