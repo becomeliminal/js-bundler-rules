@@ -1750,24 +1750,72 @@ def playwright_update(name:str, srcs:list, serve:str, config:str="playwright.con
     )
 
 
+def esbuild_binary(name:str, main:str, srcs:list=[], deps:list=[], node_modules:str="",
+                   chdir:str="", check=None, env:dict={}, visibility:list=None,
+                   labels:list=[]):
+    """A node program written in TypeScript or JavaScript, for `plz run`.
+
+    For the scripts beside an app or a library: a generator, a deploy script,
+    a tool someone runs by hand. The program is bundled with this plugin's
+    esbuild, its packages left external and resolved at run time from the tree
+    beside it, and run from its own package directory by default -- where its
+    users ran it with `npx tsx`, so a relative path on its command line, or one
+    it reads or writes itself, means what it always meant.
+
+    Args:
+        name: Target name.
+        main: The program, relative to this package: .ts, .tsx, .js or .mjs.
+        srcs: Further files the program imports.
+        deps: js_library and ts_library targets it imports by package name.
+        node_modules: The tree holding the packages it imports.
+        chdir: Directory to run in, relative to the repository root. Defaults
+               to this package.
+        check: A ts_check covering the program, as for esbuild_bundle.
+               Required when it is TypeScript; False to run it unchecked
+               deliberately.
+        env: Environment variables for the program.
+        visibility: Visibility specification.
+        labels: Additional labels.
+    """
+    bundle = esbuild_bundle(
+        name = tag(name, "bundle"),
+        entry_point = main,
+        srcs = srcs,
+        deps = deps,
+        out = f"_{name}.mjs",
+        platform = "node",
+        format = "esm",
+        node_modules = node_modules,
+        check = check,
+        # Packages resolve at run time, from the tree beside the program: some
+        # (Playwright, anything with native code) carry files a bundle would
+        # not, and none of them need bundling to run under node.
+        args = ["--packages=external"],
+    )
+    return js_binary(
+        name = name,
+        entry_point = bundle,
+        deps = deps,
+        node_modules = node_modules,
+        chdir = chdir or package_name(),
+        env = env,
+        visibility = visibility,
+        labels = labels + ["esbuild_binary"],
+    )
+
+
 def playwright_binary(name:str, main:str, srcs:list=[], deps:list=[], node_modules:str="",
                       browser:str="", chdir:str="", check=None, env:dict={},
                       visibility:list=None, labels:list=[]):
     """A program that drives the pinned browser through Playwright. `plz run`
     only.
 
-    For the scripts beside a suite rather than the suite itself: a camera that
-    screenshots one story from a running Storybook, say. It launches Chromium
-    with Playwright's own API (`chromium.launch()`), and gets the
-    playwright_browser playwright_test uses, never one from `playwright
-    install`: PLAYWRIGHT_BROWSERS_PATH is exported before node starts. Before,
-    not from inside the program: Playwright reads it while its own modules
-    load, which an ES module's imports do ahead of any of its code.
-
-    The program is bundled with this plugin's esbuild, its packages left
-    external and resolved through the tree, and run from its own package
-    directory by default -- where its users run it, so a relative path on its
-    command line, or one it reads itself, means what it says.
+    An esbuild_binary that gets the playwright_browser playwright_test uses,
+    never one from `playwright install`: a camera that screenshots one story
+    from a running Storybook, say, launching Chromium with Playwright's own API
+    (`chromium.launch()`). PLAYWRIGHT_BROWSERS_PATH is exported before node
+    starts. Before, not from inside the program: Playwright reads it while its
+    own modules load, which an ES module's imports do ahead of any of its code.
 
     Args:
         name: Target name.
@@ -1779,35 +1827,20 @@ def playwright_binary(name:str, main:str, srcs:list=[], deps:list=[], node_modul
         chdir: Directory to run in, relative to the repository root. Defaults
                to this package.
         check: A ts_check covering the program, as for esbuild_bundle.
-               Required when it is TypeScript; False to run it unchecked
-               deliberately.
         env: Environment variables for the program.
         visibility: Visibility specification.
         labels: Additional labels.
     """
     # Canonical, so $(out_location) matches the dep it names.
     browser = canonicalise(browser or CONFIG.BUNDLER.PLAYWRIGHT_BROWSER)
-    bundle = esbuild_bundle(
-        name = tag(name, "bundle"),
-        entry_point = main,
-        srcs = srcs,
-        deps = deps,
-        out = f"_{name}_pw.mjs",
-        platform = "node",
-        format = "esm",
-        node_modules = node_modules,
-        check = check,
-        # Packages resolve at run time, from the tree beside the program:
-        # Playwright drives a browser from files of its own, which a bundle
-        # would not carry.
-        args = ["--packages=external"],
-    )
-    program = js_binary(
+    program = esbuild_binary(
         name = tag(name, "program"),
-        entry_point = bundle,
+        main = main,
+        srcs = srcs,
         deps = deps,
         node_modules = node_modules,
         chdir = chdir or package_name(),
+        check = check,
         env = env,
     )
     # `plz run` starts a binary in the repository root, which is how the

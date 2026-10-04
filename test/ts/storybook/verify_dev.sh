@@ -105,6 +105,12 @@ plz run //$DIR:capture -- ../../../plz-out/gen/$DIR/storybook-static greeting--l
 check "playwright_binary captures a story in the pinned browser" 1 "$(file "$SHOT" 2>/dev/null | grep -c 'PNG image data')"
 rm -f "$SHOT"
 
+# esbuild_binary: a TypeScript program run from this package, importing from
+# the tree; its relative output path lands here.
+plz run //$DIR:stamp -- zz_stamp.txt >/dev/null 2>&1
+check "esbuild_binary runs from its package, importing the tree" 1 "$(grep -c 'ESBUILD_BINARY_MARKER react' "$DIR/zz_stamp.txt" 2>/dev/null || echo 0)"
+rm -f "$DIR/zz_stamp.txt"
+
 AFTER=$(mktemp)
 git status --porcelain --ignored=no > "$AFTER"
 check "the server wrote nothing outside plz-out" 0 \

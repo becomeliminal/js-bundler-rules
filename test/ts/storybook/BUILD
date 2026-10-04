@@ -81,7 +81,10 @@ playwright_update(
 
 ts_check(
     name = "capture_typecheck",
-    srcs = ["scripts/capture.ts"],
+    srcs = [
+        "scripts/capture.ts",
+        "scripts/stamp.ts",
+    ],
     tsconfig = "scripts/tsconfig.json",
     node_modules = "//third_party/js/react:node_modules",
     tsconfig_deps = ["//:tsconfig.json"],
@@ -94,5 +97,14 @@ playwright_binary(
     name = "capture",
     main = "scripts/capture.ts",
     check = ":capture_typecheck",
+    node_modules = "//third_party/js/react:node_modules",
+)
+
+# A node program in TypeScript, run from this package: `plz run
+# //test/ts/storybook:stamp -- zz_stamp.txt` writes zz_stamp.txt here.
+esbuild_binary(
+    name = "stamp",
+    check = ":capture_typecheck",
+    main = "scripts/stamp.ts",
     node_modules = "//third_party/js/react:node_modules",
 )
