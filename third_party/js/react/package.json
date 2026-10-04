@@ -9,13 +9,14 @@
     "react-router": "7.9.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@rollup/plugin-node-resolve": "16.0.3",
     "@types/react": "19.1.9",
     "@types/react-dom": "19.1.7",
-    "vitest": "4.1.11",
     "@vitest/coverage-v8": "4.1.11",
     "jsdom": "26.1.0",
     "rollup": "4.62.5",
-    "@rollup/plugin-node-resolve": "16.0.3",
+    "vitest": "4.1.11",
     "webpack": "5.109.2",
     "webpack-cli": "6.0.1"
   }

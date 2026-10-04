@@ -7,7 +7,7 @@ Layer 3 of a JavaScript stack for the [Please](https://please.build) build syste
 | 0 | [node-rules](https://github.com/becomeliminal/node-rules) | a pinned, hermetic node |
 | 1 | [js-rules](https://github.com/becomeliminal/js-rules) | packages, `node_modules`, running programs |
 | 2 | [ts-rules](https://github.com/becomeliminal/ts-rules) | compiling and type-checking TypeScript |
-| 3 | **js-bundler-rules** | `esbuild_bundle`, `vite_bundle`, `rollup_bundle`, `webpack_bundle`, `terser_minified`, `vitest_test`, `vite_dev` |
+| 3 | **js-bundler-rules** | `esbuild_bundle`, `vite_bundle`, `rollup_bundle`, `webpack_bundle`, `terser_minified`, `vitest_test`, `vite_dev`, `playwright_test` |
 
 ## Regenerating a lockfile
 
@@ -30,8 +30,11 @@ the target, so every repin applies the same policy.
 third_party/js/
   esbuild/   the bundler this plugin pins, overridable by the Esbuild config key
   terser/    the minifier this plugin pins, for the same reason
-  react/     the consumer's tree: vite, react, rollup, webpack, vitest, jsdom
+  react/     the consumer's tree: vite, react, rollup, webpack, vitest, jsdom, Playwright
   tiny/      one zero-dependency package, for the smallest third-party case
+third_party/playwright/
+             the Chromium playwright_test runs in, pinned per platform,
+             overridable by the PlaywrightBrowser config key
 
 test/
   lib/       first-party libraries every fixture shares
@@ -60,6 +63,22 @@ plugins and loaders, and a plugin has to match the major it is loaded into, so
 a plugin-owned copy would silently mismatch whatever the consumer pinned.
 esbuild and terser have no such ecosystem, which is the only reason this
 plugin can own those two.
+
+## Browser tests run in a browser this plugin pins
+
+`playwright_test` runs a Playwright suite against a site Please built -- the
+`vite_bundle` a `vercel_site` deploys -- served from loopback, so what is tested
+is the bytes that ship. Playwright comes from the consumer's tree, like vite and
+vitest. The browser does not: `playwright install` fetches whatever its CDN
+serves at run time, so the Chromium is a `playwright_browser` here, a
+hash-pinned download per platform, and nothing in a test reaches the network.
+At start the test checks that browser against the revision the consumer's
+Playwright expects, and refuses a mismatch by name rather than launching a
+browser it was not built for.
+
+Chrome needs its system libraries (NSS, ATK, the X11 client libraries and the
+rest of `deb.deps` in the zip) on whatever runs the test. macOS has them; a
+Linux machine or remote-execution worker needs them installed.
 
 ## The dependency boundary, proven
 

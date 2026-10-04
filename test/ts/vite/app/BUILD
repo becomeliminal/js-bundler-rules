@@ -79,3 +79,12 @@ vite_dev(
     deps = ["//test/lib/greeter"],
     node_modules = "//third_party/js/react:node_modules",
 )
+
+# The built app in a browser: the bundle above, served as vercel_site would
+# serve it, in the plugin's pinned Chromium.
+playwright_test(
+    name = "e2e",
+    srcs = glob(["e2e/*.spec.ts"]),
+    node_modules = "//third_party/js/react:node_modules",
+    serve = ":app",
+)
