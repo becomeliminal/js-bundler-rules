@@ -1047,3 +1047,313 @@ def astro_dev(name:str, srcs:list, deps:list=[], config:str="astro.config.mjs",
         visibility = visibility,
         labels = labels + ["astro_dev"],
     )
+
+
+# Where Chrome for Testing publishes each platform's headless shell, keyed by
+# Please's OS and architecture. The same CDN and names playwright-core's own
+# installer uses (lib/server/registry: cftUrl), so what this downloads is
+# byte-for-byte what `playwright install` would have.
+_PLAYWRIGHT_PLATFORMS = {
+    "darwin_amd64": "mac-x64",
+    "darwin_arm64": "mac-arm64",
+    "linux_amd64": "linux64",
+    "linux_arm64": "linux-arm64",
+}
+
+
+def playwright_browser(name:str, browser_version:str, revision:str, hashes:dict,
+                       visibility:list=None):
+    """The Chromium playwright_test runs in, as a hash-pinned download.
+
+    `playwright install` fetches whatever its CDN serves when it runs, into a
+    cache outside the build. That is the one place a Playwright suite would
+    otherwise reach the network, so the browser is a build input here like
+    any other: a remote_file per platform, checked against its hash.
+
+    Laid out the way Playwright's own registry lays it out
+    (<name>/chromium_headless_shell-<revision>/chrome-headless-shell-<platform>/),
+    so playwright_test hands Playwright the binary inside it and Playwright is
+    used unmodified.
+
+    Args:
+        name: Target name.
+        browser_version: Chrome for Testing version, as playwright-core's
+                         browsers.json gives it for chromium-headless-shell.
+        revision: That entry's revision. playwright_test checks it against the
+                  revision the consumer's Playwright expects.
+        hashes: sha256 of each platform's zip, keyed "<os>_<arch>" as Please
+                names them (linux_amd64, darwin_arm64, ...). A platform with no
+                hash fails at parse time rather than downloading unchecked.
+        visibility: Visibility specification.
+    """
+    key = CONFIG.OS + "_" + CONFIG.ARCH
+    platform = _PLAYWRIGHT_PLATFORMS.get(key)
+    if not platform:
+        fail("playwright_browser " + name + ": Chrome for Testing has no headless shell for " + key)
+    if key not in hashes:
+        fail("playwright_browser " + name + ": no hash for " + key + "; add it to hashes")
+    zip = remote_file(
+        name = tag(name, "zip"),
+        url = "https://cdn.playwright.dev/builds/cft/" + browser_version + "/" + platform +
+              "/chrome-headless-shell-" + platform + ".zip",
+        hashes = [hashes[key]],
+        extract = True,
+        # Named apart from the platform directory below: an output here called
+        # chrome-headless-shell-<platform> collides with the one the genrule
+        # writes, and Please merges the two -- the binary lands a level up.
+        out = name + "_download",
+    )
+    return genrule(
+        name = name,
+        srcs = [zip],
+        outs = [name],
+        # Into the layout Playwright's registry uses. Whether extract kept the
+        # zip's one top-level directory or stripped it, the files end up in
+        # chrome-headless-shell-<platform>.
+        cmd = " && ".join([
+            'DEST="$OUT/chromium_headless_shell-' + revision + '/chrome-headless-shell-' + platform + '"',
+            'SRC="$(location ' + zip + ')"',
+            '[ -d "$SRC/chrome-headless-shell-' + platform + '" ] && SRC="$SRC/chrome-headless-shell-' + platform + '"',
+            'mkdir -p "$DEST"',
+            'cp -R "$SRC"/. "$DEST/"',
+            # Playwright's own installer writes this marker beside the browser.
+            'touch "$OUT/chromium_headless_shell-' + revision + '/INSTALLATION_COMPLETE"',
+            # Remote execution stages inputs read-only, and a copy keeps the mode.
+            'chmod -R u+w "$OUT"',
+        ]),
+        visibility = visibility,
+        labels = ["playwright_browser:" + revision],
+    )
+
+
+# Serves a built site for playwright_test, from loopback, on a port the OS
+# picks. A file that exists is served; a path without an extension that does
+# not is an app route and gets index.html, the same fallback vercel_site's
+# config gives the deployed site; anything else is a 404, so a missing asset
+# fails the test instead of passing as HTML.
+_PLAYWRIGHT_SERVER = """
+import { createServer } from "node:http";
+import { readFile, stat } from "node:fs/promises";
+import path from "node:path";
+
+const TYPES = {
+  ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8",
+  ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png",
+  ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp",
+  ".ico": "image/x-icon", ".woff": "font/woff", ".woff2": "font/woff2", ".txt": "text/plain; charset=utf-8",
+  ".map": "application/json", ".webmanifest": "application/manifest+json",
+};
+
+async function isFile(p) {
+  try { return (await stat(p)).isFile(); } catch { return false; }
+}
+
+function serve(root) {
+  const server = createServer(async (req, res) => {
+    const url = new URL(req.url ?? "/", "http://localhost");
+    const rel = decodeURIComponent(url.pathname);
+    let file = path.join(root, rel);
+    if (!file.startsWith(root)) { res.writeHead(403).end(); return; }
+    if (rel.endsWith("/")) file = path.join(file, "index.html");
+    if (!(await isFile(file))) {
+      if (path.extname(rel) !== "") { res.writeHead(404).end(); return; }
+      file = path.join(root, "index.html");
+    }
+    const body = await readFile(file);
+    res.writeHead(200, { "content-type": TYPES[path.extname(file)] ?? "application/octet-stream" }).end(body);
+  });
+  return new Promise((resolve) => server.listen(0, "127.0.0.1", () => resolve(server)));
+}
+"""
+
+# Playwright's globalSetup, after the server in one module: starts it before
+# any worker exists and publishes its address in the environment. Workers
+# re-read the config, so the baseURL they see is this one. One file with no
+# local imports, because Playwright's TypeScript loader does not carry named
+# exports between generated modules.
+_PLAYWRIGHT_SETUP = """
+export default async function globalSetup() {
+  const server = await serve(process.env.PLZ_PLAYWRIGHT_SITE);
+  const { port } = server.address();
+  process.env.PLZ_PLAYWRIGHT_BASE_URL = `http://127.0.0.1:${port}`;
+  return () => new Promise((resolve) => server.close(() => resolve()));
+}
+"""
+
+# Finds the site and the browser where Please staged them, checks the browser
+# is the revision this Playwright expects, and names its binary. Data is staged
+# under the test's root while the runner starts in its run directory, so the
+# paths are found by walking up rather than assumed.
+_PLAYWRIGHT_PATHS = """
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import path from "node:path";
+
+function staged(rel) {
+  for (let dir = process.cwd(); ; dir = path.dirname(dir)) {
+    const candidate = path.join(dir, rel);
+    if (existsSync(candidate)) return candidate;
+    if (path.dirname(dir) === dir) throw new Error(`playwright_test: ${rel} is not staged for this test`);
+  }
+}
+
+const browserRoot = staged(PLZ_BROWSER);
+const [shell] = readdirSync(browserRoot).filter((d) => d.startsWith("chromium_headless_shell-"));
+if (!shell) throw new Error(`playwright_test: ${browserRoot} holds no chromium_headless_shell-<revision>`);
+const revision = shell.slice("chromium_headless_shell-".length);
+
+// The revision the consumer's Playwright was built against. A browser from
+// another revision may launch and then misbehave in ways no error names, so a
+// mismatch stops here, saying which side to move.
+// Followed through the packages, not resolved from the root: in the store
+// layout only @playwright/test is a top-level name, and playwright-core is its
+// dependency's dependency.
+const fromRun = createRequire(path.join(process.cwd(), "noop.js"));
+const fromTest = createRequire(fromRun.resolve("@playwright/test/package.json"));
+const fromPlaywright = createRequire(fromTest.resolve("playwright/package.json"));
+// browsers.json is not in playwright-core's exports; package.json is, and the
+// registry sits beside it.
+const corePackage = fromPlaywright.resolve("playwright-core/package.json");
+const registry = JSON.parse(readFileSync(path.join(path.dirname(corePackage), "browsers.json"), "utf8"));
+const expected = registry.browsers.find((b) => b.name === "chromium-headless-shell");
+if (!expected || expected.revision !== revision) {
+  throw new Error(
+    `playwright_test: the browser is chromium-headless-shell ${revision}, but this Playwright expects ` +
+    `${expected ? expected.revision + " (Chrome " + expected.browserVersion + ")" : "none"}. ` +
+    "Point PlaywrightBrowser (or the rule's browser) at a playwright_browser for that revision.");
+}
+
+const [platformDir] = readdirSync(path.join(browserRoot, shell)).filter((d) => d.startsWith("chrome-headless-shell-"));
+const executable = path.join(browserRoot, shell, platformDir, process.platform === "win32" ? "chrome-headless-shell.exe" : "chrome-headless-shell");
+
+const PLZ = { site: staged(PLZ_SITE), executable };
+"""
+
+# The config Playwright runs with: the app's own, with its webServer replaced
+# by the staged site, its baseURL by the server's, and every project launched
+# in the pinned browser.
+_PLAYWRIGHT_CONFIG = """
+import { defineConfig } from "@playwright/test";
+
+const base = user;
+// globalSetup runs in this process after the config loads, and reads the site
+// from here.
+process.env.PLZ_PLAYWRIGHT_SITE = PLZ.site;
+if (base.globalSetup) {
+  throw new Error("playwright_test: the config sets globalSetup; this rule needs it to serve the site");
+}
+const launch = (use) => ({
+  ...use,
+  baseURL: process.env.PLZ_PLAYWRIGHT_BASE_URL,
+  launchOptions: {
+    ...(use?.launchOptions ?? {}),
+    executablePath: PLZ.executable,
+    // A container's /dev/shm is 64MB, which Chrome outgrows and then crashes in.
+    args: [...(use?.launchOptions?.args ?? []), "--disable-dev-shm-usage"],
+  },
+});
+
+export default defineConfig({
+  ...base,
+  webServer: undefined,
+  globalSetup: "./_pw_setup.mjs",
+  use: launch(base.use),
+  projects: (base.projects ?? []).map((p) => ({ ...p, use: launch(p.use) })),
+});
+"""
+
+
+def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.config.ts",
+                    config_deps:list=[], deps:list=[], data:list=[], node_modules:str="",
+                    browser:str="", project:str="", env:dict={}, args:list=[],
+                    visibility:list=None, labels:list=[], timeout:int=0,
+                    flaky:bool|int=0, size:str=None):
+    """Browser tests run by Playwright, against a site Please built.
+
+    The suite runs against `serve` -- the same output vercel_site deploys -- so
+    what is tested is the bytes that ship, not a second build. A small static
+    server on loopback replaces the config's webServer, so nothing in the test
+    needs vite, a dev server or the network.
+
+    The browser is a playwright_browser: hash-pinned, owned by this plugin by
+    default, and checked at start against the revision the consumer's
+    Playwright expects. Playwright itself comes from the consumer's tree, as
+    vite and vitest do. Chrome needs its system libraries (NSS, ATK, X11 and
+    so on) on the machine running the test; macOS has them, and a Linux runner
+    or remote worker needs them installed.
+
+    Each test is reported to Please by name, via Playwright's JUnit reporter.
+
+    Args:
+        name: Target name.
+        srcs: The spec files and anything they import that is not a dep.
+        serve: The built site to test, e.g. a vite_bundle: one directory.
+        config: The Playwright config, relative to this package. Its projects,
+                timeouts and retries apply; webServer, baseURL and the browser
+                are this rule's.
+        config_deps: Anything the config imports.
+        deps: js_library and ts_library targets the specs import by name.
+        data: Further targets the specs read.
+        node_modules: The tree holding @playwright/test.
+        browser: A playwright_browser. Defaults to the PlaywrightBrowser config.
+        project: Run only this project of the config.
+        env: Environment variables for the run.
+        args: Further `playwright test` flags.
+        visibility: Visibility specification.
+        labels: Additional labels.
+        timeout: Test timeout in seconds.
+        flaky: True to mark the test flaky, or an integer for reruns.
+        size: Test size.
+    """
+    browser = browser or CONFIG.BUNDLER.PLAYWRIGHT_BROWSER
+    files = genrule(
+        name = tag(name, "config"),
+        srcs = {"config": [config]},
+        deps = [serve],
+        outs = ["_pw_config.ts", "_pw_setup.mjs"],
+        # One line per step under set -e: a heredoc's terminator has to stand
+        # alone on its line, which a " && " join would break.
+        cmd = "\n".join([
+            "set -e",
+            'CONFIG_BASE=$(basename "$SRCS_CONFIG" .ts)',
+            # The config is imported by its own name, beside it in the run; the
+            # site and the browser are repository-relative, so the walk up from
+            # the run finds them.
+            "{ echo \"import user from './$CONFIG_BASE';\"; echo \"const PLZ_SITE = '$(location " + serve +
+            ")';\"; echo \"const PLZ_BROWSER = '" + _playwright_staged(browser) + "';\"; cat <<'PLZ_PW'\n" +
+            _PLAYWRIGHT_PATHS + "\n" + _PLAYWRIGHT_CONFIG + "\nPLZ_PW\n} > _pw_config.ts",
+            "cat > _pw_setup.mjs <<'PLZ_PW'\n" + _PLAYWRIGHT_SERVER + "\n" + _PLAYWRIGHT_SETUP + "\nPLZ_PW",
+        ]),
+    )
+    return js_test(
+        name = name,
+        srcs = [config, files] + srcs + config_deps,
+        deps = deps,
+        data = data + [serve, browser],
+        node_modules = node_modules,
+        runner = "@playwright/test|playwright",
+        env = {"CI": "true"} | env,
+        runner_env = {"PLAYWRIGHT_JUNIT_OUTPUT_NAME": "$RESULTS_FILE"},
+        runner_args = [
+            "test",
+            "--config", "_pw_config.ts",
+            "--reporter=list,junit",
+        ] + (["--project", project] if project else []) + args,
+        visibility = visibility,
+        labels = labels + ["playwright"],
+        timeout = timeout,
+        flaky = flaky,
+        size = size,
+    )
+
+
+def _playwright_staged(label:str):
+    """Where Please stages a data dependency in a test: at its package path,
+    with any subrepo prefix dropped -- a target from ///bundler// lands at its
+    package within the plugin, as js-rules' _staged_path describes."""
+    target = label.split("|")[0].lstrip("/")
+    if "//" in target:
+        target = target.split("//")[-1]
+    package, _, name = target.partition(":")
+    return package + "/" + name

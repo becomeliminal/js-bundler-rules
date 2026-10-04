@@ -28,6 +28,12 @@ DefaultValue = terser
 Help = npm package within that tree publishing the minifier.
 Inherit = true
 
+[PluginConfig "playwright_browser"]
+ConfigKey = PlaywrightBrowser
+DefaultValue = ///bundler//third_party/playwright:chromium_headless_shell
+Help = playwright_browser target playwright_test runs its tests in: a hash-pinned download, never `playwright install`. Owned by this plugin and matched to the Playwright it is tested with; playwright_test fails if the consumer's Playwright expects a different revision, and a consumer on another Playwright points this at its own playwright_browser.
+Inherit = true
+
 [Plugin "js"]
 Target = //plugins:js
 ; The toolchain belongs to the repo being built, so a consumer supplies its own.
