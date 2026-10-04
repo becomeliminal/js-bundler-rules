@@ -1568,7 +1568,7 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
         data = data + [serve, browser],
         node_modules = node_modules,
         runner = "@playwright/test|playwright",
-        env = {"CI": "true"} | env,
+        env = {"CI": "true"} | _PLAYWRIGHT_ENV | env,
         runner_env = {"PLAYWRIGHT_JUNIT_OUTPUT_NAME": "$RESULTS_FILE"},
         runner_args = [
             "test",
@@ -1581,6 +1581,15 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
         flaky = flaky,
         size = size,
     )
+
+
+# The browser's own process locale and timezone, pinned for playwright_test and
+# playwright_update alike. Playwright's locale and timezoneId options reach the
+# page's JavaScript, but Chrome still formats a native <input type="date"> from
+# the process's LANG: unpinned, `plz test` (a clean environment) and `plz run`
+# (the developer's) rendered the same story differently, and a baseline
+# recorded by one failed under the other.
+_PLAYWRIGHT_ENV = {"LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "TZ": "UTC"}
 
 
 def _playwright_files(name:str, config:str, serve:str, browser:str, origin:str, update:bool):
@@ -1668,7 +1677,7 @@ def playwright_update(name:str, srcs:list, serve:str, config:str="playwright.con
         deps = deps + [serve, browser],
         node_modules = node_modules,
         runner = "@playwright/test|playwright",
-        env = {"CI": "true"} | env,
+        env = {"CI": "true"} | _PLAYWRIGHT_ENV | env,
         # Later flags win, so args can widen this to all.
         runner_args = [
             "test",
