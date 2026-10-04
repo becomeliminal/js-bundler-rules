@@ -24,6 +24,11 @@ nothing installed -- then regenerates the `BUILD`. Policy flags (react's
 `--hoisted-link`, which vite_dev's symlink-free layout needs) are recorded on
 the target, so every repin applies the same policy.
 
+## Linting this repository
+
+`plz lint` runs ESLint over the repository's own JavaScript and TypeScript
+(`tools/eslint`), from the tree js-rules pins.
+
 ## Layout
 
 ```
