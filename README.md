@@ -21,8 +21,8 @@ plz run //third_party/js:update-react
 
 It drives pnpm through the corepack inside the pinned node toolchain --
 nothing installed -- then regenerates the `BUILD`. Policy flags (react's
-`--hoisted-link`, which vite_dev's symlink-free layout needs) are recorded on
-the target, so every repin applies the same policy.
+`--hoisted-link`) are recorded on the target, so every repin applies the same
+policy.
 
 ## Linting this repository
 
@@ -36,6 +36,7 @@ third_party/js/
   esbuild/   the bundler this plugin pins, overridable by the Esbuild config key
   terser/    the minifier this plugin pins, for the same reason
   react/     the consumer's tree: vite, react, rollup, webpack, vitest, jsdom, Playwright
+  astro/     an Astro site's tree: astro and its checker
   tiny/      one zero-dependency package, for the smallest third-party case
 third_party/playwright/
              the Chromium playwright_test runs in, pinned per platform,
@@ -52,6 +53,9 @@ test/
   ts/        fixtures whose sources are TypeScript
     esbuild/  including tsconfig path aliases
     vite/    app, SSR, the HMR dev server
+    astro/   a site: build, check, dev server
+    storybook/  build and dev server
+    treeshake/  what reaches a bundle from a library built three ways
 ```
 
 Split by language before bundler, because that is the axis where a bundler
@@ -96,11 +100,11 @@ succeeds. Native semantics, graph discipline.
 
 ## A bundle cannot be built from TypeScript nothing checks
 
-Neither bundler reads types. vite transpiles with esbuild and esbuild strips
+No bundler here reads types. vite transpiles with esbuild and esbuild strips
 them without looking, so a type error reaches the output having failed no build.
 
-Both rules therefore refuse to parse if any source is TypeScript and `check` is
-absent:
+Every rule that bundles therefore refuses to parse if any source is TypeScript
+and `check` is absent:
 
 ```
 vite_bundle app: src/App.tsx is TypeScript and nothing checks it. This bundler
