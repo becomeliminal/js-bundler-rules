@@ -1261,12 +1261,18 @@ const launch = (use) => ({
   },
 });
 
+// Failure artifacts -- traces, screenshots, error context -- go in the run
+// directory, which Please owns, and never beside a config resolved back into
+// the repository: unsandboxed, that wrote test-results/ into the checkout.
+const outputDir = path.resolve("test-results");
+
 export default defineConfig({
   ...base,
   webServer: undefined,
   globalSetup: PLZ_SETUP,
+  outputDir,
   use: launch(base.use),
-  projects: (base.projects ?? []).map((p) => ({ ...p, use: launch(p.use) })),
+  projects: (base.projects ?? []).map((p) => ({ ...p, outputDir, use: launch(p.use) })),
 });
 """
 
