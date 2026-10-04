@@ -17,3 +17,11 @@ test("an app route falls back to index.html", async ({ request }) => {
 test("a missing asset is a 404, not the app", async ({ request }) => {
   expect((await request.get("/assets/does-not-exist.js")).status()).toBe(404);
 });
+
+// Only the suite that asks for a fixed origin says which one to expect.
+test("the site is served from the origin the suite asked for", async ({ page }) => {
+  const expected = process.env.EXPECT_ORIGIN;
+  test.skip(!expected, "this suite takes any free port");
+  await page.goto("/");
+  expect(await page.evaluate(() => window.location.origin)).toBe(expected);
+});

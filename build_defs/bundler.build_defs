@@ -1149,7 +1149,7 @@ async function isFile(p) {
   try { return (await stat(p)).isFile(); } catch { return false; }
 }
 
-function serve(root) {
+function serve(root, host, port) {
   const server = createServer(async (req, res) => {
     const url = new URL(req.url ?? "/", "http://localhost");
     const rel = decodeURIComponent(url.pathname);
@@ -1163,7 +1163,10 @@ function serve(root) {
     const body = await readFile(file);
     res.writeHead(200, { "content-type": TYPES[path.extname(file)] ?? "application/octet-stream" }).end(body);
   });
-  return new Promise((resolve) => server.listen(0, "127.0.0.1", () => resolve(server)));
+  return new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(port, host, () => resolve(server));
+  });
 }
 """
 
@@ -1174,9 +1177,12 @@ function serve(root) {
 # exports between generated modules.
 _PLAYWRIGHT_SETUP = """
 export default async function globalSetup() {
-  const server = await serve(process.env.PLZ_PLAYWRIGHT_SITE);
-  const { port } = server.address();
-  process.env.PLZ_PLAYWRIGHT_BASE_URL = `http://127.0.0.1:${port}`;
+  // A fixed origin when the suite asked for one, else any free port.
+  const origin = process.env.PLZ_PLAYWRIGHT_ORIGIN;
+  const fixed = origin ? new URL(origin) : null;
+  const server = await serve(process.env.PLZ_PLAYWRIGHT_SITE,
+    fixed ? fixed.hostname : "127.0.0.1", fixed ? Number(fixed.port) : 0);
+  process.env.PLZ_PLAYWRIGHT_BASE_URL = origin || `http://127.0.0.1:${server.address().port}`;
   return () => new Promise((resolve) => server.close(() => resolve()));
 }
 """
@@ -1240,6 +1246,7 @@ const base = user;
 // globalSetup runs in this process after the config loads, and reads the site
 // from here.
 process.env.PLZ_PLAYWRIGHT_SITE = PLZ.site;
+process.env.PLZ_PLAYWRIGHT_ORIGIN = PLZ_ORIGIN;
 if (base.globalSetup) {
   throw new Error("playwright_test: the config sets globalSetup; this rule needs it to serve the site");
 }
@@ -1266,8 +1273,8 @@ export default defineConfig({
 
 def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.config.ts",
                     config_deps:list=[], deps:list=[], data:list=[], node_modules:str="",
-                    browser:str="", project:str="", env:dict={}, args:list=[],
-                    visibility:list=None, labels:list=[], timeout:int=0,
+                    browser:str="", project:str="", origin:str="", env:dict={},
+                    args:list=[], visibility:list=None, labels:list=[], timeout:int=0,
                     flaky:bool|int=0, size:str=None):
     """Browser tests run by Playwright, against a site Please built.
 
@@ -1298,6 +1305,11 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
         node_modules: The tree holding @playwright/test.
         browser: A playwright_browser. Defaults to the PlaywrightBrowser config.
         project: Run only this project of the config.
+        origin: Serve the site from exactly this loopback origin, e.g.
+                "http://localhost:4317", for a backend that admits browsers by
+                their Origin. Empty, the default, takes any free port on
+                127.0.0.1, which is what lets suites run side by side; a fixed
+                port can collide, so set it only where a server demands it.
         env: Environment variables for the run.
         args: Further `playwright test` flags.
         visibility: Visibility specification.
@@ -1307,6 +1319,12 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
         size: Test size.
     """
     browser = browser or CONFIG.BUNDLER.PLAYWRIGHT_BROWSER
+    if origin:
+        scheme, _, rest = origin.partition("://")
+        host, _, port = rest.partition(":")
+        if scheme != "http" or host not in ["localhost", "127.0.0.1"] or not port or port.lstrip("0123456789"):
+            fail(f"playwright_test {name}: origin {origin} is not http://localhost:<port> or " +
+                 "http://127.0.0.1:<port>; the site is served on loopback, at a port it names")
     # Named for the target, so a package can hold several suites -- a gate and
     # a manual one, say -- whose generated files would otherwise collide.
     config_out = f"_pw_{name}_config.ts"
@@ -1326,7 +1344,8 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
             # the run finds them.
             "{ echo \"import user from './$CONFIG_BASE';\"; echo \"const PLZ_SITE = '$(location " + serve +
             ")';\"; echo \"const PLZ_BROWSER = '" + _playwright_staged(browser) +
-            "';\"; echo \"const PLZ_SETUP = './" + setup_out + "';\"; cat <<'PLZ_PW'\n" +
+            "';\"; echo \"const PLZ_SETUP = './" + setup_out + "';\"; echo \"const PLZ_ORIGIN = '" + origin +
+            "';\"; cat <<'PLZ_PW'\n" +
             _PLAYWRIGHT_PATHS + "\n" + _PLAYWRIGHT_CONFIG + "\nPLZ_PW\n} > " + config_out,
             "cat > " + setup_out + " <<'PLZ_PW'\n" + _PLAYWRIGHT_SERVER + "\n" + _PLAYWRIGHT_SETUP + "\nPLZ_PW",
         ]),
