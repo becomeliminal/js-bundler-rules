@@ -3,6 +3,7 @@ subinclude("//build_defs:bundler", "///ts//build_defs:ts")
 _SRCS = glob(
     [
         ".storybook/*",
+        "public/**/*",
         "src/**/*",
     ],
     hidden = True,
