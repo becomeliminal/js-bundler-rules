@@ -67,11 +67,19 @@ vitest_test(
     node_modules = "//third_party/js/react:node_modules",
 )
 
+# A source a rule produces rather than one in the repository: the dev server
+# serves it as built, beside the sources it links.
+genrule(
+    name = "generated",
+    outs = ["src/generated.ts"],
+    cmd = "echo 'export const GENERATED = \"GENERATED_MARKER\";' > $OUT",
+)
+
 # Not a test, and cannot be: a development server reacts to files that change
 # after the build. `plz run //test/ts/vite/app:dev`.
 vite_dev(
     name = "dev",
-    srcs = glob([
+    srcs = [":generated"] + glob([
         "index.html",
         "public/**/*",
         "src/**/*",

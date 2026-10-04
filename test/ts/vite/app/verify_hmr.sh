@@ -46,6 +46,8 @@ NEW_DIR=$APP/src/zz_dir
 NEW_PUBLIC=$APP/public/zz_asset.txt
 NEW_LIB=$LIB/parts/zz_lib.ts
 NEW_LIB_DIR=$LIB/parts/zz_sub
+# Where :generated's output would sit in the source tree, if it had a file there.
+SHADOW=$APP/src/generated.ts
 # Where the tree's label points in the SOURCE tree: the launcher's candidate
 # for //third_party/js/react:node_modules at the repository root.
 DECOY=third_party/js/react/node_modules
@@ -59,7 +61,7 @@ cp "$LIB_SRC" "$LIB_SRC.bak"
 cleanup() {
   mv "$APP_SRC.bak" "$APP_SRC" 2>/dev/null
   mv "$LIB_SRC.bak" "$LIB_SRC" 2>/dev/null
-  rm -rf "$NEW_FILE" "$NEW_DIR" "$NEW_PUBLIC" "$NEW_LIB" "$NEW_LIB_DIR" "$DECOY"
+  rm -rf "$NEW_FILE" "$NEW_DIR" "$NEW_PUBLIC" "$NEW_LIB" "$NEW_LIB_DIR" "$SHADOW" "$DECOY"
   [ -n "${SERVER_PID:-}" ] && kill "$SERVER_PID" 2>/dev/null
   rm -f "$LOG"
 }
@@ -128,6 +130,10 @@ check "a library's CommonJS import is prebundled" 1 \
 check "  ... and not served raw" 0 \
   "$(served /node_modules/@test/compiled/index.ts 'react/compiler-runtime.js' 0)"
 
+# A source a rule generated: no file in the repository to link, so it is
+# served from the copy the build put in the run directory.
+check "a generated source is served" 1 "$(served /src/generated.ts GENERATED_MARKER 1)"
+
 # --- Files that did not exist when the server started. ---
 
 # By URL: what index.html and the browser ask for.
@@ -164,6 +170,14 @@ printf 'import { LIB_DIR } from "@test/greeter/parts/zz_sub";\nconsole.log(LIB_D
 check "a new library directory resolves by its name" 1 \
   "$(served /src/App.tsx 'greeter/parts/zz_sub/index.ts' 1)"
 
+# A file appearing in the source tree where a generated source lands does not
+# replace it: the build's output is what the target declared.
+printf 'export const GENERATED = "SHADOW_MARKER";\n' > "$SHADOW"
+sleep 1
+check "a source-tree file does not replace a generated source" 1 \
+  "$(served /src/generated.ts GENERATED_MARKER 1)"
+check "  ... and is not served in its place" 0 "$(served /src/generated.ts SHADOW_MARKER 0)"
+
 # --- And files that go away. ---
 
 # Deleted: the link goes with it, so the old module stops being served (the
@@ -197,7 +211,7 @@ check "a deleted directory's files stop being served" 0 "$(served /src/zz_dir/de
 AFTER=$(mktemp)
 git status --porcelain --ignored=no > "$AFTER"
 check "the server wrote nothing outside plz-out" 0 \
-  "$(diff "$BEFORE" "$AFTER" | grep '^>' | grep -cv 'App.tsx\|greeter/index.ts\|\.bak\|zz_')"
+  "$(diff "$BEFORE" "$AFTER" | grep '^>' | grep -cv 'App.tsx\|greeter/index.ts\|\.bak\|zz_\|src/generated.ts')"
 rm -f "$BEFORE" "$AFTER"
 
 [ "$fail" = 0 ] && echo "PASS: the development loop works" || { echo "FAIL"; sed -n '1,40p' "$LOG"; }
