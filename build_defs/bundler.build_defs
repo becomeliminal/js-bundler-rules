@@ -643,14 +643,19 @@ def vitest_update(name:str, srcs:list, deps:list=[], config:str="vite.config.ts"
     )
 
 
-def _dev_config(name:str, config:str, deps:list, node_modules:str, out:str, merge_from:str, export:str):
+def _dev_config(name:str, config:str, deps:list, node_modules:str, out:str, merge_from:str, export:str,
+                config_import:str=""):
     """The development server's config: the consumer's, loaded and wrapped.
 
-    Shared by vite_dev and astro_dev, which differ only in where the vite
-    config sits -- the whole config, or an Astro config's vite section -- and
-    so only in the export line that applies withPlzDev to it, and in where
-    mergeConfig comes from: vite for vite_dev; astro/config for astro_dev,
-    since vite is Astro's own dependency rather than one the tree exposes.
+    Shared by vite_dev, astro_dev and storybook_dev, which differ only in
+    where the vite config sits -- the whole config, an Astro config's vite
+    section, or what a Storybook main's viteFinal returns -- and so only in
+    the export line that applies withPlzDev to it, and in where mergeConfig
+    comes from: vite for vite_dev and storybook_dev; astro/config for
+    astro_dev, since vite is Astro's own dependency rather than one the tree
+    exposes. config_import is the path the generated module imports the
+    consumer's config by, when that is not a sibling of it: a Storybook main
+    sits in its config directory.
     """
     return genrule(
         name = tag(name, "config"),
@@ -684,7 +689,8 @@ def _dev_config(name:str, config:str, deps:list, node_modules:str, out:str, merg
             f'echo "import {{ mergeConfig }} from \'{merge_from}\';" > "$OUT"',
             'echo "import path from \'node:path\';" >> "$OUT"',
             'echo "import fs from \'node:fs\';" >> "$OUT"',
-            'echo "import user from \'./$(basename $SRCS_CONFIG)\';" >> "$OUT"',
+            ('echo "import user from \'' + config_import + '\';" >> "$OUT"' if config_import else
+             'echo "import user from \'./$(basename $SRCS_CONFIG)\';" >> "$OUT"'),
             'echo "const base = typeof user === \'function\'" >> "$OUT"',
             'echo "  ? await user({ command: \'serve\', mode: \'development\' })" >> "$OUT"',
             'echo "  : user;" >> "$OUT"',
@@ -1083,6 +1089,169 @@ def astro_dev(name:str, srcs:list, deps:list=[], config:str="astro.config.mjs",
     )
 
 
+def storybook_build(name:str, srcs:list, deps:list=[], config_dir:str=".storybook",
+                    config_deps:list=[], out_dir:str="storybook-static", node_modules:str="",
+                    env:dict={}, check=None, args:list=[], visibility:list=None,
+                    test_only:bool&testonly=False, labels:list=[]):
+    """A static Storybook, produced by `storybook build`.
+
+    Storybook is a vite application with a config directory of its own, so
+    this is vite_bundle's shape run through Storybook's CLI: from the
+    consumer's tree, because a Storybook main names a framework and addons
+    that must match the Storybook they are loaded into; and with nothing
+    passed that the main could also set. The framework's vite builder merges
+    the project's vite config itself, so an alias the application relies on
+    reaches its stories too.
+
+    The output is the out_dir itself, as for vite_bundle: one directory, the
+    shape vercel_site deploys and playwright_test serves.
+
+    Args:
+        name: Target name.
+        srcs: Everything the build reads: the config directory's files, the
+              stories and what they import, styles, assets, any vite config
+              and tsconfig it reads.
+        deps: js_library and ts_library targets the stories import by package
+              name, and npm_repo targets.
+        config_dir: Storybook's config directory, relative to this package.
+        config_deps: Anything the config imports or extends that is not in
+                     srcs, such as a tsconfig the project's extends.
+        out_dir: The directory the site is, and the target's output.
+        node_modules: The tree the build resolves through, holding storybook,
+                      its framework and addons.
+        env: Environment variables for the action.
+        check: A ts_check over these sources, made a dependency so the site
+               cannot be produced while it fails. Required when any source is
+               TypeScript, as for vite_bundle; False to build unchecked
+               TypeScript deliberately.
+        args: Further storybook build flags.
+        visibility: Visibility specification.
+        test_only: If True, only visible to test rules.
+        labels: Additional labels.
+    """
+    wrapper = f"_{name}"
+    return js_run_binary(
+        name = name,
+        package = "storybook",
+        bin = "storybook",
+        deps = deps + _checked("storybook_build", name, srcs, check),
+        node_modules = node_modules,
+        srcs = srcs + config_deps,
+        # vite content-hashes filenames, so nothing here can be declared.
+        out_dirs = [wrapper],
+        # A build action has no network to report to.
+        args = ["build", "--config-dir", config_dir, "--output-dir", f"{wrapper}/{out_dir}",
+                "--disable-telemetry"] + args,
+        env = env,
+        visibility = visibility,
+        test_only = test_only,
+        labels = labels + ["storybook_build"],
+    )
+
+
+def storybook_dev(name:str, srcs:list, deps:list=[], config_dir:str=".storybook",
+                  vite_config:str="vite.config.ts", tsconfig:str="tsconfig.json",
+                  config_deps:list=[], node_modules:str="", env:dict={}, args:list=[],
+                  visibility:list=None, labels:list=[]):
+    """A Storybook development server, for `plz run`.
+
+    vite_dev for a Storybook, and the same machinery: the server runs in
+    plz-out, the sources are linked in from the repository and kept in step
+    as files come and go, first-party libraries are served from their sources
+    with what they import prebundled, and a bare import from a repository
+    file resolves through the tree Please built. Storybook runs vite itself,
+    so that machinery goes in through the main's viteFinal.
+
+    Storybook reads its config from a directory rather than a file, so the
+    rule gives it one: _<name>.storybook beside the consumer's, at the same
+    depth so the main's relative story globs mean what they say. Its main is
+    the consumer's, imported and extended; the preview, manager and head
+    files are the consumer's own, linked and passed through, so editing the
+    preview reloads like editing a story.
+
+    Args:
+        name: Target name.
+        srcs: Everything the server reads: the config directory's files, the
+              stories and what they import, styles, assets, any vite config
+              and tsconfig it reads.
+        deps: js_library and ts_library targets the stories import by name.
+        config_dir: Storybook's config directory, relative to this package.
+                    Its main is copied rather than linked, like a vite config:
+                    node loads it by its real path, and its framework and
+                    addons must resolve through the tree here.
+        vite_config: The project's vite config, which Storybook's vite builder
+                     merges. Copied rather than linked when srcs hold it, for
+                     the reason the main is: it imports plugins by name.
+        tsconfig: The project's tsconfig. Copied rather than linked when srcs
+                  hold it, as astro_dev does, so what it extends resolves
+                  through the tree here.
+        config_deps: Anything the config imports or extends that is not in
+                     srcs.
+        node_modules: The tree the server resolves through, holding storybook.
+        env: Environment variables for the server.
+        args: Further storybook dev flags: the port (-p) most usefully.
+        visibility: Visibility specification.
+        labels: Additional labels.
+    """
+    mains = [s for s in srcs if s.startswith(config_dir + "/main.")]
+    if len(mains) != 1:
+        fail(f"storybook_dev {name}: srcs must hold exactly one {config_dir}/main.*, found {mains}")
+    main = mains[0]
+    wrap_dir = f"_{name}.storybook"
+    found = "\n".join([
+        f'const userDir = path.join(runDir, "{config_dir}");',
+        # The consumer's own files, by the names Storybook looks for in a config
+        # directory: the preview and manager modules, and the head and body
+        # fragments.
+        'const userModule = (base) => ["tsx", "ts", "jsx", "js", "mjs", "cjs"]',
+        '  .map((ext) => path.join(userDir, base + "." + ext)).find((f) => fs.existsSync(f));',
+        'const userText = (file) => fs.existsSync(path.join(userDir, file))',
+        '  ? fs.readFileSync(path.join(userDir, file), "utf8") : "";',
+        'const userPreview = userModule("preview");',
+        'const userManager = userModule("manager");',
+        # A main's preset properties are values or functions of what came before;
+        # both are honoured, and the consumer's own value applied first.
+        'const chained = async (key, value, options, extra) => {',
+        '  const own = base[key];',
+        '  const v = typeof own === "function" ? await own(value, options) : own === undefined ? value : own;',
+        '  return extra(v);',
+        '};',
+        'export default {',
+        '  ...base,',
+        '  previewAnnotations: (entries = [], options) => chained("previewAnnotations", entries, options,',
+        '    (v) => (userPreview ? [...v, userPreview] : v)),',
+        '  managerEntries: (entries = [], options) => chained("managerEntries", entries, options,',
+        '    (v) => (userManager ? [...v, userManager] : v)),',
+        '  previewHead: (head = "", options) => chained("previewHead", head, options, (v) => v + userText("preview-head.html")),',
+        '  previewBody: (body = "", options) => chained("previewBody", body, options, (v) => v + userText("preview-body.html")),',
+        '  managerHead: (head = "", options) => chained("managerHead", head, options, (v) => v + userText("manager-head.html")),',
+        '  viteFinal: async (config, options) =>',
+        '    withPlzDev(typeof base.viteFinal === "function" ? await base.viteFinal(config, options) : config),',
+        '};',
+    ])
+    wrapper = _dev_config(name, main, deps, node_modules, f"{wrap_dir}/main.mjs", "vite", found,
+                          config_import = "../" + main)
+    copied = [main] + [s for s in srcs if s in [vite_config, tsconfig]]
+    return js_binary(
+        name = name,
+        srcs = copied + [wrapper] + config_deps,
+        link_srcs = [s for s in srcs if s not in copied],
+        deps = deps,
+        node_modules = node_modules,
+        link_deps = True,
+        link_live = True,
+        runner = "storybook",
+        # --ci: no prompts and no browser opened; the version check and
+        # telemetry reach the network, which a development server for one
+        # repository has no reason to.
+        runner_args = ["dev", "--config-dir", wrap_dir, "--ci", "--no-open",
+                       "--disable-telemetry", "--no-version-updates"] + args,
+        env = env,
+        visibility = visibility,
+        labels = labels + ["storybook_dev"],
+    )
+
+
 # Where Chrome for Testing publishes each platform's headless shell, keyed by
 # Please's OS and architecture. The same CDN and names playwright-core's own
 # installer uses (lib/server/registry: cftUrl), so what this downloads is
@@ -1238,7 +1407,16 @@ function staged(rel) {
   }
 }
 
-const browserRoot = staged(PLZ_BROWSER);
+// playwright_update runs from `plz run`, where nothing is staged: the site and
+// the browser are read where Please built them, from the repository root.
+function built(out) {
+  const marker = path.sep + "plz-out" + path.sep;
+  const cwd = process.cwd();
+  if (!cwd.includes(marker)) throw new Error(`playwright_update: expected to run under plz-out, ran in ${cwd}`);
+  return path.join(cwd.slice(0, cwd.indexOf(marker)), out);
+}
+
+const browserRoot = PLZ_UPDATE ? built(PLZ_UPDATE.browser) : staged(PLZ_BROWSER);
 const [shell] = readdirSync(browserRoot).filter((d) => d.startsWith("chromium_headless_shell-"));
 if (!shell) throw new Error(`playwright_test: ${browserRoot} holds no chromium_headless_shell-<revision>`);
 const revision = shell.slice("chromium_headless_shell-".length);
@@ -1267,7 +1445,7 @@ if (!expected || expected.revision !== revision) {
 const [platformDir] = readdirSync(path.join(browserRoot, shell)).filter((d) => d.startsWith("chrome-headless-shell-"));
 const executable = path.join(browserRoot, shell, platformDir, process.platform === "win32" ? "chrome-headless-shell.exe" : "chrome-headless-shell");
 
-const PLZ = { site: staged(PLZ_SITE), executable };
+const PLZ = { site: PLZ_UPDATE ? built(PLZ_UPDATE.site) : staged(PLZ_SITE), executable };
 """
 
 # The config Playwright runs with: the app's own, with its webServer replaced
@@ -1295,6 +1473,22 @@ const launch = (use) => ({
   },
 });
 
+// Snapshots, when updating, are written where the suite reads them from: the
+// package in the repository, not this run. Every directory a snapshot path is
+// built from is made absolute there; a test leaves them alone, and reads the
+// copies staged beside its specs.
+const repoPackage = PLZ_UPDATE ? built(PLZ_UPDATE.pkg) : null;
+const snapshots = (c) => {
+  if (!repoPackage) return {};
+  const testDir = path.resolve(repoPackage, c.testDir ?? base.testDir ?? ".");
+  return {
+    snapshotDir: path.resolve(repoPackage, c.snapshotDir ?? base.snapshotDir ?? c.testDir ?? base.testDir ?? "."),
+    ...((c.snapshotPathTemplate ?? base.snapshotPathTemplate)
+      ? { snapshotPathTemplate: (c.snapshotPathTemplate ?? base.snapshotPathTemplate).replaceAll("{testDir}", testDir) }
+      : {}),
+  };
+};
+
 // Failure artifacts -- traces, screenshots, error context -- go in the run
 // directory, which Please owns, and never beside a config resolved back into
 // the repository: unsandboxed, that wrote test-results/ into the checkout.
@@ -1305,8 +1499,9 @@ export default defineConfig({
   webServer: undefined,
   globalSetup: PLZ_SETUP,
   outputDir,
+  ...snapshots(base),
   use: launch(base.use),
-  projects: (base.projects ?? []).map((p) => ({ ...p, outputDir, use: launch(p.use) })),
+  projects: (base.projects ?? []).map((p) => ({ ...p, outputDir, ...snapshots(p), use: launch(p.use) })),
 });
 """
 
@@ -1365,31 +1560,7 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
         if scheme != "http" or host not in ["localhost", "127.0.0.1"] or not port or port.lstrip("0123456789"):
             fail(f"playwright_test {name}: origin {origin} is not http://localhost:<port> or " +
                  "http://127.0.0.1:<port>; the site is served on loopback, at a port it names")
-    # Named for the target, so a package can hold several suites -- a gate and
-    # a manual one, say -- whose generated files would otherwise collide.
-    config_out = f"_pw_{name}_config.ts"
-    setup_out = f"_pw_{name}_setup.mjs"
-    files = genrule(
-        name = tag(name, "config"),
-        srcs = {"config": [config]},
-        deps = [serve],
-        outs = [config_out, setup_out],
-        # One line per step under set -e: a heredoc's terminator has to stand
-        # alone on its line, which a " && " join would break.
-        cmd = "\n".join([
-            "set -e",
-            'CONFIG_BASE=$(basename "$SRCS_CONFIG" .ts)',
-            # The config is imported by its own name, beside it in the run; the
-            # site and the browser are repository-relative, so the walk up from
-            # the run finds them.
-            "{ echo \"import user from './$CONFIG_BASE';\"; echo \"const PLZ_SITE = '$(location " + serve +
-            ")';\"; echo \"const PLZ_BROWSER = '" + _playwright_staged(browser) +
-            "';\"; echo \"const PLZ_SETUP = './" + setup_out + "';\"; echo \"const PLZ_ORIGIN = '" + origin +
-            "';\"; cat <<'PLZ_PW'\n" +
-            _PLAYWRIGHT_PATHS + "\n" + _PLAYWRIGHT_CONFIG + "\nPLZ_PW\n} > " + config_out,
-            "cat > " + setup_out + " <<'PLZ_PW'\n" + _PLAYWRIGHT_SERVER + "\n" + _PLAYWRIGHT_SETUP + "\nPLZ_PW",
-        ]),
-    )
+    files, config_out = _playwright_files(name, config, serve, browser, origin, update = False)
     return js_test(
         name = name,
         srcs = [config, files] + srcs + config_deps,
@@ -1409,6 +1580,104 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
         timeout = timeout,
         flaky = flaky,
         size = size,
+    )
+
+
+def _playwright_files(name:str, config:str, serve:str, browser:str, origin:str, update:bool):
+    """The generated Playwright config and globalSetup, for playwright_test and
+    playwright_update: the same config, but an update reads the site and the
+    browser where Please built them, and writes snapshots into the
+    repository."""
+    # Named for the target, so a package can hold several suites -- a gate and
+    # a manual one, say -- whose generated files would otherwise collide.
+    config_out = f"_pw_{name}_config.ts"
+    setup_out = f"_pw_{name}_setup.mjs"
+    update_line = ("const PLZ_UPDATE = { site: '$(out_location " + serve + ")', browser: '$(out_location " +
+                   browser + ")', pkg: '" + package_name() + "' };") if update else "const PLZ_UPDATE = null;"
+    files = genrule(
+        name = tag(name, "config"),
+        srcs = {"config": [config]},
+        deps = [serve, browser] if update else [serve],
+        outs = [config_out, setup_out],
+        # One line per step under set -e: a heredoc's terminator has to stand
+        # alone on its line, which a " && " join would break.
+        cmd = "\n".join([
+            "set -e",
+            'CONFIG_BASE=$(basename "$SRCS_CONFIG" .ts)',
+            # The config is imported by its own name, beside it in the run; the
+            # site and the browser are repository-relative, so the walk up from
+            # the run finds them.
+            "{ echo \"import user from './$CONFIG_BASE';\"; echo \"const PLZ_SITE = '$(location " + serve +
+            ")';\"; echo \"const PLZ_BROWSER = '" + _playwright_staged(browser) +
+            "';\"; echo \"const PLZ_SETUP = './" + setup_out + "';\"; echo \"const PLZ_ORIGIN = '" + origin +
+            "';\"; echo \"" + update_line + "\"; cat <<'PLZ_PW'\n" +
+            _PLAYWRIGHT_PATHS + "\n" + _PLAYWRIGHT_CONFIG + "\nPLZ_PW\n} > " + config_out,
+            "cat > " + setup_out + " <<'PLZ_PW'\n" + _PLAYWRIGHT_SERVER + "\n" + _PLAYWRIGHT_SETUP + "\nPLZ_PW",
+        ]),
+    )
+    return files, config_out
+
+
+def playwright_update(name:str, srcs:list, serve:str, config:str="playwright.config.ts",
+                      config_deps:list=[], deps:list=[], node_modules:str="", browser:str="",
+                      project:str="", origin:str="", env:dict={}, args:list=[],
+                      visibility:list=None, labels:list=[]):
+    """Re-records a Playwright suite's snapshots. `plz run` only.
+
+    The playwright_test of the same suite never writes a snapshot -- it runs in
+    CI mode, so a missing or changed one fails -- and this is the one
+    sanctioned way they change: the shape of vitest_update, for the same
+    reason. A snapshot is a source, reviewed and committed, and a build action
+    can touch neither the sources nor the network.
+
+    It runs the suite exactly as the test does -- the same generated config,
+    the same staged site, the same pinned browser -- with
+    `--update-snapshots`, and every snapshot path the config builds made
+    absolute in this package in the repository. So a screenshot recorded here
+    is one the test will compare against, taken by the browser the test uses,
+    on this platform: a config whose snapshotPathTemplate names {platform}
+    keeps each platform's baselines apart.
+
+    Args:
+        name: Target name.
+        srcs: The same spec files the playwright_test names.
+        serve: The same built site.
+        config: The same Playwright config.
+        config_deps: Anything the config imports.
+        deps: js_library and ts_library targets the specs import by name.
+        node_modules: The tree holding @playwright/test.
+        browser: A playwright_browser. Defaults to the PlaywrightBrowser config.
+        project: Re-record only this project of the config.
+        origin: As for playwright_test.
+        env: Environment variables for the run.
+        args: Further `playwright test` flags: a test name filter, most
+              usefully. Missing and changed snapshots are written; pass
+              `--update-snapshots=all` to rewrite matching ones too.
+        visibility: Visibility specification.
+        labels: Additional labels.
+    """
+    # Canonical, so $(out_location) matches the dep it names: inside this
+    # plugin's own repository ///bundler// is the repository itself.
+    browser = canonicalise(browser or CONFIG.BUNDLER.PLAYWRIGHT_BROWSER)
+    files, config_out = _playwright_files(name, config, serve, browser, origin, update = True)
+    return js_binary(
+        name = name,
+        srcs = [config, files] + srcs + config_deps,
+        # The site and the browser as deps, so `plz run` builds them first; they
+        # are read where Please built them rather than copied into the run.
+        deps = deps + [serve, browser],
+        node_modules = node_modules,
+        runner = "@playwright/test|playwright",
+        env = {"CI": "true"} | env,
+        # Later flags win, so args can widen this to all.
+        runner_args = [
+            "test",
+            "--config", config_out,
+            "--reporter=list",
+            "--update-snapshots=changed",
+        ] + (["--project", project] if project else []) + args,
+        visibility = visibility,
+        labels = labels + ["playwright_update"],
     )
 
 

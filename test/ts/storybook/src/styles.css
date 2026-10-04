@@ -1,0 +1,3 @@
+/* The preview's stylesheet, reached through "@/". */
+.storybook-css-marker { content: "STORYBOOK_CSS_MARKER"; }
+.greeting { font-family: sans-serif; }

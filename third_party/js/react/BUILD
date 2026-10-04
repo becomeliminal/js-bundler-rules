@@ -1,6 +1,13 @@
 subinclude("///js//build_defs:npm")
 
 npm_repo(
+    name = "adobe_css-tools_4.5.0",
+    hashes = ["e3fcb785c85d490882e866b885e570ed5d0ddbbea1149d4fa2d9a73c4f2247bc"],
+    pkg = "@adobe/css-tools",
+    version = "4.5.0",
+)
+
+npm_repo(
     name = "asamuzakjp_css-color_3.2.0",
     hashes = ["b65bd3770651faf0b081aad7c2b4b7d4ec575f466c4cc881313e4a3ed0a38759"],
     pkg = "@asamuzakjp/css-color",
@@ -120,17 +127,17 @@ npm_repo(
 )
 
 npm_repo(
-    name = "babel_template_7.29.7",
-    hashes = ["5e0ee28d5536e986cf5ff2da0f096fb84810d9136c2a64c6c78a6b495a0e7764"],
-    pkg = "@babel/template",
+    name = "babel_runtime_7.29.7",
+    hashes = ["4d7f1bd502a1a64d47625cc738d13284865f0666d2ed01f244de0adf05b69aa5"],
+    pkg = "@babel/runtime",
     version = "7.29.7",
 )
 
 npm_repo(
-    name = "babel_traverse_7.29.8_cfc6fa9a",
-    hashes = ["cf16861f356fd766361ba4d85d5462b6320e0e59f05cb55c762d8f5dff83e234"],
-    pkg = "@babel/traverse",
-    version = "7.29.8",
+    name = "babel_template_7.29.7",
+    hashes = ["5e0ee28d5536e986cf5ff2da0f096fb84810d9136c2a64c6c78a6b495a0e7764"],
+    pkg = "@babel/template",
+    version = "7.29.7",
 )
 
 npm_repo(
@@ -194,6 +201,48 @@ npm_repo(
     hashes = ["12ebc2d05c845306ce55b32831ba4c16a07919a8c2d24247600fff34969c1781"],
     pkg = "@discoveryjs/json-ext",
     version = "0.6.3",
+)
+
+npm_repo(
+    name = "emnapi_core_1.11.0",
+    hashes = ["6117ff73f55964dc1b9bc4f1c966d89be51d00a8d341f1f2d92c8e1360fcbb96"],
+    pkg = "@emnapi/core",
+    version = "1.11.0",
+)
+
+npm_repo(
+    name = "emnapi_core_1.9.2",
+    hashes = ["8dc203cdda258b67a7f9feba35864e65561b093598f80e88bbb37168e53bafc3"],
+    pkg = "@emnapi/core",
+    version = "1.9.2",
+)
+
+npm_repo(
+    name = "emnapi_runtime_1.11.0",
+    hashes = ["8ecbde1b116ec6f867a20c4c6d63f2e4b6327d62d34c09583a0ed792af78973b"],
+    pkg = "@emnapi/runtime",
+    version = "1.11.0",
+)
+
+npm_repo(
+    name = "emnapi_runtime_1.9.2",
+    hashes = ["f7f02074b96b17605f5636d0e2e6414201742ba450ec8305d5d4b83a0986cf31"],
+    pkg = "@emnapi/runtime",
+    version = "1.9.2",
+)
+
+npm_repo(
+    name = "emnapi_wasi-threads_1.2.1",
+    hashes = ["30e4e3be96d12edba357579ec9924b1e59333db18a18f49efdb63e531cea8bb9"],
+    pkg = "@emnapi/wasi-threads",
+    version = "1.2.1",
+)
+
+npm_repo(
+    name = "emnapi_wasi-threads_1.2.2",
+    hashes = ["bc2f73bba7ec3f0bf52da313ed1e32b73e0ba36a300c9226cdc1d21383abcba6"],
+    pkg = "@emnapi/wasi-threads",
+    version = "1.2.2",
 )
 
 npm_repo(
@@ -431,6 +480,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "joshwooding_vite-plugin-react-docgen-typescript_0.7.0_5325c5f2",
+    hashes = ["998eee51e7d4311c455adc0935df9d488dd0a7346274601b78527685bd1b522d"],
+    pkg = "@joshwooding/vite-plugin-react-docgen-typescript",
+    version = "0.7.0",
+)
+
+npm_repo(
     name = "jridgewell_gen-mapping_0.3.13",
     hashes = ["bc16f658c1f6d63e0c8738ab881d03f49f1955d8f853cdcb8f7d315cf62f0082"],
     pkg = "@jridgewell/gen-mapping",
@@ -466,10 +522,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "jridgewell_sourcemap-codec_1.6.0",
+    hashes = ["f30a35f6af8c347d01b8ff2f8662272f7d986cf21b916704d86c249a90b97e25"],
+    pkg = "@jridgewell/sourcemap-codec",
+    version = "1.6.0",
+)
+
+npm_repo(
     name = "jridgewell_trace-mapping_0.3.31",
     hashes = ["c64c71a119630d5abe8246889edf334b2ca9ddad094e20d623332956b1453ccf"],
     pkg = "@jridgewell/trace-mapping",
     version = "0.3.31",
+)
+
+npm_repo(
+    name = "mdx-js_react_3.1.1_6d74a898",
+    hashes = ["838e34d2a563f2fd6c219513e76364a914edab674ae4b12f24f7cc2dcb6d8be7"],
+    pkg = "@mdx-js/react",
+    version = "3.1.1",
 )
 
 npm_repo(
@@ -479,6 +549,376 @@ npm_repo(
     os = ["linux"],
     pkg = "@napi-rs/lzma-linux-x64-gnu",
     version = "1.5.1",
+)
+
+npm_repo(
+    name = "napi-rs_wasm-runtime_1.2.4_0adde06f",
+    hashes = ["e64c2013eba51ad6624ccf94f06c8a570c0d80488b7eabf17af2934690ccb887"],
+    pkg = "@napi-rs/wasm-runtime",
+    version = "1.2.4",
+)
+
+npm_repo(
+    name = "napi-rs_wasm-runtime_1.2.4_209b3ada",
+    hashes = ["e64c2013eba51ad6624ccf94f06c8a570c0d80488b7eabf17af2934690ccb887"],
+    pkg = "@napi-rs/wasm-runtime",
+    version = "1.2.4",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-android-arm-eabi_0.127.0",
+    cpu = ["arm"],
+    hashes = ["14e60a1caebb0dc2e96e4cd5ae6e24e0cc2c8a1065f64e79a45743853ebb81ea"],
+    os = ["android"],
+    pkg = "@oxc-parser/binding-android-arm-eabi",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-android-arm64_0.127.0",
+    cpu = ["arm64"],
+    hashes = ["f8bc226fcba3ce539b15b96a073dfe63a9b5be271a699193d007e047e759d8e5"],
+    os = ["android"],
+    pkg = "@oxc-parser/binding-android-arm64",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-darwin-arm64_0.127.0",
+    cpu = ["arm64"],
+    hashes = ["2db0aa463f72c19eaef18b7dd10baafa23e6272e4f20580ce98e55588224bb21"],
+    os = ["darwin"],
+    pkg = "@oxc-parser/binding-darwin-arm64",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-darwin-x64_0.127.0",
+    cpu = ["x64"],
+    hashes = ["c8b98a2b19963992f99e77dee011c7aa7657eaffc7acf98884292e7189b9cd47"],
+    os = ["darwin"],
+    pkg = "@oxc-parser/binding-darwin-x64",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-freebsd-x64_0.127.0",
+    cpu = ["x64"],
+    hashes = ["b5c9bb1c9be0842dcdb215a0a2aeeaf1ffc57b1c34f34166e256e77864883bab"],
+    os = ["freebsd"],
+    pkg = "@oxc-parser/binding-freebsd-x64",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-arm-gnueabihf_0.127.0",
+    cpu = ["arm"],
+    hashes = ["264a56288edf2c5a0981858f1fa24b4c5ea9b1b4906ee9ae6b358f09b7c837cb"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-arm-gnueabihf",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-arm-musleabihf_0.127.0",
+    cpu = ["arm"],
+    hashes = ["9061456cd96661968b5ca9c921b7f20d66c5633f416ff45b00f3b8b5b82feece"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-arm-musleabihf",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-arm64-gnu_0.127.0",
+    cpu = ["arm64"],
+    hashes = ["f16cd9e11b1c16b73b3a61d5d8f9cb9e396f2f4e1a71f4eeca2b4b31dfa3fa51"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-arm64-gnu",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-arm64-musl_0.127.0",
+    cpu = ["arm64"],
+    hashes = ["85d03ac7386af79368fb32eb5b943fb6b45fcced707e138453e4738263ea8022"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-arm64-musl",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-ppc64-gnu_0.127.0",
+    cpu = ["ppc64"],
+    hashes = ["7f9cd2e36248a1ce83e5f3cdb9fdbc7ab74f432474c382128a7a76987234d159"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-ppc64-gnu",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-riscv64-gnu_0.127.0",
+    cpu = ["riscv64"],
+    hashes = ["9b46b9bea81164a3304fcb6f1df932b11adbf8e8b901533c4024c0628695cbce"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-riscv64-gnu",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-riscv64-musl_0.127.0",
+    cpu = ["riscv64"],
+    hashes = ["a0a1c17a86b6f6582e7ad8090a4254c036866d6130d14d2577c302ef3111a66d"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-riscv64-musl",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-s390x-gnu_0.127.0",
+    cpu = ["s390x"],
+    hashes = ["dfe672b04dfad742a32e8f89780806c3e0056acc634263a8e69c4c76b09ebb13"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-s390x-gnu",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-x64-gnu_0.127.0",
+    cpu = ["x64"],
+    hashes = ["2874538b47e5f37fe6cee8d5ad73931aaa8ca7ce0c8661f7070d1c6ba80cdfa3"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-x64-gnu",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-linux-x64-musl_0.127.0",
+    cpu = ["x64"],
+    hashes = ["e15d61abb398a6b28fa94d4ffe05e4651f88a33e15c5c0df336a3e3c69140e52"],
+    os = ["linux"],
+    pkg = "@oxc-parser/binding-linux-x64-musl",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-openharmony-arm64_0.127.0",
+    cpu = ["arm64"],
+    hashes = ["7abd34e09b56c1c580f740b89a1704c831baaaaffc07f8d1d59182f513bb0735"],
+    os = ["openharmony"],
+    pkg = "@oxc-parser/binding-openharmony-arm64",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-wasm32-wasi_0.127.0",
+    cpu = ["wasm32"],
+    hashes = ["43fbfe0ed007080fdbe40e247ec5e3fbe121c43911e0466cd251e1d98d7a74a9"],
+    pkg = "@oxc-parser/binding-wasm32-wasi",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-win32-arm64-msvc_0.127.0",
+    cpu = ["arm64"],
+    hashes = ["266a1edaf211d53631af27af09596de9b26dce3ed60e54b4d5912201d55cee10"],
+    os = ["win32"],
+    pkg = "@oxc-parser/binding-win32-arm64-msvc",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-win32-ia32-msvc_0.127.0",
+    cpu = ["ia32"],
+    hashes = ["7f81682eb0bf33522eee9f95ba8fa5569884945ba8b7ed9190af859e7182aa20"],
+    os = ["win32"],
+    pkg = "@oxc-parser/binding-win32-ia32-msvc",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-parser_binding-win32-x64-msvc_0.127.0",
+    cpu = ["x64"],
+    hashes = ["2839dbd106b9b716ea99880a8648aaa6a49e6e20d4e553e1f7da2cbb1ba01664"],
+    os = ["win32"],
+    pkg = "@oxc-parser/binding-win32-x64-msvc",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-project_types_0.127.0",
+    hashes = ["fe4d030cbc8e25e6cf09af400fa4c6a834501d144c046943434a5b999d954753"],
+    pkg = "@oxc-project/types",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-android-arm-eabi_11.21.2",
+    cpu = ["arm"],
+    hashes = ["89a94f42633ef55885319acb2c7211115d62836268759fc63ff31d4838ead0d0"],
+    os = ["android"],
+    pkg = "@oxc-resolver/binding-android-arm-eabi",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-android-arm64_11.21.2",
+    cpu = ["arm64"],
+    hashes = ["6fd5bbed9058c0a142a1754c52cf668ec5f5e77f3a4ae4bbb069fd8fdd932d8c"],
+    os = ["android"],
+    pkg = "@oxc-resolver/binding-android-arm64",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-darwin-arm64_11.21.2",
+    cpu = ["arm64"],
+    hashes = ["dc35c075431b1700e154850412d090533b933c9911acaac5ca8c5d11fd880c1d"],
+    os = ["darwin"],
+    pkg = "@oxc-resolver/binding-darwin-arm64",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-darwin-x64_11.21.2",
+    cpu = ["x64"],
+    hashes = ["5b3053dc91e2be7d3705ee49d2c742138512bbc605e20097166b75d92927b86a"],
+    os = ["darwin"],
+    pkg = "@oxc-resolver/binding-darwin-x64",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-freebsd-x64_11.21.2",
+    cpu = ["x64"],
+    hashes = ["16cd3a8bfc991bd2ef0f46d0df24071f20dd96d5164d0d0d66e8129cfb26f4b5"],
+    os = ["freebsd"],
+    pkg = "@oxc-resolver/binding-freebsd-x64",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-arm-gnueabihf_11.21.2",
+    cpu = ["arm"],
+    hashes = ["80c63d317ce412c748e3fbafd31f9e94ad670e095ae0228d77470baf263e779d"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-arm-gnueabihf",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-arm-musleabihf_11.21.2",
+    cpu = ["arm"],
+    hashes = ["8d5a233f75d06bbe9a7b48a51ba156a099d574ad9b5f4b34ea628c95da76fc96"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-arm-musleabihf",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-arm64-gnu_11.21.2",
+    cpu = ["arm64"],
+    hashes = ["0636e20316d0d581cbfad085e49ab3d0916033127927a19c04233125841a9ce0"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-arm64-gnu",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-arm64-musl_11.21.2",
+    cpu = ["arm64"],
+    hashes = ["ba7211d2fca0a285375a1bd969899dff2a7a3f1a8fc6097ee479eabb9a97fb4a"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-arm64-musl",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-ppc64-gnu_11.21.2",
+    cpu = ["ppc64"],
+    hashes = ["5fc688f30ea8fe1ef7f1afdc6dc30e90bc3d71fe01306538652c74555f99d385"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-ppc64-gnu",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-riscv64-gnu_11.21.2",
+    cpu = ["riscv64"],
+    hashes = ["05a1c09a5ce5c2128cc795b9e288b50f5398a31cf3a5373cb026ba07cba1fae2"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-riscv64-gnu",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-riscv64-musl_11.21.2",
+    cpu = ["riscv64"],
+    hashes = ["af71cd42dbb61d47ef694226f4b5381be6435d3bcb109776b9f617b9fa7dc4df"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-riscv64-musl",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-s390x-gnu_11.21.2",
+    cpu = ["s390x"],
+    hashes = ["cbe7301b0cb4cd79cdf959d189763dd65d38c43288506efcc8e35e82b4608699"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-s390x-gnu",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-x64-gnu_11.21.2",
+    cpu = ["x64"],
+    hashes = ["10f289725c1b1d9d5d8eebdcbcbf3e4612817aedb4d63312bf6aedc187ad0ff9"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-x64-gnu",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-linux-x64-musl_11.21.2",
+    cpu = ["x64"],
+    hashes = ["66e7b8ca120d78e7d357a843e0b70c911b7ce9fba169371e14eb50fe6d13468c"],
+    os = ["linux"],
+    pkg = "@oxc-resolver/binding-linux-x64-musl",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-openharmony-arm64_11.21.2",
+    cpu = ["arm64"],
+    hashes = ["5bf652f4875c4393c8948be21509602bbe3bc3f327c061c95c711189d184b880"],
+    os = ["openharmony"],
+    pkg = "@oxc-resolver/binding-openharmony-arm64",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-wasm32-wasi_11.21.2",
+    cpu = ["wasm32"],
+    hashes = ["0b42d1dd0bafb489decc877d75b38288ecafebcae78441ae3dcc57181ec8ade9"],
+    pkg = "@oxc-resolver/binding-wasm32-wasi",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-win32-arm64-msvc_11.21.2",
+    cpu = ["arm64"],
+    hashes = ["2dd69604a47da8dc60e63d967a4e2953ce312c880ffa8c5539ae52fdbb48cde4"],
+    os = ["win32"],
+    pkg = "@oxc-resolver/binding-win32-arm64-msvc",
+    version = "11.21.2",
+)
+
+npm_repo(
+    name = "oxc-resolver_binding-win32-x64-msvc_11.21.2",
+    cpu = ["x64"],
+    hashes = ["4e588ef84cea068eca726bbb4e452e9a67da74404e63a7b9ccab91cd2c9a4b08"],
+    os = ["win32"],
+    pkg = "@oxc-resolver/binding-win32-x64-msvc",
+    version = "11.21.2",
 )
 
 npm_repo(
@@ -742,6 +1182,90 @@ npm_repo(
 )
 
 npm_repo(
+    name = "storybook_addon-docs_10.6.1_e9462adb",
+    hashes = ["0d1bf00350b0d57a9c1f27aa1aba6718cbaf724eb4206fd686823bfbb263b17d"],
+    pkg = "@storybook/addon-docs",
+    version = "10.6.1",
+)
+
+npm_repo(
+    name = "storybook_builder-vite_10.6.1_86e9329c",
+    hashes = ["e1bea159c6a779fc33867dba421b729af53d49c35f4e2a6212ec7c23f2dc262d"],
+    pkg = "@storybook/builder-vite",
+    version = "10.6.1",
+)
+
+npm_repo(
+    name = "storybook_global_5.0.0",
+    hashes = ["2f433837f392aa881bf81d70b7868b5618e091cfeaca416f89b862a6b3ba1cae"],
+    pkg = "@storybook/global",
+    version = "5.0.0",
+)
+
+npm_repo(
+    name = "storybook_icons_2.1.0_6cb25bb6",
+    hashes = ["8d9db35b0d27c3c067f0d2318eff24fbcc7102505e01403dc84f73c685975489"],
+    pkg = "@storybook/icons",
+    version = "2.1.0",
+)
+
+npm_repo(
+    name = "storybook_react-dom-shim_10.6.1_dd2910dd",
+    hashes = ["f71bd72669de1b8ce4042aa89c9d661c870657ae3d1cd28c7dc1cc4f95b0f920"],
+    pkg = "@storybook/react-dom-shim",
+    version = "10.6.1",
+)
+
+npm_repo(
+    name = "storybook_react-vite_10.6.1_158dc745",
+    hashes = ["c8a7125fbb808f0651d995fe53c7c50f14fc44a535924a548ef57e1d2271db2d"],
+    pkg = "@storybook/react-vite",
+    version = "10.6.1",
+)
+
+npm_repo(
+    name = "storybook_react_10.6.1_2added35",
+    hashes = ["4c3b633a586a9d057a8ef4dc37214640fd3c90d84451e7fe65fa320ba96a3897"],
+    pkg = "@storybook/react",
+    version = "10.6.1",
+)
+
+npm_repo(
+    name = "testing-library_dom_10.4.2",
+    hashes = ["6a45d85a68c45ab36768f4b58875081903f47daf1313b4d7433c380f706d9c54"],
+    pkg = "@testing-library/dom",
+    version = "10.4.2",
+)
+
+npm_repo(
+    name = "testing-library_jest-dom_6.9.1",
+    hashes = ["ee52ab258e9599f6ad914dc28c95f4f53aae23973ebf568976e067d25aee69b1"],
+    pkg = "@testing-library/jest-dom",
+    version = "6.9.1",
+)
+
+npm_repo(
+    name = "testing-library_user-event_14.6.7_c19bd22f",
+    hashes = ["9dc44924eca3c29c8d94b416eaa5cefa8d41d1a27b303fbc093c415e5c0b557a"],
+    pkg = "@testing-library/user-event",
+    version = "14.6.7",
+)
+
+npm_repo(
+    name = "tybys_wasm-util_0.10.4",
+    hashes = ["c6293ce0ae57dbf718723df204f014f6e6285cefc2fee51ea65fe8cac5eef0a0"],
+    pkg = "@tybys/wasm-util",
+    version = "0.10.4",
+)
+
+npm_repo(
+    name = "types_aria-query_5.0.4",
+    hashes = ["d454704bef5203e528f79d2f231b08baf415b151cbdb1ed70fb07a29b14ba6c8"],
+    pkg = "@types/aria-query",
+    version = "5.0.4",
+)
+
+npm_repo(
     name = "types_babel_core_7.20.5",
     hashes = ["1865223be6b834c44abf5ebedafb1707019b4941be8021469980c7ef4c2e1155"],
     pkg = "@types/babel__core",
@@ -784,6 +1308,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "types_doctrine_0.0.9",
+    hashes = ["30daa25047dd7ce1a4abc45e483c5dcbe5c48ca398eb5f9a1ce7302ad18aa4c1"],
+    pkg = "@types/doctrine",
+    version = "0.0.9",
+)
+
+npm_repo(
     name = "types_estree_1.0.9",
     hashes = ["ec8f3c0dfb21497db5a3480c45a6cf6f9b18d3b337b2ea4d03e3ef2a9c2bb358"],
     pkg = "@types/estree",
@@ -795,6 +1326,13 @@ npm_repo(
     hashes = ["12dcb1dcff7099bff0663fc220551ba53fcf23c136a22375e323bb6626d95724"],
     pkg = "@types/json-schema",
     version = "7.0.15",
+)
+
+npm_repo(
+    name = "types_mdx_2.0.14",
+    hashes = ["20c26e1c168ee8e2e6e09b6c7d20c0b020edfa46c9c4e846075d07f5115a3c96"],
+    pkg = "@types/mdx",
+    version = "2.0.14",
 )
 
 npm_repo(
@@ -840,6 +1378,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "vitest_expect_3.2.4",
+    hashes = ["dd259b1c520933a42375e2353c0d5b3d983f947d8650306060b16256d06d12c6"],
+    pkg = "@vitest/expect",
+    version = "3.2.4",
+)
+
+npm_repo(
     name = "vitest_expect_4.1.11",
     hashes = ["503d668851ce760fb60bb2b4681452089d8658a5fbd2b1f626dece4c1fbcc57f"],
     pkg = "@vitest/expect",
@@ -851,6 +1396,13 @@ npm_repo(
     hashes = ["5f42c3959636909c506885ef643f4a4e4d024bd7939934465f280c42164eb142"],
     pkg = "@vitest/mocker",
     version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_pretty-format_3.2.4",
+    hashes = ["7fe0e0a8763935b065ce97e0038e0a279b0f9bae05cb58f9340c9e33caa5e255"],
+    pkg = "@vitest/pretty-format",
+    version = "3.2.4",
 )
 
 npm_repo(
@@ -875,10 +1427,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "vitest_spy_3.2.4",
+    hashes = ["d630d88641a84963ae00b4071cdf29fa210e270a175d4fb79c4d3e9811cac805"],
+    pkg = "@vitest/spy",
+    version = "3.2.4",
+)
+
+npm_repo(
     name = "vitest_spy_4.1.11",
     hashes = ["9b15875da96e769a19b3c9e2c316459528c57b9c20168c5abaa1ce050b7c8490"],
     pkg = "@vitest/spy",
     version = "4.1.11",
+)
+
+npm_repo(
+    name = "vitest_utils_3.2.4",
+    hashes = ["24b9d45a802d27c5a3206866219c9ffa4338d76f057b4b16b1714470028aa495"],
+    pkg = "@vitest/utils",
+    version = "3.2.4",
 )
 
 npm_repo(
@@ -994,6 +1560,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "webcontainer_env_1.1.1",
+    hashes = ["6f8e1c623a9dadc72f13d7b48f32afc846c03c97b67362adddd6052a960d9706"],
+    pkg = "@webcontainer/env",
+    version = "1.1.1",
+)
+
+npm_repo(
     name = "webpack-cli_configtest_3.0.1_b867fa0e",
     hashes = ["b13ab4b4aed51382b61077959876f5e5d8c584e9d354439e5c2da4e39535a4b0"],
     pkg = "@webpack-cli/configtest",
@@ -1064,10 +1637,45 @@ npm_repo(
 )
 
 npm_repo(
+    name = "ansi-regex_5.0.1",
+    hashes = ["0e0eadcdaada805db5d85b53ad5cdca0760b996ee199ec9658e7b34aa6c8e0d9"],
+    pkg = "ansi-regex",
+    version = "5.0.1",
+)
+
+npm_repo(
+    name = "ansi-styles_5.2.0",
+    hashes = ["4ddd9360421279bb2c2c4ba91bc41a5515663223432d09158f9e3805f9d4a05f"],
+    pkg = "ansi-styles",
+    version = "5.2.0",
+)
+
+npm_repo(
+    name = "aria-query_5.3.0",
+    hashes = ["ca306d730a68a8402edebcb32d27069fee3142a9fbfabeba37e1b3558d235c92"],
+    pkg = "aria-query",
+    version = "5.3.0",
+)
+
+npm_repo(
+    name = "aria-query_5.3.2",
+    hashes = ["62691953222d8acef97db2daa0e84adedc8eb6b074c33ec02367291a32e4ad37"],
+    pkg = "aria-query",
+    version = "5.3.2",
+)
+
+npm_repo(
     name = "assertion-error_2.0.1",
     hashes = ["73f4a5b3c9b38e4f3123188d4d85a7933ee5fe2f77f8ff04e8867b0938c20f56"],
     pkg = "assertion-error",
     version = "2.0.1",
+)
+
+npm_repo(
+    name = "ast-types_0.16.3",
+    hashes = ["1b31ce3d1c2e3e1e1f99f011f25fc25b1d84295c60a9eb94bbceddcb1f418b0a"],
+    pkg = "ast-types",
+    version = "0.16.3",
 )
 
 npm_repo(
@@ -1078,10 +1686,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "balanced-match_4.0.4",
+    hashes = ["9025508d9125eee531bbc49ce3ae560183975ad595f058c378bd56af4152fb16"],
+    pkg = "balanced-match",
+    version = "4.0.4",
+)
+
+npm_repo(
     name = "baseline-browser-mapping_2.11.18",
     hashes = ["e22e803ab76c0aafddff84f220cf8d6a82923059c3563ad61964da9a27bb1db2"],
     pkg = "baseline-browser-mapping",
     version = "2.11.18",
+)
+
+npm_repo(
+    name = "brace-expansion_5.0.12",
+    hashes = ["ef8448ec78f20b692f04fa6d01f39b5ab34c66404bea3429f5a39c6c9e0be8b4"],
+    pkg = "brace-expansion",
+    version = "5.0.12",
 )
 
 npm_repo(
@@ -1099,6 +1721,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "bundle-name_4.1.1",
+    hashes = ["f6100d53bf456b81a380c824e7e3fbfe70357f2d6bde9c7de24a9d9ce39836da"],
+    pkg = "bundle-name",
+    version = "4.1.1",
+)
+
+npm_repo(
     name = "caniuse-lite_1.0.30001809",
     hashes = ["31aa93f13ffd7fef90b767b1b33f92dc251b4578f17764a44a72ba759528364d"],
     pkg = "caniuse-lite",
@@ -1106,10 +1735,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "chai_5.3.3",
+    hashes = ["b842b0c79ca60a407e883e7f740049552dc402e6c8019ffffc058868c554f00f"],
+    pkg = "chai",
+    version = "5.3.3",
+)
+
+npm_repo(
     name = "chai_6.2.2",
     hashes = ["702cd574375345c56198e96b52f55abeb445cd73a52cf7f9ee0d57bba4055b58"],
     pkg = "chai",
     version = "6.2.2",
+)
+
+npm_repo(
+    name = "check-error_2.1.3",
+    hashes = ["8e249638e449af571a62783cbc6686fe2defba14f2d6ee59a60168b5379d6df0"],
+    pkg = "check-error",
+    version = "2.1.3",
 )
 
 npm_repo(
@@ -1169,6 +1812,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "css.escape_1.5.1",
+    hashes = ["e65c27021c84ff3339ce6fa82c29f0a972801ac23d60ad39a4fc5e3ac381e22e"],
+    pkg = "css.escape",
+    version = "1.5.1",
+)
+
+npm_repo(
     name = "cssstyle_4.6.0",
     hashes = ["c3698bac3074af4449a75345eabc31d5b43fdeb8267cffe0b2907c196fde5929"],
     pkg = "cssstyle",
@@ -1211,6 +1861,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "deep-eql_5.0.2",
+    hashes = ["471837e36a6201c15358852a0daae74af017d6d5e3f6c1c66109f261aa292f36"],
+    pkg = "deep-eql",
+    version = "5.0.2",
+)
+
+npm_repo(
     name = "deepmerge_4.3.1",
     hashes = ["4003a0a348276a95543fa969f561f6b5968629acbbb59d66018dd23e7b8f1d5c"],
     pkg = "deepmerge",
@@ -1218,10 +1875,66 @@ npm_repo(
 )
 
 npm_repo(
+    name = "default-browser-id_5.0.1",
+    hashes = ["3c94fbe0d90b610de6dc068180c780cbb7ef0ade6d2f3a7b5401f99f215d7429"],
+    pkg = "default-browser-id",
+    version = "5.0.1",
+)
+
+npm_repo(
+    name = "default-browser_5.5.1",
+    hashes = ["221997185065b746a870ddd6f1ed85aaeeaf666183ee927d0ab9a6fe29f1be26"],
+    pkg = "default-browser",
+    version = "5.5.1",
+)
+
+npm_repo(
+    name = "define-lazy-prop_3.0.0",
+    hashes = ["bbe9fe67a229c64ff9b8c77ace12278e2d44048a2a5af96e5fc95abbc94c49b5"],
+    pkg = "define-lazy-prop",
+    version = "3.0.0",
+)
+
+npm_repo(
+    name = "dequal_2.0.3",
+    hashes = ["941d90d6629878167d10d2a05d8c6df8f8fa13acc826616abb49db63ac6a5c35"],
+    pkg = "dequal",
+    version = "2.0.3",
+)
+
+npm_repo(
+    name = "doctrine_3.0.0",
+    hashes = ["1004df8845f9c26d6644e4d9bf1076a3d4ff758690c81ee9f485dbf9c8571d20"],
+    pkg = "doctrine",
+    version = "3.0.0",
+)
+
+npm_repo(
+    name = "dom-accessibility-api_0.5.16",
+    hashes = ["ce667877c3a310462a9c43b1f75dba6c49c0f509a9f34f9546f15b91fa5bb828"],
+    pkg = "dom-accessibility-api",
+    version = "0.5.16",
+)
+
+npm_repo(
+    name = "dom-accessibility-api_0.6.3",
+    hashes = ["90bce27325f3cfedad2acd0dc83b39b69989d437d2342d7b5419b49768a99031"],
+    pkg = "dom-accessibility-api",
+    version = "0.6.3",
+)
+
+npm_repo(
     name = "electron-to-chromium_1.5.413",
     hashes = ["96e255b15164c62d79746c87b0610b8ac11fab43c8f5abaa7828c46bdd163c5c"],
     pkg = "electron-to-chromium",
     version = "1.5.413",
+)
+
+npm_repo(
+    name = "empathic_2.1.0",
+    hashes = ["8f2f5d2aba4ca39b4bf16ee4a07380c2b4c1b01eb5273d471417cd2b96decffa"],
+    pkg = "empathic",
+    version = "2.1.0",
 )
 
 npm_repo(
@@ -1281,6 +1994,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "esprima_4.0.1",
+    hashes = ["d8a1910e9cbecc95b4c5df75376c46a7a9261859c294ef91505c1442e093cc74"],
+    pkg = "esprima",
+    version = "4.0.1",
+)
+
+npm_repo(
     name = "esrecurse_4.3.0",
     hashes = ["3ecf9370d7296b47b570c88a11f70b35bb965af8d536536b259eb55f9b793b61"],
     pkg = "esrecurse",
@@ -1313,6 +2033,13 @@ npm_repo(
     hashes = ["bbbdfdc16cd9ef099e474f55a4aa344103c01853727136a76ee165fa9d1c72b3"],
     pkg = "estree-walker",
     version = "3.0.3",
+)
+
+npm_repo(
+    name = "esutils_2.0.3",
+    hashes = ["c5adbd730a495a3c635bbae9ee5f693b95c7e13b395f7036efab8232c5f0640f"],
+    pkg = "esutils",
+    version = "2.0.3",
 )
 
 npm_repo(
@@ -1394,6 +2121,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "glob_13.0.6",
+    hashes = ["020f184fa9c4e2905cf33c3d1dbba4b25a58e05f6f785f81cc931394e07b8970"],
+    pkg = "glob",
+    version = "13.0.6",
+)
+
+npm_repo(
     name = "graceful-fs_4.2.11",
     hashes = ["3961374aa161e6fed80d6f4b6aaf2fb7eafd2c9e5be34e865b375f0114dd099c"],
     pkg = "graceful-fs",
@@ -1457,6 +2191,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "indent-string_4.0.0",
+    hashes = ["bc6b74d3d74eb341c8b590c697c7fcd259c6fd1223c4b44dbfb11887ce9842a0"],
+    pkg = "indent-string",
+    version = "4.0.0",
+)
+
+npm_repo(
     name = "interpret_3.1.1",
     hashes = ["898eea4a6546a9d63c3e884af02dbdcebbe8df5b8b196c19daefd9b42321cc4f"],
     pkg = "interpret",
@@ -1468,6 +2209,20 @@ npm_repo(
     hashes = ["e2f933640de144ca2e96d754b51b1fd6b96e2ad44e72eeffce17aa24436a41b3"],
     pkg = "is-core-module",
     version = "2.16.2",
+)
+
+npm_repo(
+    name = "is-docker_3.0.0",
+    hashes = ["1a230b0b25c81eff06bdee3856a742fd17260169b0bf958de9368c4b3ce2ddee"],
+    pkg = "is-docker",
+    version = "3.0.0",
+)
+
+npm_repo(
+    name = "is-inside-container_1.0.0",
+    hashes = ["dbde95b8434fc4757624974d4139c4f32391d08c4153565ae91a5f3fd772e07b"],
+    pkg = "is-inside-container",
+    version = "1.0.0",
 )
 
 npm_repo(
@@ -1489,6 +2244,13 @@ npm_repo(
     hashes = ["b6e425bb136422af133754814046a640c1573349755c63130c424abcee398621"],
     pkg = "is-potential-custom-element-name",
     version = "1.0.1",
+)
+
+npm_repo(
+    name = "is-wsl_3.1.1",
+    hashes = ["f0f93f9796c2e768a487a35bbe8f96c0b703edeb01add088686ba91a72b92eb2"],
+    pkg = "is-wsl",
+    version = "3.1.1",
 )
 
 npm_repo(
@@ -1576,6 +2338,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "jsonc-parser_3.3.1",
+    hashes = ["4a0315b8671e7463bae7af7c142cdf19e9aa7ba39eb36dc2df383b8648e3cbc9"],
+    pkg = "jsonc-parser",
+    version = "3.3.1",
+)
+
+npm_repo(
     name = "kind-of_6.0.3",
     hashes = ["6c24443b5b6ca52d3dce399c1e2c27c4591c7529765513eeaa0c265b0c0e63da"],
     pkg = "kind-of",
@@ -1590,10 +2359,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "loupe_3.2.1",
+    hashes = ["af8dbefd220eb7890b48e9b31f5b377ba0eb1ea37b0ffbd0dd5a181d2862f637"],
+    pkg = "loupe",
+    version = "3.2.1",
+)
+
+npm_repo(
     name = "lru-cache_10.4.3",
     hashes = ["0ea17b527beaaaac504ea7a7aaab90db0581dc9a2e117bfbdba44789f15496ed"],
     pkg = "lru-cache",
     version = "10.4.3",
+)
+
+npm_repo(
+    name = "lru-cache_11.5.3",
+    hashes = ["d18739bbd7d0091d30d2cca58e120c8b70ac09a5a21aa4b2b3e9afb2dc4084d8"],
+    pkg = "lru-cache",
+    version = "11.5.3",
 )
 
 npm_repo(
@@ -1604,10 +2387,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "lz-string_1.5.0",
+    hashes = ["ad640cf79fc54bc8035a66edd33974f1334db9ba079c8b845f13e5d54c5e011b"],
+    pkg = "lz-string",
+    version = "1.5.0",
+)
+
+npm_repo(
     name = "magic-string_0.30.21",
     hashes = ["fa49762567dca44e8ccf327f365d250e04c482bf7a4ed0ae7d03659b09ac656f"],
     pkg = "magic-string",
     version = "0.30.21",
+)
+
+npm_repo(
+    name = "magic-string_1.4.2",
+    hashes = ["15787df3842a47f08abe2c0c82a413b4107ed99e44981a380491b6919e3e5291"],
+    pkg = "magic-string",
+    version = "1.4.2",
 )
 
 npm_repo(
@@ -1639,10 +2436,38 @@ npm_repo(
 )
 
 npm_repo(
+    name = "min-indent_1.0.1",
+    hashes = ["e8a7c0aece6d8a4e5552a897057b0f9d58eac932eb2b0dfab559bbf9caca0767"],
+    pkg = "min-indent",
+    version = "1.0.1",
+)
+
+npm_repo(
+    name = "minimatch_10.2.6",
+    hashes = ["5a3d2c8074a28229665727e47b8a1090941856a7962905efe05d20d3760355f8"],
+    pkg = "minimatch",
+    version = "10.2.6",
+)
+
+npm_repo(
+    name = "minimist_1.2.8",
+    hashes = ["350a76c115b393c19d24654834261e5dc9f0e8cc5e08f3937fa80140f3e4ce83"],
+    pkg = "minimist",
+    version = "1.2.8",
+)
+
+npm_repo(
     name = "minimizer-webpack-plugin_5.6.1_324e53ab",
     hashes = ["553bcf0e868d13b6e6482ce0b5cf8298a90c7c11494ec0dd6a574beaef96dac2"],
     pkg = "minimizer-webpack-plugin",
     version = "5.6.1",
+)
+
+npm_repo(
+    name = "minipass_7.1.3",
+    hashes = ["52ac61be743755e3fdc98e560086d0d4a1e2c7fd3643387792db38e322d27d12"],
+    pkg = "minipass",
+    version = "7.1.3",
 )
 
 npm_repo(
@@ -1685,6 +2510,27 @@ npm_repo(
     hashes = ["87618f4dd0510e47759d5527a34c05aae0752c5aef8417e30898a8db4afb5375"],
     pkg = "obug",
     version = "2.1.4",
+)
+
+npm_repo(
+    name = "open_10.2.0",
+    hashes = ["b5b60d1271802682a5c8e0ed1cc8e825d3be7fd610afaaf3d4d8ce799e825be9"],
+    pkg = "open",
+    version = "10.2.0",
+)
+
+npm_repo(
+    name = "oxc-parser_0.127.0",
+    hashes = ["b831239904128a3bda87cef97dfe8f87c9cff544635f030cbca04bb5601f27d6"],
+    pkg = "oxc-parser",
+    version = "0.127.0",
+)
+
+npm_repo(
+    name = "oxc-resolver_11.21.2",
+    hashes = ["aa825f9457600a5eaef62bcf88863515a9cce713604c7931ce65bf743ce3c0c7"],
+    pkg = "oxc-resolver",
+    version = "11.21.2",
 )
 
 npm_repo(
@@ -1737,10 +2583,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "path-scurry_2.0.2",
+    hashes = ["dea3e3dab1c00c28fcb5871b1133b02050c7e110dde2dbe31e14067922c23ec1"],
+    pkg = "path-scurry",
+    version = "2.0.2",
+)
+
+npm_repo(
     name = "pathe_2.0.3",
     hashes = ["6e3b73bc5dbb7f8a108ff5d8459b07da04062e822c662339416525510696df36"],
     pkg = "pathe",
     version = "2.0.3",
+)
+
+npm_repo(
+    name = "pathval_2.0.1",
+    hashes = ["af089e2e7a104703a2e59d1f35f785b69381ba4d13a60ca9fb53820cb6bf3a7c"],
+    pkg = "pathval",
+    version = "2.0.1",
 )
 
 npm_repo(
@@ -1786,6 +2646,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "pretty-format_27.5.1",
+    hashes = ["f90be2c91dc52176e383b2fbf706f9c938bb6022f823ec7a45bdff3347a34103"],
+    pkg = "pretty-format",
+    version = "27.5.1",
+)
+
+npm_repo(
     name = "punycode_2.3.1",
     hashes = ["e4ce59f9fbac44349abab87279ab658f6b4614916bec5e088ae3be9323e193bb"],
     pkg = "punycode",
@@ -1793,10 +2660,31 @@ npm_repo(
 )
 
 npm_repo(
+    name = "react-docgen-typescript_2.4.0_e540abfa",
+    hashes = ["40c4fdb0d436472bb31746f6b8fd36b41e721a221c0f45aa569cfd991e92dacf"],
+    pkg = "react-docgen-typescript",
+    version = "2.4.0",
+)
+
+npm_repo(
+    name = "react-docgen_8.0.4_5b645c40",
+    hashes = ["3b0907bf28827927ee5c9bebad08467f7afed92cb174da2f9ff4f16294f9076e"],
+    pkg = "react-docgen",
+    version = "8.0.4",
+)
+
+npm_repo(
     name = "react-dom_19.1.1_6cb25bb6",
     hashes = ["d72ebd28017f0ccfee96e4c3d9b2f69a0ab8109edfd51f17316a1fd68bd0bdd8"],
     pkg = "react-dom",
     version = "19.1.1",
+)
+
+npm_repo(
+    name = "react-is_17.0.2",
+    hashes = ["9b1850c05b4fc08e9b814a201281a103a7651ac46500dce7b6bedd0865963eb1"],
+    pkg = "react-is",
+    version = "17.0.2",
 )
 
 npm_repo(
@@ -1821,10 +2709,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "recast_0.23.21",
+    hashes = ["d38fe64eddf28bc2581c61a0496476ee31ca5377b15cb671f6ca2805e4d01b19"],
+    pkg = "recast",
+    version = "0.23.21",
+)
+
+npm_repo(
     name = "rechoir_0.8.0",
     hashes = ["6a9af1f7c2693a1b0d7824812b4db95f02367764bb2601f40bbdaf731b7a8d67"],
     pkg = "rechoir",
     version = "0.8.0",
+)
+
+npm_repo(
+    name = "redent_3.0.0",
+    hashes = ["d8d324d73d21b0847b7b22936e23685a1b27e25ca1c1566861be00134f5f2896"],
+    pkg = "redent",
+    version = "3.0.0",
 )
 
 npm_repo(
@@ -1867,6 +2769,13 @@ npm_repo(
     hashes = ["6b975deba1561fbc7c6ce1e3982e354e958a34cc36097491083b472c8a922370"],
     pkg = "rrweb-cssom",
     version = "0.8.0",
+)
+
+npm_repo(
+    name = "run-applescript_7.1.0",
+    hashes = ["d29ace7117aaa0d6b119027e9a157c238e6899bbb35d03f508ae8d4fa9ca8c9d"],
+    pkg = "run-applescript",
+    version = "7.1.0",
 )
 
 npm_repo(
@@ -1982,6 +2891,34 @@ npm_repo(
 )
 
 npm_repo(
+    name = "storybook_10.6.1_6d74a898",
+    hashes = ["2ccbd714122302f34f9223b589e9a97dd6dc72731a1c9dcaead14fe3f6a15387"],
+    pkg = "storybook",
+    version = "10.6.1",
+)
+
+npm_repo(
+    name = "strip-bom_3.0.0",
+    hashes = ["48094c11a1f7faa867eb6919c09380232ce9b6d61fb3c43618ca6235b6013ee2"],
+    pkg = "strip-bom",
+    version = "3.0.0",
+)
+
+npm_repo(
+    name = "strip-indent_3.0.0",
+    hashes = ["e5957205b9664935858a2d2e2049118bf577b3afa64a83d513b99184ee7c247f"],
+    pkg = "strip-indent",
+    version = "3.0.0",
+)
+
+npm_repo(
+    name = "strip-indent_4.1.1",
+    hashes = ["d497fcbb11bb4a3f07b4e74d5de4ef2ed7deef7402e6fd740ed9895536d1a026"],
+    pkg = "strip-indent",
+    version = "4.1.1",
+)
+
+npm_repo(
     name = "supports-color_7.2.0",
     hashes = ["f16acafd1634624e60c24a5538004c4e168c82607f10dbe28395e9df3e7d5e4a"],
     pkg = "supports-color",
@@ -2024,6 +2961,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "tiny-invariant_1.3.3",
+    hashes = ["746a0b1c98dafa3f96769e200a23fd10dacece300b312d111d19bb65c85c3d48"],
+    pkg = "tiny-invariant",
+    version = "1.3.3",
+)
+
+npm_repo(
     name = "tinybench_2.9.0",
     hashes = ["3a38e953c2366359670fb41e7efae2d8a818ac12615fbea6f9d0614010582e39"],
     pkg = "tinybench",
@@ -2045,10 +2989,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "tinyrainbow_2.0.0",
+    hashes = ["5601101cd494f8d563422003f8593558c8cbe344924de2c69c6a3e1abf0dbf75"],
+    pkg = "tinyrainbow",
+    version = "2.0.0",
+)
+
+npm_repo(
     name = "tinyrainbow_3.1.1",
     hashes = ["cdb1b980964665438e90dd184d7cfbe2c1544a73b6cc949c92c2592cb8791744"],
     pkg = "tinyrainbow",
     version = "3.1.1",
+)
+
+npm_repo(
+    name = "tinyspy_4.0.6",
+    hashes = ["3a1d70094497dcca6a99106e48ccb3d15194b7a58b03d93611d20bf3c280aea3"],
+    pkg = "tinyspy",
+    version = "4.0.6",
 )
 
 npm_repo(
@@ -2080,6 +3038,34 @@ npm_repo(
 )
 
 npm_repo(
+    name = "ts-dedent_2.3.0",
+    hashes = ["65d54d1418fd6fe57e6da83806423c25897a0d09ac906c109ea2d1327fd5acf8"],
+    pkg = "ts-dedent",
+    version = "2.3.0",
+)
+
+npm_repo(
+    name = "tsconfig-paths_4.2.0",
+    hashes = ["1454d5f923d4330f4b8fb75c004df490ecbdce81cf0757de43351ac3078085c1"],
+    pkg = "tsconfig-paths",
+    version = "4.2.0",
+)
+
+npm_repo(
+    name = "tslib_2.8.1",
+    hashes = ["66f635d5eeabae44807534976913a102cf615b9a045368359c9f79ae6ee2119e"],
+    pkg = "tslib",
+    version = "2.8.1",
+)
+
+npm_repo(
+    name = "typescript_5.9.3",
+    hashes = ["10e108c9cf7d5f2879053dff18515fb405abf2ccef63eaaf017d9c571687a1d3"],
+    pkg = "typescript",
+    version = "5.9.3",
+)
+
+npm_repo(
     name = "undici-types_8.3.0",
     hashes = ["07a721cb2cd0dd798c24757de34d14e8b640ff8fddef85d662e00b392562a1f2"],
     pkg = "undici-types",
@@ -2087,10 +3073,24 @@ npm_repo(
 )
 
 npm_repo(
+    name = "unplugin_2.3.11",
+    hashes = ["f5fca8fdb4d4e8f40827ac5f702440d99fe1f1037bf60c1ef49799a609f38af7"],
+    pkg = "unplugin",
+    version = "2.3.11",
+)
+
+npm_repo(
     name = "update-browserslist-db_1.3.1_48be4307",
     hashes = ["0c3f182a1c14933648742043e3b03a293dc1b0b71c6632e3e8d049ca5b9aa4e1"],
     pkg = "update-browserslist-db",
     version = "1.3.1",
+)
+
+npm_repo(
+    name = "use-sync-external-store_1.7.0_6cb25bb6",
+    hashes = ["4f62a44660396a55417322fb0c71c14413b784192e4cd18acfec6bdf3157e359"],
+    pkg = "use-sync-external-store",
+    version = "1.7.0",
 )
 
 npm_repo(
@@ -2150,6 +3150,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "webpack-virtual-modules_0.6.2",
+    hashes = ["9506996a90d4cf9ed547a0459884e4eb8e391e6b9512f23d137feafe697ab719"],
+    pkg = "webpack-virtual-modules",
+    version = "0.6.2",
+)
+
+npm_repo(
     name = "webpack_5.109.2_e56e9508",
     hashes = ["3edd36c4196801c74b283e8fe662e1fdb9965a947bf996d487d578422539925d"],
     pkg = "webpack",
@@ -2206,6 +3213,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "wsl-utils_0.1.0",
+    hashes = ["d2cbb69eb9d502a5248d79232b18d7fcbf23c9d33b8045f9bc01250650d98dd4"],
+    pkg = "wsl-utils",
+    version = "0.1.0",
+)
+
+npm_repo(
     name = "xml-name-validator_5.0.0",
     hashes = ["3d40b1428dae32a6328ea20543abaafb72101a2652a95f43ec8757fef213f0be"],
     pkg = "xml-name-validator",
@@ -2228,12 +3242,18 @@ npm_repo(
 
 CLOSURE = [
     ":acorn_8.18.0",
+    ":adobe_css-tools_4.5.0",
     ":agent-base_7.1.4",
     ":ajv-formats_2.1.1_2cb7a033",
     ":ajv-keywords_5.1.0_2cb7a033",
     ":ajv_8.20.0",
+    ":ansi-regex_5.0.1",
+    ":ansi-styles_5.2.0",
+    ":aria-query_5.3.0",
+    ":aria-query_5.3.2",
     ":asamuzakjp_css-color_3.2.0",
     ":assertion-error_2.0.1",
+    ":ast-types_0.16.3",
     ":ast-v8-to-istanbul_1.0.5",
     ":babel_code-frame_7.29.7",
     ":babel_compat-data_7.29.7",
@@ -2251,16 +3271,21 @@ CLOSURE = [
     ":babel_parser_7.29.8",
     ":babel_plugin-transform-react-jsx-self_7.29.7_ce46d344",
     ":babel_plugin-transform-react-jsx-source_7.29.7_ce46d344",
+    ":babel_runtime_7.29.7",
     ":babel_template_7.29.7",
     ":babel_traverse_7.29.8_5b645c40",
-    ":babel_traverse_7.29.8_cfc6fa9a",
     ":babel_types_7.29.8",
+    ":balanced-match_4.0.4",
     ":baseline-browser-mapping_2.11.18",
     ":bcoe_v8-coverage_1.0.2",
+    ":brace-expansion_5.0.12",
     ":browserslist_4.28.8",
     ":buffer-from_1.1.2",
+    ":bundle-name_4.1.1",
     ":caniuse-lite_1.0.30001809",
+    ":chai_5.3.3",
     ":chai_6.2.2",
+    ":check-error_2.1.3",
     ":chrome-trace-event_1.0.4",
     ":clone-deep_4.0.1",
     ":colorette_2.0.20",
@@ -2269,6 +3294,7 @@ CLOSURE = [
     ":convert-source-map_2.0.0",
     ":cookie_1.1.1",
     ":cross-spawn_7.0.6",
+    ":css.escape_1.5.1",
     ":cssstyle_4.6.0",
     ":csstools_color-helpers_5.1.0",
     ":csstools_css-calc_2.1.4_4639dcc2",
@@ -2280,9 +3306,24 @@ CLOSURE = [
     ":debug_4.4.3_5b645c40",
     ":debug_4.4.3_cfc6fa9a",
     ":decimal.js_10.6.0",
+    ":deep-eql_5.0.2",
     ":deepmerge_4.3.1",
+    ":default-browser-id_5.0.1",
+    ":default-browser_5.5.1",
+    ":define-lazy-prop_3.0.0",
+    ":dequal_2.0.3",
     ":discoveryjs_json-ext_0.6.3",
+    ":doctrine_3.0.0",
+    ":dom-accessibility-api_0.5.16",
+    ":dom-accessibility-api_0.6.3",
     ":electron-to-chromium_1.5.413",
+    ":emnapi_core_1.11.0",
+    ":emnapi_core_1.9.2",
+    ":emnapi_runtime_1.11.0",
+    ":emnapi_runtime_1.9.2",
+    ":emnapi_wasi-threads_1.2.1",
+    ":emnapi_wasi-threads_1.2.2",
+    ":empathic_2.1.0",
     ":enhanced-resolve_5.24.5",
     ":entities_6.0.1",
     ":envinfo_7.21.0",
@@ -2317,11 +3358,13 @@ CLOSURE = [
     ":esbuild_win32-x64_0.25.12",
     ":escalade_3.2.0",
     ":eslint-scope_5.1.1",
+    ":esprima_4.0.1",
     ":esrecurse_4.3.0",
     ":estraverse_4.3.0",
     ":estraverse_5.3.0",
     ":estree-walker_2.0.2",
     ":estree-walker_3.0.3",
+    ":esutils_2.0.3",
     ":events_3.3.0",
     ":expect-type_1.4.0",
     ":fast-deep-equal_3.1.3",
@@ -2333,6 +3376,7 @@ CLOSURE = [
     ":fsevents_2.3.3",
     ":function-bind_1.1.2",
     ":gensync_1.0.0-beta.2",
+    ":glob_13.0.6",
     ":graceful-fs_4.2.11",
     ":has-flag_4.0.0",
     ":hasown_2.0.4",
@@ -2342,22 +3386,28 @@ CLOSURE = [
     ":https-proxy-agent_7.0.6_cfc6fa9a",
     ":iconv-lite_0.6.3",
     ":import-local_3.2.0",
+    ":indent-string_4.0.0",
     ":interpret_3.1.1",
     ":is-core-module_2.16.2",
+    ":is-docker_3.0.0",
+    ":is-inside-container_1.0.0",
     ":is-module_1.0.0",
     ":is-plain-object_2.0.4",
     ":is-potential-custom-element-name_1.0.1",
+    ":is-wsl_3.1.1",
     ":isexe_2.0.0",
     ":isobject_3.0.1",
     ":istanbul-lib-coverage_3.2.2",
     ":istanbul-lib-report_3.0.1",
     ":istanbul-reports_3.2.0",
     ":jest-worker_27.5.1",
+    ":joshwooding_vite-plugin-react-docgen-typescript_0.7.0_5325c5f2",
     ":jridgewell_gen-mapping_0.3.13",
     ":jridgewell_remapping_2.3.5",
     ":jridgewell_resolve-uri_3.1.2",
     ":jridgewell_source-map_0.3.11",
     ":jridgewell_sourcemap-codec_1.5.5",
+    ":jridgewell_sourcemap-codec_1.6.0",
     ":jridgewell_trace-mapping_0.3.31",
     ":js-tokens_10.0.0",
     ":js-tokens_4.0.0",
@@ -2365,23 +3415,78 @@ CLOSURE = [
     ":jsesc_3.1.0",
     ":json-schema-traverse_1.0.0",
     ":json5_2.2.3",
+    ":jsonc-parser_3.3.1",
     ":kind-of_6.0.3",
     ":locate-path_5.0.0",
+    ":loupe_3.2.1",
     ":lru-cache_10.4.3",
+    ":lru-cache_11.5.3",
     ":lru-cache_5.1.1",
+    ":lz-string_1.5.0",
     ":magic-string_0.30.21",
+    ":magic-string_1.4.2",
     ":magicast_0.5.4",
     ":make-dir_4.0.0",
+    ":mdx-js_react_3.1.1_6d74a898",
     ":merge-stream_2.0.0",
     ":mime-db_1.54.0",
+    ":min-indent_1.0.1",
+    ":minimatch_10.2.6",
+    ":minimist_1.2.8",
     ":minimizer-webpack-plugin_5.6.1_324e53ab",
+    ":minipass_7.1.3",
     ":ms_2.1.3",
     ":nanoid_3.3.18",
     ":napi-rs_lzma-linux-x64-gnu_1.5.1",
+    ":napi-rs_wasm-runtime_1.2.4_0adde06f",
+    ":napi-rs_wasm-runtime_1.2.4_209b3ada",
     ":neo-async_2.6.2",
     ":node-releases_2.0.53",
     ":nwsapi_2.2.24",
     ":obug_2.1.4",
+    ":open_10.2.0",
+    ":oxc-parser_0.127.0",
+    ":oxc-parser_binding-android-arm-eabi_0.127.0",
+    ":oxc-parser_binding-android-arm64_0.127.0",
+    ":oxc-parser_binding-darwin-arm64_0.127.0",
+    ":oxc-parser_binding-darwin-x64_0.127.0",
+    ":oxc-parser_binding-freebsd-x64_0.127.0",
+    ":oxc-parser_binding-linux-arm-gnueabihf_0.127.0",
+    ":oxc-parser_binding-linux-arm-musleabihf_0.127.0",
+    ":oxc-parser_binding-linux-arm64-gnu_0.127.0",
+    ":oxc-parser_binding-linux-arm64-musl_0.127.0",
+    ":oxc-parser_binding-linux-ppc64-gnu_0.127.0",
+    ":oxc-parser_binding-linux-riscv64-gnu_0.127.0",
+    ":oxc-parser_binding-linux-riscv64-musl_0.127.0",
+    ":oxc-parser_binding-linux-s390x-gnu_0.127.0",
+    ":oxc-parser_binding-linux-x64-gnu_0.127.0",
+    ":oxc-parser_binding-linux-x64-musl_0.127.0",
+    ":oxc-parser_binding-openharmony-arm64_0.127.0",
+    ":oxc-parser_binding-wasm32-wasi_0.127.0",
+    ":oxc-parser_binding-win32-arm64-msvc_0.127.0",
+    ":oxc-parser_binding-win32-ia32-msvc_0.127.0",
+    ":oxc-parser_binding-win32-x64-msvc_0.127.0",
+    ":oxc-project_types_0.127.0",
+    ":oxc-resolver_11.21.2",
+    ":oxc-resolver_binding-android-arm-eabi_11.21.2",
+    ":oxc-resolver_binding-android-arm64_11.21.2",
+    ":oxc-resolver_binding-darwin-arm64_11.21.2",
+    ":oxc-resolver_binding-darwin-x64_11.21.2",
+    ":oxc-resolver_binding-freebsd-x64_11.21.2",
+    ":oxc-resolver_binding-linux-arm-gnueabihf_11.21.2",
+    ":oxc-resolver_binding-linux-arm-musleabihf_11.21.2",
+    ":oxc-resolver_binding-linux-arm64-gnu_11.21.2",
+    ":oxc-resolver_binding-linux-arm64-musl_11.21.2",
+    ":oxc-resolver_binding-linux-ppc64-gnu_11.21.2",
+    ":oxc-resolver_binding-linux-riscv64-gnu_11.21.2",
+    ":oxc-resolver_binding-linux-riscv64-musl_11.21.2",
+    ":oxc-resolver_binding-linux-s390x-gnu_11.21.2",
+    ":oxc-resolver_binding-linux-x64-gnu_11.21.2",
+    ":oxc-resolver_binding-linux-x64-musl_11.21.2",
+    ":oxc-resolver_binding-openharmony-arm64_11.21.2",
+    ":oxc-resolver_binding-wasm32-wasi_11.21.2",
+    ":oxc-resolver_binding-win32-arm64-msvc_11.21.2",
+    ":oxc-resolver_binding-win32-x64-msvc_11.21.2",
     ":p-limit_2.3.0",
     ":p-locate_4.1.0",
     ":p-try_2.2.0",
@@ -2389,7 +3494,9 @@ CLOSURE = [
     ":path-exists_4.0.0",
     ":path-key_3.1.1",
     ":path-parse_1.0.7",
+    ":path-scurry_2.0.2",
     ":pathe_2.0.3",
+    ":pathval_2.0.1",
     ":picocolors_1.1.1",
     ":picomatch_4.0.7",
     ":pkg-dir_4.2.0",
@@ -2397,12 +3504,18 @@ CLOSURE = [
     ":playwright_1.63.0",
     ":playwright_test_1.63.0",
     ":postcss_8.5.26",
+    ":pretty-format_27.5.1",
     ":punycode_2.3.1",
+    ":react-docgen-typescript_2.4.0_e540abfa",
+    ":react-docgen_8.0.4_5b645c40",
     ":react-dom_19.1.1_6cb25bb6",
+    ":react-is_17.0.2",
     ":react-refresh_0.17.0",
     ":react-router_7.9.1_a63170c7",
     ":react_19.1.1",
+    ":recast_0.23.21",
     ":rechoir_0.8.0",
+    ":redent_3.0.0",
     ":require-from-string_2.0.2",
     ":resolve-cwd_3.0.0",
     ":resolve-from_5.0.0",
@@ -2437,6 +3550,7 @@ CLOSURE = [
     ":rollup_rollup-win32-x64-gnu_4.62.5",
     ":rollup_rollup-win32-x64-msvc_4.62.5",
     ":rrweb-cssom_0.8.0",
+    ":run-applescript_7.1.0",
     ":safer-buffer_2.1.2",
     ":saxes_6.0.0",
     ":scheduler_0.26.0",
@@ -2454,44 +3568,75 @@ CLOSURE = [
     ":stackback_0.0.2",
     ":standard-schema_spec_1.1.0",
     ":std-env_4.2.0",
+    ":storybook_10.6.1_6d74a898",
+    ":storybook_addon-docs_10.6.1_e9462adb",
+    ":storybook_builder-vite_10.6.1_86e9329c",
+    ":storybook_global_5.0.0",
+    ":storybook_icons_2.1.0_6cb25bb6",
+    ":storybook_react-dom-shim_10.6.1_dd2910dd",
+    ":storybook_react-vite_10.6.1_158dc745",
+    ":storybook_react_10.6.1_2added35",
+    ":strip-bom_3.0.0",
+    ":strip-indent_3.0.0",
+    ":strip-indent_4.1.1",
     ":supports-color_7.2.0",
     ":supports-color_8.1.1",
     ":supports-preserve-symlinks-flag_1.0.0",
     ":symbol-tree_3.2.4",
     ":tapable_2.3.3",
     ":terser_5.50.0",
+    ":testing-library_dom_10.4.2",
+    ":testing-library_jest-dom_6.9.1",
+    ":testing-library_user-event_14.6.7_c19bd22f",
+    ":tiny-invariant_1.3.3",
     ":tinybench_2.9.0",
     ":tinyexec_1.3.0",
     ":tinyglobby_0.2.17",
+    ":tinyrainbow_2.0.0",
     ":tinyrainbow_3.1.1",
+    ":tinyspy_4.0.6",
     ":tldts-core_6.1.86",
     ":tldts_6.1.86",
     ":tough-cookie_5.1.2",
     ":tr46_5.1.1",
+    ":ts-dedent_2.3.0",
+    ":tsconfig-paths_4.2.0",
+    ":tslib_2.8.1",
+    ":tybys_wasm-util_0.10.4",
+    ":types_aria-query_5.0.4",
     ":types_babel_core_7.20.5",
     ":types_babel_generator_7.27.0",
     ":types_babel_template_7.4.4",
     ":types_babel_traverse_7.28.0",
     ":types_chai_5.2.3",
     ":types_deep-eql_4.0.2",
+    ":types_doctrine_0.0.9",
     ":types_estree_1.0.9",
     ":types_json-schema_7.0.15",
+    ":types_mdx_2.0.14",
     ":types_node_26.3.0",
     ":types_react-dom_19.1.7_5d8f97ea",
     ":types_react_19.1.9",
     ":types_resolve_1.20.2",
+    ":typescript_5.9.3",
     ":undici-types_8.3.0",
+    ":unplugin_2.3.11",
     ":update-browserslist-db_1.3.1_48be4307",
+    ":use-sync-external-store_1.7.0_6cb25bb6",
     ":vite_7.1.2_03b546a8",
     ":vitejs_plugin-react_5.0.0_34add744",
     ":vitest_4.1.11_a7b77df3",
     ":vitest_coverage-v8_4.1.11_e94d1b4b",
+    ":vitest_expect_3.2.4",
     ":vitest_expect_4.1.11",
     ":vitest_mocker_4.1.11_1a0c7ffa",
+    ":vitest_pretty-format_3.2.4",
     ":vitest_pretty-format_4.1.11",
     ":vitest_runner_4.1.11",
     ":vitest_snapshot_4.1.11",
+    ":vitest_spy_3.2.4",
     ":vitest_spy_4.1.11",
+    ":vitest_utils_3.2.4",
     ":vitest_utils_4.1.11",
     ":w3c-xmlserializer_5.0.0",
     ":watchpack_2.5.2",
@@ -2510,6 +3655,7 @@ CLOSURE = [
     ":webassemblyjs_wasm-opt_1.14.1",
     ":webassemblyjs_wasm-parser_1.14.1",
     ":webassemblyjs_wast-printer_1.14.1",
+    ":webcontainer_env_1.1.1",
     ":webidl-conversions_7.0.0",
     ":webpack-cli_6.0.1_15068955",
     ":webpack-cli_configtest_3.0.1_b867fa0e",
@@ -2517,6 +3663,7 @@ CLOSURE = [
     ":webpack-cli_serve_3.0.1_b867fa0e",
     ":webpack-merge_6.0.1",
     ":webpack-sources_3.5.1",
+    ":webpack-virtual-modules_0.6.2",
     ":webpack_5.109.2_e56e9508",
     ":whatwg-encoding_3.1.1",
     ":whatwg-mimetype_4.0.0",
@@ -2525,6 +3672,7 @@ CLOSURE = [
     ":why-is-node-running_2.3.0",
     ":wildcard_2.0.1",
     ":ws_8.21.3",
+    ":wsl-utils_0.1.0",
     ":xml-name-validator_5.0.0",
     ":xmlchars_2.2.0",
     ":xtuc_ieee754_1.2.0",

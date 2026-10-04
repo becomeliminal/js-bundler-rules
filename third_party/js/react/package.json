@@ -11,11 +11,15 @@
   "devDependencies": {
     "@playwright/test": "1.63.0",
     "@rollup/plugin-node-resolve": "16.0.3",
+    "@storybook/addon-docs": "10.6.1",
+    "@storybook/react-vite": "10.6.1",
     "@types/react": "19.1.9",
     "@types/react-dom": "19.1.7",
     "@vitest/coverage-v8": "4.1.11",
     "jsdom": "26.1.0",
     "rollup": "4.62.5",
+    "storybook": "10.6.1",
+    "typescript": "5.9.3",
     "vitest": "4.1.11",
     "webpack": "5.109.2",
     "webpack-cli": "6.0.1"
