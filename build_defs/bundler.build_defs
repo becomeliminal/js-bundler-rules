@@ -1257,7 +1257,7 @@ const launch = (use) => ({
 export default defineConfig({
   ...base,
   webServer: undefined,
-  globalSetup: "./_pw_setup.mjs",
+  globalSetup: PLZ_SETUP,
   use: launch(base.use),
   projects: (base.projects ?? []).map((p) => ({ ...p, use: launch(p.use) })),
 });
@@ -1307,11 +1307,15 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
         size: Test size.
     """
     browser = browser or CONFIG.BUNDLER.PLAYWRIGHT_BROWSER
+    # Named for the target, so a package can hold several suites -- a gate and
+    # a manual one, say -- whose generated files would otherwise collide.
+    config_out = f"_pw_{name}_config.ts"
+    setup_out = f"_pw_{name}_setup.mjs"
     files = genrule(
         name = tag(name, "config"),
         srcs = {"config": [config]},
         deps = [serve],
-        outs = ["_pw_config.ts", "_pw_setup.mjs"],
+        outs = [config_out, setup_out],
         # One line per step under set -e: a heredoc's terminator has to stand
         # alone on its line, which a " && " join would break.
         cmd = "\n".join([
@@ -1321,9 +1325,10 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
             # site and the browser are repository-relative, so the walk up from
             # the run finds them.
             "{ echo \"import user from './$CONFIG_BASE';\"; echo \"const PLZ_SITE = '$(location " + serve +
-            ")';\"; echo \"const PLZ_BROWSER = '" + _playwright_staged(browser) + "';\"; cat <<'PLZ_PW'\n" +
-            _PLAYWRIGHT_PATHS + "\n" + _PLAYWRIGHT_CONFIG + "\nPLZ_PW\n} > _pw_config.ts",
-            "cat > _pw_setup.mjs <<'PLZ_PW'\n" + _PLAYWRIGHT_SERVER + "\n" + _PLAYWRIGHT_SETUP + "\nPLZ_PW",
+            ")';\"; echo \"const PLZ_BROWSER = '" + _playwright_staged(browser) +
+            "';\"; echo \"const PLZ_SETUP = './" + setup_out + "';\"; cat <<'PLZ_PW'\n" +
+            _PLAYWRIGHT_PATHS + "\n" + _PLAYWRIGHT_CONFIG + "\nPLZ_PW\n} > " + config_out,
+            "cat > " + setup_out + " <<'PLZ_PW'\n" + _PLAYWRIGHT_SERVER + "\n" + _PLAYWRIGHT_SETUP + "\nPLZ_PW",
         ]),
     )
     return js_test(
@@ -1337,7 +1342,7 @@ def playwright_test(name:str, srcs:list, serve:str, config:str="playwright.confi
         runner_env = {"PLAYWRIGHT_JUNIT_OUTPUT_NAME": "$RESULTS_FILE"},
         runner_args = [
             "test",
-            "--config", "_pw_config.ts",
+            "--config", config_out,
             "--reporter=list,junit",
         ] + (["--project", project] if project else []) + args,
         visibility = visibility,

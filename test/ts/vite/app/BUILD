@@ -88,3 +88,13 @@ playwright_test(
     node_modules = "//third_party/js/react:node_modules",
     serve = ":app",
 )
+
+# A second suite in the same package, one project of the config: the generated
+# config and setup are named for each target, so the two do not collide.
+playwright_test(
+    name = "e2e_chromium",
+    srcs = glob(["e2e/*.spec.ts"]),
+    node_modules = "//third_party/js/react:node_modules",
+    project = "chromium",
+    serve = ":app",
+)
