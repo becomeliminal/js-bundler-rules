@@ -2,6 +2,8 @@ import { useState } from "react";
 import { HashRouter, Routes, Route, NavLink, useParams, Navigate } from "react-router";
 import { hasCompilerRuntime } from "@test/compiled";
 import { greet } from "@test/greeter";
+// A directory of the library, by name: its index answers.
+import { BANG } from "@test/greeter/parts";
 import { ROWS, VERDICTS, type Row } from "./data";
 
 const MEASURES = [
@@ -112,7 +114,7 @@ export function App() {
             greeting below comes from a first-party library resolved by package name
             through a tree Please assembled.
           </p>
-          <p className="greeting" data-compiled={String(hasCompilerRuntime)}>
+          <p className="greeting" data-compiled={String(hasCompilerRuntime)} data-bang={BANG}>
             {greet("Please")}
           </p>
           <nav className="nav">
