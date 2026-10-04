@@ -102,8 +102,8 @@ curl -s "$URL/node_modules/@test/greeter/index.ts" >/dev/null
 edit 's|Smaller, and not finished|HMR_APP_MARKER|' "$APP_SRC"
 check "an app edit reaches the browser" 1 "$(served /src/App.tsx HMR_APP_MARKER 1)"
 
-# A first-party library -- the half that needs the hoisted tree, the live
-# links, and the watcher negations. Any one missing and this stays 0.
+# A first-party library -- the half that needs the live links and the
+# watcher negations. Any one missing and this stays 0.
 edit 's|Hello, |HMR_LIB_MARKER |' "$LIB_SRC"
 check "a library edit reaches the browser" 1 "$(served /node_modules/@test/greeter/index.ts HMR_LIB_MARKER 1)"
 

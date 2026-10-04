@@ -20,9 +20,8 @@ plz run //third_party/js:update-react
 ```
 
 It drives pnpm through the corepack inside the pinned node toolchain --
-nothing installed -- then regenerates the `BUILD`. Policy flags (react's
-`--hoisted-link`) are recorded on the target, so every repin applies the same
-policy.
+nothing installed -- then regenerates the `BUILD`. A tree's policy flags, where
+it has any, are recorded on the target, so every repin applies the same policy.
 
 ## Linting this repository
 
