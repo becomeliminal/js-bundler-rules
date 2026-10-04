@@ -1,52 +1,57 @@
 subinclude("//build_defs:bundler", "///js//build_defs:js", "///ts//build_defs:ts")
 
-# Why a ts_library's JavaScript is worth handing to a transpiler, measured
-# where it matters: in a bundle. One library, emitted by the compiler and by
-# esbuild, and an application that uses one of its two enums. The compiler
-# writes an enum as a call nothing marks as free of side effects, so a bundler
-# keeps the one nobody uses; esbuild marks it, and it is gone.
-for emitter in [
-    "tsc",
-    "esbuild",
-]:
+# What decides whether a library's unused code reaches an application's bundle,
+# measured where it matters: in the bundle. One library, built three ways, and
+# an application that uses one of its two enums and nothing from its second
+# module.
+#
+#   tsc       the compiler emits it. An enum is a call nothing marks as free of
+#             side effects, so a bundler keeps the one nobody uses.
+#   esbuild   esbuild emits it, and marks the enum: the unused one is gone.
+#   declared  as esbuild, and the library says its files have no side effects
+#             (side_effects = False): the module nobody imports from is gone
+#             too, though it runs a call when loaded.
+_BUILDS = {
+    "tsc": ("tsc", None),
+    "esbuild": ("esbuild", None),
+    "declared": ("esbuild", False),
+}
+
+for build, how in _BUILDS.items():
+    transpiler, side_effects = how
+
     ts_library(
-        name = f"statuses_{emitter}",
-        package = f"@test/statuses-{emitter}",
-        srcs = ["statuses.ts"],
-        entry = "statuses.ts",
+        name = f"statuses_{build}",
+        package = f"@test/statuses-{build}",
+        srcs = [
+            "index.ts",
+            "registry.ts",
+            "statuses.ts",
+        ],
         module_type = "module",
-        transpiler = emitter,
+        side_effects = side_effects,
+        transpiler = transpiler,
         tsconfig_deps = ["//:tsconfig.json"],
     )
 
     esbuild_bundle(
-        name = f"app_{emitter}",
-        entry_point = f"main_{emitter}.js",
-        out = f"app_{emitter}.js",
+        name = f"app_{build}",
+        entry_point = f"main_{build}.js",
+        out = f"app_{build}.js",
         format = "esm",
         platform = "node",
-        deps = [f":statuses_{emitter}"],
+        deps = [f":statuses_{build}"],
     )
 
 rollup_bundle(
     name = "rollup",
-    srcs = [
-        "main_esbuild.js",
-        "main_tsc.js",
-    ],
+    srcs = [f"main_{build}.js" for build in _BUILDS.keys()],
     node_modules = "//third_party/js/react:node_modules",
-    deps = [
-        ":statuses_esbuild",
-        ":statuses_tsc",
-    ],
+    deps = [f":statuses_{build}" for build in _BUILDS.keys()],
 )
 
 js_test(
     name = "treeshake_test",
     srcs = ["treeshake.test.js"],
-    data = [
-        ":app_esbuild",
-        ":app_tsc",
-        ":rollup",
-    ],
+    data = [":rollup"] + [f":app_{build}" for build in _BUILDS.keys()],
 )
