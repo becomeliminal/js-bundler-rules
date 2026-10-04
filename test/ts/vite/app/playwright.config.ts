@@ -5,5 +5,7 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./e2e",
   retries: process.env.CI ? 1 : 0,
+  // A failure writes its trace, so the fixture exercises where artifacts land.
+  use: { trace: "retain-on-failure" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 });
