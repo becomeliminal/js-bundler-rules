@@ -6,6 +6,8 @@ test("the bundle renders, first-party library included", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Smaller, and not finished");
   // @test/greeter, compiled by ts-rules and bundled by vite: the whole stack.
   await expect(page.locator(".greeting")).toHaveText("Hello, Please!");
+  // Imported as a directory of the library, `@test/greeter/parts`.
+  await expect(page.locator(".greeting")).toHaveAttribute("data-bang", "!");
 });
 
 test("an app route falls back to index.html", async ({ request }) => {

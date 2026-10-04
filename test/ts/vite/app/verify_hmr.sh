@@ -45,6 +45,7 @@ NEW_FILE=$APP/src/zz_new.ts
 NEW_DIR=$APP/src/zz_dir
 NEW_PUBLIC=$APP/public/zz_asset.txt
 NEW_LIB=$LIB/parts/zz_lib.ts
+NEW_LIB_DIR=$LIB/parts/zz_sub
 # Where the tree's label points in the SOURCE tree: the launcher's candidate
 # for //third_party/js/react:node_modules at the repository root.
 DECOY=third_party/js/react/node_modules
@@ -58,7 +59,7 @@ cp "$LIB_SRC" "$LIB_SRC.bak"
 cleanup() {
   mv "$APP_SRC.bak" "$APP_SRC" 2>/dev/null
   mv "$LIB_SRC.bak" "$LIB_SRC" 2>/dev/null
-  rm -rf "$NEW_FILE" "$NEW_DIR" "$NEW_PUBLIC" "$NEW_LIB" "$DECOY"
+  rm -rf "$NEW_FILE" "$NEW_DIR" "$NEW_PUBLIC" "$NEW_LIB" "$NEW_LIB_DIR" "$DECOY"
   [ -n "${SERVER_PID:-}" ] && kill "$SERVER_PID" 2>/dev/null
   rm -f "$LOG"
 }
@@ -110,6 +111,12 @@ check "a library edit reaches the browser" 1 "$(served /node_modules/@test/greet
 check "a CSS @import of a first-party package resolves" 1 \
   "$(served /src/styles.css GREETER_CSS_MARKER 1)"
 
+# A directory of a first-party library, imported by name: its index answers,
+# as the built package's manifest says it does. Resolved means rewritten to
+# the module's path; an unresolved import leaves vite's error page instead.
+check "a library's directory import resolves to its index" 1 \
+  "$(served /src/App.tsx 'greeter/parts/index.ts' 1)"
+
 # The update propagated, not merely re-servable: vite logged an hmr update.
 check "hmr update was pushed to the client" 1 "$(grep -c 'hmr update' "$LOG" | awk '{print ($1>0)?1:0}')"
 
@@ -147,6 +154,15 @@ check "a new public/ asset is served" 1 "$(served /zz_asset.txt NEW_PUBLIC_MARKE
 # A new module in a first-party library's source directory.
 printf 'export const LIB_NEW = "NEW_LIB_MARKER";\n' > "$NEW_LIB"
 check "a new library module is served" 1 "$(served /node_modules/@test/greeter/parts/zz_lib.ts NEW_LIB_MARKER 1)"
+
+# A new directory in a library, imported by its name: nothing lists a
+# library's modules ahead of time, so its index answers as soon as it exists.
+mkdir -p "$NEW_LIB_DIR"
+printf 'export const LIB_DIR = "NEW_LIB_DIR_MARKER";\n' > "$NEW_LIB_DIR/index.ts"
+sleep 0.5
+printf 'import { LIB_DIR } from "@test/greeter/parts/zz_sub";\nconsole.log(LIB_DIR);\n' >> "$APP_SRC"
+check "a new library directory resolves by its name" 1 \
+  "$(served /src/App.tsx 'greeter/parts/zz_sub/index.ts' 1)"
 
 # --- And files that go away. ---
 

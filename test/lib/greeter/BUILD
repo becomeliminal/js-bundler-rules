@@ -8,6 +8,7 @@ ts_library(
     package = "@test/greeter",
     srcs = [
         "index.ts",
+        "parts/index.ts",
         "parts/punctuation.ts",
     ],
     # Copied into the package as is: test/ts/vite/app's CSS @imports it.
