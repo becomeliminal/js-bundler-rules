@@ -97,10 +97,18 @@ STORY
 check "a new story file is indexed" 1 "$(served /index.json zznew--fresh 1)"
 check "  ... and served" 1 "$(served /src/ZzNew.stories.tsx NEW_STORY_MARKER 1)"
 
+# playwright_binary: a program driving the pinned browser, run from this
+# package, so its relative arguments resolve here.
+plz build //$DIR:storybook >/dev/null 2>&1
+SHOT=$DIR/zz_capture.png
+plz run //$DIR:capture -- ../../../plz-out/gen/$DIR/storybook-static greeting--loud zz_capture.png >/dev/null 2>&1
+check "playwright_binary captures a story in the pinned browser" 1 "$(file "$SHOT" 2>/dev/null | grep -c 'PNG image data')"
+rm -f "$SHOT"
+
 AFTER=$(mktemp)
 git status --porcelain --ignored=no > "$AFTER"
 check "the server wrote nothing outside plz-out" 0 \
-  "$(diff "$BEFORE" "$AFTER" | grep '^>' | grep -cv 'Greeting.tsx\|preview.ts\|greeter/index.ts\|\.bak\|ZzNew')"
+  "$(diff "$BEFORE" "$AFTER" | grep '^>' | grep -cv 'Greeting.tsx\|preview.ts\|greeter/index.ts\|\.bak\|ZzNew\|zz_capture')"
 rm -f "$BEFORE" "$AFTER"
 
 [ "$fail" = 0 ] && echo "PASS: the Storybook development loop works" || { echo "FAIL"; sed -n '1,40p' "$LOG"; }

@@ -1690,6 +1690,95 @@ def playwright_update(name:str, srcs:list, serve:str, config:str="playwright.con
     )
 
 
+def playwright_binary(name:str, main:str, srcs:list=[], deps:list=[], node_modules:str="",
+                      browser:str="", chdir:str="", check=None, env:dict={},
+                      visibility:list=None, labels:list=[]):
+    """A program that drives the pinned browser through Playwright. `plz run`
+    only.
+
+    For the scripts beside a suite rather than the suite itself: a camera that
+    screenshots one story from a running Storybook, say. It launches Chromium
+    with Playwright's own API (`chromium.launch()`), and gets the
+    playwright_browser playwright_test uses, never one from `playwright
+    install`: PLAYWRIGHT_BROWSERS_PATH is exported before node starts. Before,
+    not from inside the program: Playwright reads it while its own modules
+    load, which an ES module's imports do ahead of any of its code.
+
+    The program is bundled with this plugin's esbuild, its packages left
+    external and resolved through the tree, and run from its own package
+    directory by default -- where its users run it, so a relative path on its
+    command line, or one it reads itself, means what it says.
+
+    Args:
+        name: Target name.
+        main: The program, relative to this package: .ts, .tsx, .js or .mjs.
+        srcs: Further files the program imports.
+        deps: js_library and ts_library targets it imports by package name.
+        node_modules: The tree holding @playwright/test and its other packages.
+        browser: A playwright_browser. Defaults to the PlaywrightBrowser config.
+        chdir: Directory to run in, relative to the repository root. Defaults
+               to this package.
+        check: A ts_check covering the program, as for esbuild_bundle.
+               Required when it is TypeScript; False to run it unchecked
+               deliberately.
+        env: Environment variables for the program.
+        visibility: Visibility specification.
+        labels: Additional labels.
+    """
+    # Canonical, so $(out_location) matches the dep it names.
+    browser = canonicalise(browser or CONFIG.BUNDLER.PLAYWRIGHT_BROWSER)
+    bundle = esbuild_bundle(
+        name = tag(name, "bundle"),
+        entry_point = main,
+        srcs = srcs,
+        deps = deps,
+        out = f"_{name}_pw.mjs",
+        platform = "node",
+        format = "esm",
+        node_modules = node_modules,
+        check = check,
+        # Packages resolve at run time, from the tree beside the program:
+        # Playwright drives a browser from files of its own, which a bundle
+        # would not carry.
+        args = ["--packages=external"],
+    )
+    program = js_binary(
+        name = tag(name, "program"),
+        entry_point = bundle,
+        deps = deps,
+        node_modules = node_modules,
+        chdir = chdir or package_name(),
+        env = env,
+    )
+    # `plz run` starts a binary in the repository root, which is how the
+    # program's own launcher finds its tree; this one finds the browser the
+    # same way, by the path Please built it at.
+    return build_rule(
+        name = name,
+        outs = [f"{name}.sh"],
+        cmd = "\n".join([
+            "cat > $OUT <<'PLZ_PW'",
+            "#!/bin/sh",
+            "set -eu",
+            "ROOT=$(pwd -P)",
+            'export PLAYWRIGHT_BROWSERS_PATH="$ROOT/PLZ_BROWSER_OUT"',
+            '[ -d "$PLAYWRIGHT_BROWSERS_PATH" ] || { echo "playwright_binary: no browser at $PLAYWRIGHT_BROWSERS_PATH; run it with plz run" >&2; exit 1; }',
+            'exec "$ROOT/PLZ_PROGRAM_OUT" "$@"',
+            "PLZ_PW",
+            "sed -i.bak -e \"s|PLZ_BROWSER_OUT|$(out_location " + browser + ")|\" -e \"s|PLZ_PROGRAM_OUT|$(out_location " + program + ")|\" $OUT",
+            "rm -f $OUT.bak && chmod +x $OUT",
+        ]),
+        binary = True,
+        # The program as a build dependency rather than a runtime one: built,
+        # and run in place where Please put it, as its own launcher expects.
+        # A runtime dependency would be re-inspected on every run, after its
+        # launcher has linked the tree into its run directory.
+        deps = [browser, program],
+        visibility = visibility,
+        labels = labels + ["playwright_binary"],
+    )
+
+
 def _playwright_staged(label:str):
     """Where Please stages a data dependency in a test: at its package path,
     with any subrepo prefix dropped -- a target from ///bundler// lands at its

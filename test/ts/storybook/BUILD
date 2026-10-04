@@ -77,3 +77,21 @@ playwright_update(
     node_modules = "//third_party/js/react:node_modules",
     serve = ":storybook",
 )
+
+ts_check(
+    name = "capture_typecheck",
+    srcs = ["scripts/capture.ts"],
+    tsconfig = "scripts/tsconfig.json",
+    node_modules = "//third_party/js/react:node_modules",
+    tsconfig_deps = ["//:tsconfig.json"],
+)
+
+# A program driving the pinned browser, run from this package so its relative
+# arguments resolve here: `plz run //test/ts/storybook:capture -- \
+#   ../../../plz-out/gen/test/ts/storybook/storybook-static greeting--loud /tmp/loud.png`
+playwright_binary(
+    name = "capture",
+    main = "scripts/capture.ts",
+    check = ":capture_typecheck",
+    node_modules = "//third_party/js/react:node_modules",
+)

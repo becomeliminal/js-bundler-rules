@@ -480,7 +480,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "joshwooding_vite-plugin-react-docgen-typescript_0.7.0_5325c5f2",
+    name = "joshwooding_vite-plugin-react-docgen-typescript_0.7.0_e3fa1c40",
     hashes = ["998eee51e7d4311c455adc0935df9d488dd0a7346274601b78527685bd1b522d"],
     pkg = "@joshwooding/vite-plugin-react-docgen-typescript",
     version = "0.7.0",
@@ -1189,7 +1189,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "storybook_builder-vite_10.6.1_86e9329c",
+    name = "storybook_builder-vite_10.6.1_145a2870",
     hashes = ["e1bea159c6a779fc33867dba421b729af53d49c35f4e2a6212ec7c23f2dc262d"],
     pkg = "@storybook/builder-vite",
     version = "10.6.1",
@@ -1217,7 +1217,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "storybook_react-vite_10.6.1_158dc745",
+    name = "storybook_react-vite_10.6.1_8796f10d",
     hashes = ["c8a7125fbb808f0651d995fe53c7c50f14fc44a535924a548ef57e1d2271db2d"],
     pkg = "@storybook/react-vite",
     version = "10.6.1",
@@ -1336,6 +1336,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "types_node_22.18.13",
+    hashes = ["5401b90ad750c7420467cb4d66fa7118fef1c5074c35b2e1546e0537f863bf06"],
+    pkg = "@types/node",
+    version = "22.18.13",
+)
+
+npm_repo(
     name = "types_node_26.3.0",
     hashes = ["69b0a537007774b0d5a3bea12736d3506b6ef451241fbca46213fd9e474b0a17"],
     pkg = "@types/node",
@@ -1364,7 +1371,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "vitejs_plugin-react_5.0.0_34add744",
+    name = "vitejs_plugin-react_5.0.0_06e35629",
     hashes = ["bfb18cf62cadeaec6de98518e39f14cdbc92903554775dd891fae7d62dd48dcd"],
     pkg = "@vitejs/plugin-react",
     version = "5.0.0",
@@ -1392,7 +1399,7 @@ npm_repo(
 )
 
 npm_repo(
-    name = "vitest_mocker_4.1.11_1a0c7ffa",
+    name = "vitest_mocker_4.1.11_dff9735c",
     hashes = ["5f42c3959636909c506885ef643f4a4e4d024bd7939934465f280c42164eb142"],
     pkg = "@vitest/mocker",
     version = "4.1.11",
@@ -3066,6 +3073,13 @@ npm_repo(
 )
 
 npm_repo(
+    name = "undici-types_6.21.0",
+    hashes = ["cfa1a9a5e18988850e548f4f6b629c58da32dc32bebb116e58ea301e516fd16d"],
+    pkg = "undici-types",
+    version = "6.21.0",
+)
+
+npm_repo(
     name = "undici-types_8.3.0",
     hashes = ["07a721cb2cd0dd798c24757de34d14e8b640ff8fddef85d662e00b392562a1f2"],
     pkg = "undici-types",
@@ -3094,14 +3108,14 @@ npm_repo(
 )
 
 npm_repo(
-    name = "vite_7.1.2_03b546a8",
+    name = "vite_7.1.2_0c74f165",
     hashes = ["2582c2adf5adbb25f80f24c46dc03548ae97ebab24379e984b503ea20b26286d"],
     pkg = "vite",
     version = "7.1.2",
 )
 
 npm_repo(
-    name = "vitest_4.1.11_a7b77df3",
+    name = "vitest_4.1.11_6e1a1552",
     hashes = ["81875725211b8c43a30213579456954603d471d022587ce0e6842d44d9ed162b"],
     pkg = "vitest",
     version = "4.1.11",
@@ -3401,7 +3415,7 @@ CLOSURE = [
     ":istanbul-lib-report_3.0.1",
     ":istanbul-reports_3.2.0",
     ":jest-worker_27.5.1",
-    ":joshwooding_vite-plugin-react-docgen-typescript_0.7.0_5325c5f2",
+    ":joshwooding_vite-plugin-react-docgen-typescript_0.7.0_e3fa1c40",
     ":jridgewell_gen-mapping_0.3.13",
     ":jridgewell_remapping_2.3.5",
     ":jridgewell_resolve-uri_3.1.2",
@@ -3570,11 +3584,11 @@ CLOSURE = [
     ":std-env_4.2.0",
     ":storybook_10.6.1_6d74a898",
     ":storybook_addon-docs_10.6.1_e9462adb",
-    ":storybook_builder-vite_10.6.1_86e9329c",
+    ":storybook_builder-vite_10.6.1_145a2870",
     ":storybook_global_5.0.0",
     ":storybook_icons_2.1.0_6cb25bb6",
     ":storybook_react-dom-shim_10.6.1_dd2910dd",
-    ":storybook_react-vite_10.6.1_158dc745",
+    ":storybook_react-vite_10.6.1_8796f10d",
     ":storybook_react_10.6.1_2added35",
     ":strip-bom_3.0.0",
     ":strip-indent_3.0.0",
@@ -3614,22 +3628,24 @@ CLOSURE = [
     ":types_estree_1.0.9",
     ":types_json-schema_7.0.15",
     ":types_mdx_2.0.14",
+    ":types_node_22.18.13",
     ":types_node_26.3.0",
     ":types_react-dom_19.1.7_5d8f97ea",
     ":types_react_19.1.9",
     ":types_resolve_1.20.2",
     ":typescript_5.9.3",
+    ":undici-types_6.21.0",
     ":undici-types_8.3.0",
     ":unplugin_2.3.11",
     ":update-browserslist-db_1.3.1_48be4307",
     ":use-sync-external-store_1.7.0_6cb25bb6",
-    ":vite_7.1.2_03b546a8",
-    ":vitejs_plugin-react_5.0.0_34add744",
-    ":vitest_4.1.11_a7b77df3",
+    ":vite_7.1.2_0c74f165",
+    ":vitejs_plugin-react_5.0.0_06e35629",
+    ":vitest_4.1.11_6e1a1552",
     ":vitest_coverage-v8_4.1.11_e94d1b4b",
     ":vitest_expect_3.2.4",
     ":vitest_expect_4.1.11",
-    ":vitest_mocker_4.1.11_1a0c7ffa",
+    ":vitest_mocker_4.1.11_dff9735c",
     ":vitest_pretty-format_3.2.4",
     ":vitest_pretty-format_4.1.11",
     ":vitest_runner_4.1.11",
