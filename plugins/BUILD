@@ -13,7 +13,7 @@ plugin_repo(
     # Pinned past link-sources: vite_dev's sources and first-party libraries
     # are linked from one spec whose live directories its watcher keeps in
     # step, and a run never resolves its tree from the source tree.
-    revision = "71104fdebe17d0a38daaafc20f267507ab521573",
+    revision = "eda2eff67a86a8cfa1cd50dbe0c2985301a4c45e",
 )
 
 plugin_repo(
@@ -27,5 +27,5 @@ plugin_repo(
     name = "ts",
     owner = "becomeliminal",
     plugin = "ts-rules",
-    revision = "3d644edfc178793389598922f4741ee4c65374bc",
+    revision = "e40bf491d486a738f840a3716e538093e89549c2",
 )
