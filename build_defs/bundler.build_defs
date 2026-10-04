@@ -686,6 +686,9 @@ def _dev_config(name:str, config:str, deps:list, node_modules:str, out:str, merg
             'case "$n" in @*/*) printf "\'!**/node_modules/%s\'," "${n%%/*}";; esac; ' +
             'printf "\'!**/node_modules/%s\'," "$n"; ' +
             'printf "\'!**/node_modules/%s/**\'," "$n"; done)',
+            # The output may sit in a directory of its own (storybook_dev's
+            # config directory), which remote execution does not create.
+            'mkdir -p "$(dirname "$OUT")"',
             f'echo "import {{ mergeConfig }} from \'{merge_from}\';" > "$OUT"',
             'echo "import path from \'node:path\';" >> "$OUT"',
             'echo "import fs from \'node:fs\';" >> "$OUT"',
@@ -1089,6 +1092,46 @@ def astro_dev(name:str, srcs:list, deps:list=[], config:str="astro.config.mjs",
     )
 
 
+def _storybook_main(config_dir:str, extra:str, vite_final:str):
+    """The body of the main Storybook reads from the rule's config directory:
+    the consumer's main, `base`, extended. The consumer's preview, manager and
+    head files are passed through from their own directory, which Storybook no
+    longer reads itself. Expects `base`, `runDir`, `fs` and `path` in scope;
+    `extra` adds fields, and `vite_final` is the expression viteFinal returns,
+    with `config` and `options` in scope."""
+    return "\n".join([
+        f'const userDir = path.join(runDir, "{config_dir}");',
+        # The consumer's own files, by the names Storybook looks for in a config
+        # directory: the preview and manager modules, and the head and body
+        # fragments.
+        'const userModule = (base) => ["tsx", "ts", "jsx", "js", "mjs", "cjs"]',
+        '  .map((ext) => path.join(userDir, base + "." + ext)).find((f) => fs.existsSync(f));',
+        'const userText = (file) => fs.existsSync(path.join(userDir, file))',
+        '  ? fs.readFileSync(path.join(userDir, file), "utf8") : "";',
+        'const userPreview = userModule("preview");',
+        'const userManager = userModule("manager");',
+        # A main's preset properties are values or functions of what came before;
+        # both are honoured, and the consumer's own value applied first.
+        'const chained = async (key, value, options, extra) => {',
+        '  const own = base[key];',
+        '  const v = typeof own === "function" ? await own(value, options) : own === undefined ? value : own;',
+        '  return extra(v);',
+        '};',
+        'export default {',
+        '  ...base,',
+        extra,
+        '  previewAnnotations: (entries = [], options) => chained("previewAnnotations", entries, options,',
+        '    (v) => (userPreview ? [...v, userPreview] : v)),',
+        '  managerEntries: (entries = [], options) => chained("managerEntries", entries, options,',
+        '    (v) => (userManager ? [...v, userManager] : v)),',
+        '  previewHead: (head = "", options) => chained("previewHead", head, options, (v) => v + userText("preview-head.html")),',
+        '  previewBody: (body = "", options) => chained("previewBody", body, options, (v) => v + userText("preview-body.html")),',
+        '  managerHead: (head = "", options) => chained("managerHead", head, options, (v) => v + userText("manager-head.html")),',
+        f'  viteFinal: async (config, options) => {vite_final},',
+        '};',
+    ])
+
+
 def storybook_build(name:str, srcs:list, deps:list=[], config_dir:str=".storybook",
                     config_deps:list=[], out_dir:str="storybook-static", node_modules:str="",
                     env:dict={}, check=None, args:list=[], visibility:list=None,
@@ -1129,6 +1172,38 @@ def storybook_build(name:str, srcs:list, deps:list=[], config_dir:str=".storyboo
         test_only: If True, only visible to test rules.
         labels: Additional labels.
     """
+    mains = [s for s in srcs if s.startswith(config_dir + "/main.")]
+    if len(mains) != 1:
+        fail(f"storybook_build {name}: srcs must hold exactly one {config_dir}/main.*, found {mains}")
+    main = mains[0]
+    wrap_dir = f"_{name}.storybook"
+    body = _storybook_main(config_dir,
+        # The application's public/ goes to Storybook as a static directory
+        # rather than being copied by vite as well: both copied a favicon.svg,
+        # and where inputs are read-only -- remote execution -- the second copy
+        # failed on the first. Storybook prefers the application's favicon.
+        extra = "\n".join([
+            '  staticDirs: base.staticDirs ?? (fs.existsSync(path.join(runDir, "public")) ? [path.join(runDir, "public")] : []),',
+        ]),
+        vite_final = "((c) => ({ ...c, build: { ...c.build, copyPublicDir: false } }))(" +
+                     "typeof base.viteFinal === \"function\" ? await base.viteFinal(config, options) : config)")
+    generated = genrule(
+        name = tag(name, "config"),
+        outs = [f"{wrap_dir}/main.mjs"],
+        cmd = "\n".join([
+            'mkdir -p "$(dirname "$OUT")"',
+            "cat > $OUT <<'PLZ_SB'",
+            'import fs from "node:fs";',
+            'import path from "node:path";',
+            f'import user from "../{main}";',
+            "const base = user;",
+            # The build runs in this package's directory, where the consumer's
+            # config directory sits beside this one.
+            "const runDir = process.cwd();",
+            body,
+            "PLZ_SB",
+        ]),
+    )
     wrapper = f"_{name}"
     return js_run_binary(
         name = name,
@@ -1136,11 +1211,11 @@ def storybook_build(name:str, srcs:list, deps:list=[], config_dir:str=".storyboo
         bin = "storybook",
         deps = deps + _checked("storybook_build", name, srcs, check),
         node_modules = node_modules,
-        srcs = srcs + config_deps,
+        srcs = srcs + config_deps + [generated],
         # vite content-hashes filenames, so nothing here can be declared.
         out_dirs = [wrapper],
         # A build action has no network to report to.
-        args = ["build", "--config-dir", config_dir, "--output-dir", f"{wrapper}/{out_dir}",
+        args = ["build", "--config-dir", wrap_dir, "--output-dir", f"{wrapper}/{out_dir}",
                 "--disable-telemetry"] + args,
         env = env,
         visibility = visibility,
@@ -1198,37 +1273,9 @@ def storybook_dev(name:str, srcs:list, deps:list=[], config_dir:str=".storybook"
         fail(f"storybook_dev {name}: srcs must hold exactly one {config_dir}/main.*, found {mains}")
     main = mains[0]
     wrap_dir = f"_{name}.storybook"
-    found = "\n".join([
-        f'const userDir = path.join(runDir, "{config_dir}");',
-        # The consumer's own files, by the names Storybook looks for in a config
-        # directory: the preview and manager modules, and the head and body
-        # fragments.
-        'const userModule = (base) => ["tsx", "ts", "jsx", "js", "mjs", "cjs"]',
-        '  .map((ext) => path.join(userDir, base + "." + ext)).find((f) => fs.existsSync(f));',
-        'const userText = (file) => fs.existsSync(path.join(userDir, file))',
-        '  ? fs.readFileSync(path.join(userDir, file), "utf8") : "";',
-        'const userPreview = userModule("preview");',
-        'const userManager = userModule("manager");',
-        # A main's preset properties are values or functions of what came before;
-        # both are honoured, and the consumer's own value applied first.
-        'const chained = async (key, value, options, extra) => {',
-        '  const own = base[key];',
-        '  const v = typeof own === "function" ? await own(value, options) : own === undefined ? value : own;',
-        '  return extra(v);',
-        '};',
-        'export default {',
-        '  ...base,',
-        '  previewAnnotations: (entries = [], options) => chained("previewAnnotations", entries, options,',
-        '    (v) => (userPreview ? [...v, userPreview] : v)),',
-        '  managerEntries: (entries = [], options) => chained("managerEntries", entries, options,',
-        '    (v) => (userManager ? [...v, userManager] : v)),',
-        '  previewHead: (head = "", options) => chained("previewHead", head, options, (v) => v + userText("preview-head.html")),',
-        '  previewBody: (body = "", options) => chained("previewBody", body, options, (v) => v + userText("preview-body.html")),',
-        '  managerHead: (head = "", options) => chained("managerHead", head, options, (v) => v + userText("manager-head.html")),',
-        '  viteFinal: async (config, options) =>',
-        '    withPlzDev(typeof base.viteFinal === "function" ? await base.viteFinal(config, options) : config),',
-        '};',
-    ])
+    found = _storybook_main(config_dir,
+        extra = "",
+        vite_final = "withPlzDev(typeof base.viteFinal === \"function\" ? await base.viteFinal(config, options) : config)")
     wrapper = _dev_config(name, main, deps, node_modules, f"{wrap_dir}/main.mjs", "vite", found,
                           config_import = "../" + main)
     copied = [main] + [s for s in srcs if s in [vite_config, tsconfig]]

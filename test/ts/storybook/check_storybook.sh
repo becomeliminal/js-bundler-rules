@@ -23,3 +23,9 @@ grep -rq "Hello, " "$DIR/assets" || fail "@test/greeter never made it into the b
 # The preview's stylesheet, imported through the vite config's "@" alias:
 # Storybook merged the project's vite config.
 grep -rq "STORYBOOK_CSS_MARKER" "$DIR/assets" || fail "the preview's stylesheet is missing: the vite config was not merged"
+
+# public/, served from the root: the application's static files, and its
+# favicon in place of Storybook's own. Both Storybook and vite copied
+# public/ once, and where inputs are read-only the second copy failed.
+grep -q "STORYBOOK_PUBLIC_MARKER" "$DIR/static.txt" || fail "public/static.txt was not copied"
+grep -q "APP_FAVICON_MARKER" "$DIR/favicon.svg" || fail "the application's favicon was not used"
