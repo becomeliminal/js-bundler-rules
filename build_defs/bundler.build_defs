@@ -782,6 +782,40 @@ const liveLinks = {
   },
 };
 
+// What the first-party libraries import from third-party packages, for the
+// optimizer. They are excluded from it (EXCLUDE), so its scan never reads
+// them, and a bare import found only there -- @mui/material/CssBaseline in a
+// design system, say, when the application never names it -- is served raw.
+// Raw is fine for ES modules and fatal for CommonJS (react-is behind
+// @mui/utils): the browser finds no named export to link, and the page dies
+// on a SyntaxError. The library's own files are read here instead, and each
+// specifier is included as "<library> > <specifier>", vite's form for a
+// dependency resolved from the library rather than the application -- which
+// is where the tree places it.
+const LIBRARY_IMPORTS = (() => {
+  const specifiers = /(?:^|[\\s;])(?:import|export)(?!\\s+type\\b)[^'"`;]*?\\bfrom\\s*['"]([^'"./][^'"]*)['"]|\\bimport\\s*\\(\\s*['"]([^'"./][^'"]*)['"]\\s*\\)|^\\s*import\\s*['"]([^'"./][^'"]*)['"]/gm;
+  const found = new Set();
+  const read = (lib, dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const file = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== "node_modules") read(lib, file);
+        continue;
+      }
+      if (!/\\.[cm]?[jt]sx?$/.test(entry.name) || entry.name.endsWith(".d.ts")) continue;
+      for (const m of fs.readFileSync(file, "utf8").matchAll(specifiers)) {
+        const spec = m[1] ?? m[2] ?? m[3];
+        // Node's own modules, and the first-party libraries, which are served
+        // from source rather than prebundled.
+        if (spec.startsWith("node:") || EXCLUDE.some((n) => spec === n || spec.startsWith(n + "/"))) continue;
+        found.add(lib + " > " + spec);
+      }
+    }
+  };
+  for (const lib of EXCLUDE) read(lib, fs.realpathSync(path.join(runDir, "node_modules", lib)));
+  return [...found].sort();
+})();
+
 // What the development server adds to a vite config: vite_dev applies it to
 // the application's config, astro_dev to the vite section of an Astro one.
 const withPlzDev = (viteConfig) => {
@@ -789,7 +823,7 @@ const merged = mergeConfig(viteConfig, {
   plugins: [linkIds, liveLinks],
   // The tree is a build output: vite's cache goes beside the run, never into it.
   cacheDir: path.join(runDir, ".vite"),
-  optimizeDeps: { exclude: EXCLUDE },
+  optimizeDeps: { exclude: EXCLUDE, include: LIBRARY_IMPORTS },
   server: {
     // Real paths are in the repository, so that is what vite may serve.
     fs: { allow: [runDir, repoRoot] },

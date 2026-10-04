@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { HashRouter, Routes, Route, NavLink, useParams, Navigate } from "react-router";
+import { hasCompilerRuntime } from "@test/compiled";
 import { greet } from "@test/greeter";
 import { ROWS, VERDICTS, type Row } from "./data";
 
@@ -111,7 +112,9 @@ export function App() {
             greeting below comes from a first-party library resolved by package name
             through a tree Please assembled.
           </p>
-          <p className="greeting">{greet("Please")}</p>
+          <p className="greeting" data-compiled={String(hasCompilerRuntime)}>
+            {greet("Please")}
+          </p>
           <nav className="nav">
             <NavLink to="/" end>counted</NavLink>
             <NavLink to="/ledger">ledger</NavLink>
