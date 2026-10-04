@@ -16,7 +16,7 @@ vite_bundle(
         "src/**/*",
     ]),
     check = ":typecheck",
-    deps = ["//test/lib/greeter"],
+    deps = ["//test/lib/compiled", "//test/lib/greeter"],
     node_modules = "//third_party/js/react:node_modules",
 )
 
@@ -34,7 +34,7 @@ ts_check(
         "src/**/*.ts",
         "src/**/*.tsx",
     ]),
-    deps = ["//test/lib/greeter"],
+    deps = ["//test/lib/compiled", "//test/lib/greeter"],
     node_modules = "//third_party/js/react:node_modules",
     tsconfig_deps = ["//:tsconfig.json"],
 )
@@ -63,7 +63,7 @@ vitest_test(
         "src/App.tsx",
         "src/data.ts",
     ],
-    deps = ["//test/lib/greeter"],
+    deps = ["//test/lib/compiled", "//test/lib/greeter"],
     node_modules = "//third_party/js/react:node_modules",
 )
 
@@ -76,7 +76,7 @@ vite_dev(
         "public/**/*",
         "src/**/*",
     ]),
-    deps = ["//test/lib/greeter"],
+    deps = ["//test/lib/compiled", "//test/lib/greeter"],
     node_modules = "//third_party/js/react:node_modules",
 )
 

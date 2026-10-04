@@ -113,6 +113,14 @@ check "a CSS @import of a first-party package resolves" 1 \
 # The update propagated, not merely re-servable: vite logged an hmr update.
 check "hmr update was pushed to the client" 1 "$(grep -c 'hmr update' "$LOG" | awk '{print ($1>0)?1:0}')"
 
+# A first-party library's import of a CommonJS module the application never
+# imports itself: served from the optimizer's prebundle, where it gains the
+# named exports the browser links against -- never raw from the tree.
+check "a library's CommonJS import is prebundled" 1 \
+  "$(served /node_modules/@test/compiled/index.ts 'react_compiler-runtime.js' 1)"
+check "  ... and not served raw" 0 \
+  "$(served /node_modules/@test/compiled/index.ts 'react/compiler-runtime.js' 0)"
+
 # --- Files that did not exist when the server started. ---
 
 # By URL: what index.html and the browser ask for.
