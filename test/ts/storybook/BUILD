@@ -49,6 +49,20 @@ build_rule(
     test_cmd = "$TEST",
 )
 
+# The dev server's generated config: its build command is the one whose case
+# patterns macOS's bash 3.2 once could not parse.
+build_rule(
+    name = "dev_config_test",
+    srcs = ["check_dev_config.sh"],
+    data = [":_dev#config"],
+    outs = ["dev_config_test"],
+    cmd = "cp $SRCS $OUT",
+    binary = True,
+    test = True,
+    no_test_output = True,
+    test_cmd = "$TEST",
+)
+
 # Not a test, and cannot be: `plz run //test/ts/storybook:dev`, and
 # verify_dev.sh scripts what a person would check.
 storybook_dev(

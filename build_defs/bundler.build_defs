@@ -692,9 +692,14 @@ def _dev_config(name:str, config:str, deps:list, node_modules:str, out:str, merg
             # -- so without the first negation the walk never starts, and
             # without the others it stops one level short of the files the
             # last pattern names. Every one was found by watching it fail.
+            #
+            # Every case pattern here opens with "(": macOS's /bin/bash is 3.2,
+            # which reads an unopened pattern's ")" inside $(...) as the end of
+            # the substitution ("syntax error near unexpected token `;;'").
+            # test/bash32 holds every build_defs file to it.
             'IGNORE=$([ -n "$NAMES" ] && printf "\'!**/node_modules\',"; ' +
             "for n in $NAMES; do " +
-            'case "$n" in @*/*) printf "\'!**/node_modules/%s\'," "${n%%/*}";; esac; ' +
+            'case "$n" in (@*/*) printf "\'!**/node_modules/%s\'," "${n%%/*}";; esac; ' +
             'printf "\'!**/node_modules/%s\'," "$n"; ' +
             'printf "\'!**/node_modules/%s/**\'," "$n"; done)',
             # The output may sit in a directory of its own (storybook_dev's
@@ -713,7 +718,7 @@ def _dev_config(name:str, config:str, deps:list, node_modules:str, out:str, merg
             # The application's own third-party dependencies: the top of the
             # tree, scoped packages one level down. A bare import in the
             # application's source can only name one of these.
-            "DIRECT=$(cd $SRCS_TREE && for d in *; do case \"$d\" in @*) for p in \"$d\"/*; do printf \"'%s',\" \"$p\"; done;; *) printf \"'%s',\" \"$d\";; esac; done)",
+            "DIRECT=$(cd $SRCS_TREE && for d in *; do case \"$d\" in (@*) for p in \"$d\"/*; do printf \"'%s',\" \"$p\"; done;; (*) printf \"'%s',\" \"$d\";; esac; done)",
             'echo "const DIRECT = [$DIRECT];" >> "$OUT"',
         ]) + " && cat >> \"$OUT\" <<'PLZ_DEV_CONFIG'\n" + _VITE_DEV_CONFIG + "\n" + export + "\nPLZ_DEV_CONFIG",
         tools = {"please_js": ["///js//tools/please_js"]},
