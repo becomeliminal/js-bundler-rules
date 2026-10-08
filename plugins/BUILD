@@ -10,10 +10,6 @@ plugin_repo(
     name = "js",
     owner = "becomeliminal",
     plugin = "js-rules",
-    # Pinned past link-sources (vite_dev's sources and first-party libraries
-    # are linked from one spec whose live directories its watcher keeps in
-    # step) and past the macOS package-root fix (#107: BSD wc pads its count,
-    # so @types/* landed a directory too deep on a Mac).
     revision = "3cc69ed5d50392968f3c98100063b280aeb64fd4",
 )
 
