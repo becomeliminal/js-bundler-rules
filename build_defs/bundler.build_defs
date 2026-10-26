@@ -1329,6 +1329,32 @@ _PLAYWRIGHT_PLATFORMS = {
 }
 
 
+def _fetch_zip(url:str, dest:str, hashes:list):
+    """Shell: download url to dest, check its sha256, unzip, and delete dest.
+
+    dest is in the action temp dir, so the zip is not an output. A remote_file
+    cannot arrange that: its output is the archive, and the extracted tree was
+    then copied into the browser layout, so the shell was stored twice and the
+    zip a third time. Any listed hash may match. The action is local and
+    unsandboxed, because the fetch needs the network.
+    """
+    qdest = "'" + dest.replace("'", "'\\''") + "'"
+    qurl = "'" + url.replace("'", "'\\''") + "'"
+    # _archive is not an output. Please creates the parent of every output
+    # before the action runs, and an entry of that name would collide with it.
+    fetch = "curl -fsSL --retry 5 --retry-delay 2 -o %s %s" % (qdest, qurl)
+    extract = "mkdir -p _archive && unzip -q %s -d _archive && rm -f %s" % (qdest, qdest)
+    digest = "digest=$(if command -v sha256sum >/dev/null 2>&1; then sha256sum %s | awk '{print $1}'; else openssl dgst -sha256 %s | awk '{print $NF}'; fi)" % (qdest, qdest)
+    checks = []
+    for h in hashes:
+        if ":" in h:
+            _, _, h = h.rpartition(":")
+            h = h.strip()
+        checks.append("[ \"$digest\" = '%s' ]" % h)
+    verify = "{ { " + " || ".join(checks) + "; } || { echo \"bad hash for " + url + ": $digest\" >&2; exit 1; }; }"
+    return " && ".join([fetch, digest, verify, extract])
+
+
 def playwright_browser(name:str, browser_version:str, revision:str, hashes:dict,
                        visibility:list=None):
     """The Chromium playwright_test runs in, as a hash-pinned download.
@@ -1336,7 +1362,9 @@ def playwright_browser(name:str, browser_version:str, revision:str, hashes:dict,
     `playwright install` fetches whatever its CDN serves when it runs, into a
     cache outside the build. That is the one place a Playwright suite would
     otherwise reach the network, so the browser is a build input here like
-    any other: a remote_file per platform, checked against its hash.
+    any other: one download per platform, checked against its hash. The zip
+    is removed before the action finishes, and the shell is moved into
+    Playwright's layout rather than copied.
 
     Laid out the way Playwright's own registry lays it out
     (<name>/chromium_headless_shell-<revision>/chrome-headless-shell-<platform>/),
@@ -1360,33 +1388,23 @@ def playwright_browser(name:str, browser_version:str, revision:str, hashes:dict,
         fail("playwright_browser " + name + ": Chrome for Testing has no headless shell for " + key)
     if key not in hashes:
         fail("playwright_browser " + name + ": no hash for " + key + "; add it to hashes")
-    zip = remote_file(
-        name = tag(name, "zip"),
-        url = "https://cdn.playwright.dev/builds/cft/" + browser_version + "/" + platform +
-              "/chrome-headless-shell-" + platform + ".zip",
-        hashes = [hashes[key]],
-        extract = True,
-        # Named apart from the platform directory below: an output here called
-        # chrome-headless-shell-<platform> collides with the one the genrule
-        # writes, and Please merges the two -- the binary lands a level up.
-        out = name + "_download",
-    )
-    return genrule(
+    url = ("https://cdn.playwright.dev/builds/cft/" + browser_version + "/" + platform +
+           "/chrome-headless-shell-" + platform + ".zip")
+    return build_rule(
         name = name,
-        srcs = [zip],
         outs = [name],
-        # Into the layout Playwright's registry uses. Whether extract kept the
-        # zip's one top-level directory or stripped it, the files end up in
-        # chrome-headless-shell-<platform>.
+        local = True,
+        sandbox = False,
+        # Into the layout Playwright's registry uses. The zip has one top-level
+        # directory, chrome-headless-shell-<platform>, and that directory is
+        # moved into place rather than copied.
         cmd = " && ".join([
+            _fetch_zip(url, "browser.zip", [hashes[key]]),
             'DEST="$OUT/chromium_headless_shell-' + revision + '/chrome-headless-shell-' + platform + '"',
-            'SRC="$(location ' + zip + ')"',
-            '[ -d "$SRC/chrome-headless-shell-' + platform + '" ] && SRC="$SRC/chrome-headless-shell-' + platform + '"',
-            'mkdir -p "$DEST"',
-            'cp -R "$SRC"/. "$DEST/"',
+            'mkdir -p "$(dirname "$DEST")"',
+            'mv "_archive/chrome-headless-shell-' + platform + '" "$DEST"',
             # Playwright's own installer writes this marker beside the browser.
             'touch "$OUT/chromium_headless_shell-' + revision + '/INSTALLATION_COMPLETE"',
-            # Remote execution stages inputs read-only, and a copy keeps the mode.
             'chmod -R u+w "$OUT"',
         ]),
         visibility = visibility,
