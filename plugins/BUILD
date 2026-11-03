@@ -17,12 +17,12 @@ plugin_repo(
     name = "node",
     owner = "becomeliminal",
     plugin = "node-rules",
-    revision = "v0.1.0",
+    revision = "0be4beedb363106aff99b80ecbb2ed105e56af23",
 )
 
 plugin_repo(
     name = "ts",
     owner = "becomeliminal",
     plugin = "ts-rules",
-    revision = "e40bf491d486a738f840a3716e538093e89549c2",
+    revision = "c9744a52a6e67594050464e2e061b0ff03b4bd40",
 )

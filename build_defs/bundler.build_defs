@@ -26,6 +26,10 @@ _SOURCEMAPS = ["inline", "external", "linked", "both"]
 def _checked(rule:str, name:str, sources:list, check):
     """Refuses to bundle TypeScript that nothing type-checks.
 
+    `check` is the successful output of a `ts_check` target. Its implementation
+    may be TypeScript or another checker; bundler rules depend only on the
+    target's pass/fail contract and never consume checker-specific outputs.
+
     Neither bundler reads types. vite transpiles with esbuild and esbuild strips
     them without looking, so a type error reaches the output having failed no
     build -- which makes a type check that nothing depends on decoration rather
