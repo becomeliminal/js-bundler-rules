@@ -24,5 +24,5 @@ plugin_repo(
     name = "ts",
     owner = "becomeliminal",
     plugin = "ts-rules",
-    revision = "c9744a52a6e67594050464e2e061b0ff03b4bd40",
+    revision = "e433fcb79e4a1e2fcf4bc9c1893a6886a617c6c6",
 )
